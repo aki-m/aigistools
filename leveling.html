@@ -1,0 +1,630 @@
+﻿<!DOCTYPE HTML>
+<html lang="ja"><head>
+ <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title></title>
+<style>
+html,body{ font-size:24px; height:100%; margin:0px; }
+.fl{ display: flex; }
+.fl span { margin-top:4px; }
+select,input[type="number"] { font-size:20px;}
+input[type="number"]{ width:5em; }
+table{  border-collapse: collapse;}
+tr{ border: none;  }
+td div { padding: 2px 0px 2px 0px;}
+label ,input[type="button"] {
+ background-color: #e8ffff;
+ border: solid 1px #999;
+ border-radius: 5px;
+ padding: 0px;
+ margin:0px ;
+ user-select: none;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ -o-user-select: none;
+}
+.set {
+ background-color: #d0ffff;
+ text-align:center;
+}
+.set th , .set td{
+ border: solid 1px #00f;
+ padding:2px;
+}
+.cinfo {
+ border: solid 1px #dbd;
+ background-color: #fef;
+ vertical-alignment: center;
+ padding: 8px 2px 8px 2px;
+}
+.cinfo select{
+ margin: 4px 0px 4px 0px;
+}
+.list {
+ overflow-y:scroll;
+ border: solid 1px black;
+ height:148px;
+ background-color: #eef;
+ margin: 0px;
+}
+.list table td{
+ border-width: 1px;
+ border-style: solid none none solid;
+ border-color: #bbf;
+ text-align: right;
+}
+.bs {
+ border: none;
+ background-color: #fd8;
+ vertical-alignment: center;
+ padding: 4px ;
+}
+.mask {
+ position: fixed;
+ top: 0;
+ left: 0;
+ height: 100%;
+ width: 100%;
+ background-color: gray;
+ opacity: 0.5;
+ z-index: 1;
+ display: none;
+}
+.dlg {
+ cursor: pointer;
+ top: 2em;
+ left:1em;
+ background-color: #fef;
+ border: ridge 4px #f8e;
+ position: fixed;
+ z-index:2;
+ display:none;
+}
+.dlg tr th {
+ background-color: #ece;
+}
+.dlg tr td {
+ border: outset 2px #d88;
+ padding: 10px;
+ user-select: none;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ -o-user-select: none;
+
+}
+.dlg tr td:hover {
+ border: outset 2px #d88;
+ background-color: yellow;
+}
+td select:disabled { background-color: #e8ffff; }
+input[type="radio"],input[type="checkbox"] { display:none; }
+input[type="radio"]:checked + label, input[type="checkbox"]:checked + label {
+  background-color: #ff4;
+}
+td input[type="checkbox"].rot +label { display:none; }
+td input[type="checkbox"].rot:checked + label { display:inline; background-color:#90ffcf; }
+</style>
+</head><body>
+<span class="cinfo">
+   <select id="in01">
+    <option value="0">アイアン</option>
+    <option value="1">ブロンズ</option>
+    <option value="2">シルバー</option>
+    <option value="3">ゴールド</option>
+    <option value="4">サファイア</option>
+    <option value="5">プラチナ</option>
+    <option value="6" selected>ブラック</option>
+   </select>
+Lv<select id="in02" ></select>あと<input id="in03" type="number" min=1 max=3999 />を
+<input type="button" id="in42" value="…" />
+Lv<select id="in04"></select>あと<input id="in05" type="number" min=1 max=3999 />まで<span id="out01"></span> exp</span>
+<input type="checkbox" id="in00"><label for="in00" title="ショップブースト">　Ｇ ↑</label>
+<div class="fl">
+<span style="margin-right:8px;">
+<table class="set" >
+ <tr>
+  <th colspan=5>
+   <div>１セット=<select id="in06"></select>を<select id="in07"></select>回</div>
+   <div>↳カリ<span id="out07"></span>（<span id="out08"></span>exp:<span id="out09"></span>G）</div>
+  </th>
+ </tr><tr>
+  <td rowspan=2>鉄</td>
+  <td>職ボなし</td>
+  <td>ドロ数<select id="in08"></select>(平均<span id="out02"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in09"><label for="in09">合成</label>
+      <input type="checkbox" class="rot" id="in10"><label for="in10">換金</label></td>
+ </tr><tr>
+  <td>職ボあり</td>
+  <td>ドロ数<select id="in11" ></select>(平均<span id="out03"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in12"><label for="in12">合成</label>
+      <input type="checkbox" class="rot" id="in13"><label for="in13">換金</label></td>
+ </tr><tr>
+  <td rowspan=2>銅</td>
+  <td>職ボなし</td>
+  <td>ドロ数<select id="in14"></select>(平均<span id="out04"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in15"><label for="in15">合成</label>
+      <input type="checkbox" class="rot" id="in16"><label for="in16">換金</label></td>
+ </tr><tr>
+  <td>職ボあり</td>
+  <td>ドロ数<select id="in17" ></select>(平均<span id="out05"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in18"><label for="in18">合成</label>
+      <input type="checkbox" class="rot" id="in19"><label for="in19">換金</label></td>
+ </tr><tr>
+  <td colspan=3>
+   <input type="checkbox" class="rot" id="in20" checked><label for="in20">ゴールドゲット</label>
+   <input type="checkbox" class="rot" id="in21"        ><label for="in21" title="覚醒トトノ">ゴールドゲット＋</label>
+   <span>数<select id="in22"></select>(平均<span id="out06"></span>)</span>
+  </td><td></td>
+ </tr><tr>
+  <td colspan=2>
+    <input type="checkbox" class="rot" id="in25"        ><label for="in25">報酬↑なし</label>
+    <input type="checkbox" class="rot" id="in23"        ><label for="in23" title="覚醒ノエル">金運招来</label>
+    <input type="checkbox" class="rot" id="in24" checked><label for="in24" title="覚醒ミア">豊穣の杖</label>
+  </td>
+  <td colspan=2>
+   <input type="radio" name="radio6" value=1 id="in26"        ><label for="in26">★１</label>
+   <input type="radio" name="radio6" value=2 id="in27"        ><label for="in27">★２</label>
+   <input type="radio" name="radio6" value=3 id="in28"        ><label for="in28">★３</label>
+   <input type="radio" name="radio6" value=4 id="in29" checked><label for="in29">委任</label>
+  </td>
+ </tr>
+</table>
+<div class="bs" style="margin-top:4px;">目標まで合成<span id="out10"></span>回（<span id="out15"></span>G）</div>
+</span><span>
+<div class="bs">
+ <div id="out11"></div>
+ <div class="list"><table id="out12" ></table></div>
+</div>
+<div class="bs" style="margin-top:4px;">
+<table class="set">
+<tr>
+ <td rowspan=2>金<br />策</td>
+ <td>
+  <select id="in30"></select>
+ </td>
+ <td>
+  <input type="checkbox" class="rot" id="in32"        ><label for="in32">★１</label>
+  <input type="checkbox" class="rot" id="in33"        ><label for="in33">★２</label>
+  <input type="checkbox" class="rot" id="in34" checked><label for="in34">★３</label>
+  <input type="checkbox" class="rot" id="in35"        ><label for="in35">委任</label>
+ </td>
+ <td>
+  <input type="checkbox" class="rot" id="in36" checked><label for="in36">報酬↑なし</label>
+  <input type="checkbox" class="rot" id="in37"        ><label for="in37" title="覚醒ノエル">金運招来</label>
+  <input type="checkbox" class="rot" id="in38"        ><label for="in38" title="覚醒ミア">豊穣の杖</label>
+ </td>
+
+</tr><tr>
+ <td>
+金以下ドロ平均<select id="in31"></select>
+ </td>
+ <td colspan=2>
+  <input type="checkbox" class="rot" id="in39"        ><label for="in39">GG</label>
+  <input type="checkbox" class="rot" id="in40" checked><label for="in40" title="覚醒トトノ">GG+</label>平均数<select id="in41" ></select>
+ </td>
+</tr>
+</table>
+<div id="out13"></div>
+</div>
+<div id="out14" colspan=4></div>
+</span>
+</div>
+<div id="in44" class="mask"></div>
+<table id="in43" class="dlg">
+ <tr>
+  <th colspan=4>覚醒カンストからの逆算</th><th style="text-align:right;">☒　</th>
+ </tr><tr>
+  <td id="dlg01">白バ8倍× 1</td>
+  <td id="dlg02">白バ8倍× 2</td>
+  <td id="dlg03">白バ8倍× 3</td>
+  <td id="dlg04">白バ8倍× 4</td>
+  <td id="dlg05">団長8倍× 1</td>
+ </tr><tr>
+  <td id="dlg06">白バ8倍× 6</td>
+  <td id="dlg07">白バ8倍× 7</td>
+  <td id="dlg08">白バ8倍× 8</td>
+  <td id="dlg09">白バ8倍× 9</td>
+  <td id="dlg10">団長8倍× 2</td>
+ </tr><tr>
+  <td id="dlg11">白バ8倍×11</td>
+  <td id="dlg12">白バ8倍×12</td>
+  <td id="dlg13">白バ8倍×13</td>
+  <td id="dlg14">白バ8倍×14</td>
+  <td id="dlg15">団長8倍× 3</td>
+ </tr><tr>
+  <th colspan=4>CCカンストからの逆算</th><th></th>
+ </tr><tr>
+  <td id="dlg16">白バ8倍× 1</td>
+  <td id="dlg17">白バ8倍× 2</td>
+  <td id="dlg18">白バ8倍× 3</td>
+  <td id="dlg19">白バ8倍× 4</td>
+  <td id="dlg20">団長8倍× 1</td>
+ </tr><tr>
+</table>
+<script language="javascript">
+exptable=[
+[0,32,65,100,135,172,211,250,291,333,418,506,598,693,791,893,998,1106,1218,1333,1503,1679,1862,2052,2249,2452,2662,2879,3103,3333],
+[0,35,72,110,149,189,232,275,320,366,460,557,658,762,870,982,1098,1217,1340,1466,1653,1847,2048,2257,2474,2697,2928,3167,3413,3978,4301,4637,4984,5345,5718,6103,6501,6910,7334],
+[0,38,78,120,162,206,253,300,349,400,502,607,718,832, 949,1072,1198,1327,1462,1600,1804,2015,2234,2462,2699,2942,3194,3455,3724,4000,4339,4692,5058,5437,5831,6238,6658,7092,7538,8000,8678,9383,10115,10874,11662,12474,13315,14183,15078,16000,17017,18074,19172,20312,21492],
+[0,42,85,130,176,224,274,325,378,433,543,658,777,901,1028,1161,1297,1438,1583,1733,1954,2183,2421,2668,2924,3188,3461,3743,4034,4333,4701,5083,5480,5890,6317,6757,7212,7683,8167,8667,9402,10165,10958,11781,12633,13514,14425,15365,16335,17333,18435,19581,20770,22005,23283,24605,25970,27381,28835,30333,31802,33329,34917,36561,38266,40028,41850,43729,45669,47667,49503,51412,53395,55452,57582,59786,62062,64412,66836,69333],
+[0,45,91,140,189,241,295,350,407,466,585,708,837,970,1107,1250,1397,1548,1705,1866,2104,2351,2607,2873,3149,3433,3727,4031,4344,4666,5062,5474,5901,6343,6803,7277,7767,8274,8795,9334,10125,10947,11801,12687,13605,14553,15534,16547,17591,18666,19853,21087,22368,23698,25074,26498,27968,29487,31053,32666,34248,35893,37603,39374,41209,43107,45069,47093,49182,51334,53311,55367,57502,59717,62012,64385,66836,69367,71977,74666,77435,80314,83304,86405,89615],
+[0,45,91,140,189,241,295,350,407,466,585,708,837,970,1107,1250,1397,1548,1705,1866,2104,2351,2607,2873,3149,3433,3727,4031,4344,4666,5062,5474,5901,6343,6803,7277,7767,8274,8795,9334,10125,10947,11801,12687,13605,14553,15534,16547,17591,18666,19853,21087,22368,23698,25074,26498,27968,29487,31053,32666,34248,35893,37603,39374,41209,43107,45069,47093,49182,51334,53311,55367,57502,59717,62012,64385,66836,69367,71977,74666,77435,80314,83304,86405,89615,92938,96370,99914,103568,107334],
+[0,48,98,150,203,258,317,375,437,500,627,759,897,1040,1187,1340,1497,1659,1827,2000,2255,2519,2793,3078,3374,3678,3993,4319,4655,5000,5424,5865,6323,6797,7289,7797,8322,8865,9423,10001,10848,11729,12644,13593,14577,15593,16644,17729,18848,20000,21272,22593,23966,25391,26865,28391,29966,31593,33272,35000,36695,38457,40289,42186,44153,46187,48288,50457,52695,55001,57119,59322,61610,63983,66441,68984,71610,74322,77118,80000,82967,86051,89255,92577,96017,99576,103254,107051,110966,115001,117966,121052,124254,127577,131018,134577,138254,142052,145967],
+];
+maptable=[
+/* name,charisma,G,e-cnt,e-lv */
+{name:"神殿の森"          ,charisma:10 ,g:720/1.5  ,ecnt:10  ,eexp:40 },
+{name:"女神の神殿"        ,charisma:11 ,g:810/1.5  ,ecnt:40  ,eexp:40 },
+{name:"神殿を守れ！"      ,charisma:12 ,g:900/1.5  ,ecnt:32  ,eexp:45 },
+{name:"残党退治1"         ,charisma:12 ,g:990/1.5  ,ecnt:32  ,eexp:50 },
+{name:"田園の門"          ,charisma:12 ,g:900/1.5  ,ecnt:45  ,eexp:50 },
+{name:"住民救出1"         ,charisma:14 ,g:990/1.5  ,ecnt:21  ,eexp:50 },
+{name:"住民救出2"         ,charisma:15 ,g:1080/1.5 ,ecnt:30  ,eexp:50 },
+{name:"田園の門防衛戦"    ,charisma:16 ,g:1170/1.5 ,ecnt:58  ,eexp:50 },
+{name:"住民救出3"         ,charisma:18 ,g:1350/1.5 ,ecnt:56  ,eexp:60 },
+{name:"狼の巣"            ,charisma:15 ,g:1080/1.5 ,ecnt:30  ,eexp:50 },
+{name:"火事場泥棒"        ,charisma:19 ,g:1440/1.5 ,ecnt:28  ,eexp:50 },
+{name:"謎の魔物"          ,charisma:20 ,g:1440/1.5 ,ecnt:92  ,eexp:70 },
+{name:"砦の戦い"          ,charisma:21 ,g:1575/1.5 ,ecnt:61  ,eexp:70 },
+{name:"王都に続く道"      ,charisma:22 ,g:1620/1.5 ,ecnt:56  ,eexp:80 },
+{name:"山賊の隠れ家"      ,charisma:15 ,g:1350/1.5 ,ecnt:36  ,eexp:55 },
+{name:"深森の大道"        ,charisma:20 ,g:2250/1.5 ,ecnt:67  ,eexp:70 },
+{name:"残党退治2"         ,charisma:22 ,g:1665/1.5 ,ecnt:73  ,eexp:70 },
+{name:"哀しみの墓地"      ,charisma:23 ,g:1710/1.5 ,ecnt:42  ,eexp:85 },
+{name:"廃都への帰還"      ,charisma:23 ,g:1800/1.5 ,ecnt:58  ,eexp:105},
+{name:"戦場の群狼"        ,charisma:24 ,g:1890/1.5 ,ecnt:45  ,eexp:95 },
+{name:"見張り塔"          ,charisma:25 ,g:1980/1.5 ,ecnt:61  ,eexp:100},
+{name:"亡者の鎧"          ,charisma:26 ,g:2070/1.5 ,ecnt:70  ,eexp:95 },
+{name:"城門の戦い"        ,charisma:28 ,g:2160/1.5 ,ecnt:77  ,eexp:105},
+{name:"王城奪還"          ,charisma:29 ,g:2250/1.5 ,ecnt:80  ,eexp:110},
+{name:"残党退治3"         ,charisma:30 ,g:2700/1.5 ,ecnt:49  ,eexp:115},
+{name:"竜の狩場"          ,charisma:37 ,g:3600/1.5 ,ecnt:46  ,eexp:125},
+{name:"炎の竜"            ,charisma:34 ,g:3150/1.5 ,ecnt:41  ,eexp:120},
+{name:"不死の魔物"        ,charisma:42 ,g:4500/1.5 ,ecnt:83  ,eexp:135},
+{name:"熱砂の戦場"        ,charisma:25 ,g:1950/1.5 ,ecnt:39  ,eexp:95 },
+{name:"砂の廃都"          ,charisma:28 ,g:2130/1.5 ,ecnt:60  ,eexp:100},
+{name:"焦熱のオアシス"    ,charisma:30 ,g:2265/1.5 ,ecnt:28  ,eexp:110},
+{name:"砂海に潜む魔物"    ,charisma:33 ,g:2445/1.5 ,ecnt:55  ,eexp:120},
+{name:"拠点争奪戦・前"    ,charisma:36 ,g:2625/1.5 ,ecnt:74  ,eexp:125},
+{name:"拠点争奪戦・後"    ,charisma:40 ,g:2970/1.5 ,ecnt:97  ,eexp:135},
+{name:"砂漠のサソリ"      ,charisma:44 ,g:3135/1.5 ,ecnt:51  ,eexp:135},
+{name:"オアシスに迫る危機",charisma:47 ,g:3330/1.5 ,ecnt:37  ,eexp:140},
+{name:"二つのピラミッド"  ,charisma:51 ,g:3525/1.5 ,ecnt:54  ,eexp:145},
+{name:"東の国の港町"      ,charisma:45 ,g:3600/1.5 ,ecnt:51  ,eexp:140},
+{name:"風に散る桜"        ,charisma:58 ,g:3870/1.5 ,ecnt:55  ,eexp:145},
+{name:"田を返せ！"        ,charisma:52 ,g:4230/1.5 ,ecnt:34  ,eexp:155},
+{name:"絶望の城下町"      ,charisma:56 ,g:4380/1.5 ,ecnt:30  ,eexp:160},
+{name:"風神退治"          ,charisma:59 ,g:4560/1.5 ,ecnt:47  ,eexp:170},
+{name:"落ち武者たちの行進",charisma:61 ,g:4680/1.5 ,ecnt:26  ,eexp:175},
+{name:"雷神襲来"          ,charisma:63 ,g:4845/1.5 ,ecnt:41  ,eexp:180},
+{name:"魔法都市への誘い"  ,charisma:58 ,g:4500/1.5 ,ecnt:39  ,eexp:175},
+{name:"鋼鉄の手刀"        ,charisma:60 ,g:4620/1.5 ,ecnt:55  ,eexp:180},
+{name:"鋼鉄の手斧"        ,charisma:62 ,g:4740/1.5 ,ecnt:21  ,eexp:185},
+{name:"転送の魔法陣"      ,charisma:63 ,g:4800/1.5 ,ecnt:27  ,eexp:190},
+{name:"研究塔の巨兵"      ,charisma:65 ,g:4920/1.5 ,ecnt:28  ,eexp:195},
+{name:"幾多の水晶"        ,charisma:69 ,g:5205/1.5 ,ecnt:100 ,eexp:200},
+{name:"二体の巨兵"        ,charisma:71 ,g:5475/1.5 ,ecnt:37  ,eexp:205},
+{name:"密林の強者"        ,charisma:63 ,g:4830/1.5 ,ecnt:100 ,eexp:185},
+{name:"黒き狂戦士"        ,charisma:64 ,g:4890/1.5 ,ecnt:52  ,eexp:190},
+{name:"立ち並ぶ軍旗"      ,charisma:66 ,g:4995/1.5 ,ecnt:50  ,eexp:195},
+{name:"解き放たれし封印"  ,charisma:68 ,g:5145/1.5 ,ecnt:32  ,eexp:200},
+{name:"魔界の洗礼"        ,charisma:70 ,g:5380/1.5 ,ecnt:53  ,eexp:200},
+{name:"オークの勇士"      ,charisma:72 ,g:5520/1.5 ,ecnt:100 ,eexp:205},
+{name:"湿地の激戦"        ,charisma:74 ,g:5640/1.5 ,ecnt:150 ,eexp:210}
+];
+maptable2=[
+{name:"黄金の鎧 初級",charisma:15 ,stamina:2 ,g:2250/1.5  ,ecnt:23},
+{name:"黄金の鎧 中級",charisma:24 ,stamina:2 ,g:3000/1.5  ,ecnt:27},
+{name:"黄金の鎧 上級",charisma:60 ,stamina:3 ,g:4500/1.5  ,ecnt:30},
+{name:"黄金の鎧 極級",charisma:80 ,stamina:3 ,g:15000/1.5 ,ecnt:30},
+{name:"黄金の鎧 神級",charisma:80 ,stamina:6 ,g:22500/1.5 ,ecnt:30},
+];
+
+
+
+document.body.onload=function(ev){
+  var sel,i,obj;
+  var inobj=[null];
+  var outobj=[null];
+
+  var fNum=function(n){
+   return String(n).replace( /(-?\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+  }
+
+  var dolv=function (){
+    var rea=inobj[1].value;
+    var lv =inobj[2].value;
+    if(lv<exptable[rea].length) inobj[3].value=exptable[rea][lv]-exptable[rea][lv-1];
+    else inobj[3].value=0;
+  };
+
+  var dorea=function(){
+    var i,j,obj;
+    for( j=0 ; j < 2 ; j++ ){
+      inobj[j*2+2].innerHTML="";
+      for( i=0 ; i < exptable[inobj[1].value].length ; i++ ){
+        obj=document.createElement("OPTION");
+        obj.value=i+1;
+        obj.innerText=obj.value;
+        inobj[j*2+2].add(obj);
+      }
+      inobj[j*2+2].value=1;
+    }
+  };
+
+  var leveling=function(rea,expfrom,expto,map,oneset,cur){
+    var ex,lv,cost;
+    var r=[0,0];
+    while(  expfrom < expto ){
+      for(lv=0;lv+1<exptable[rea].length && expfrom >= exptable[rea][lv+1] ; lv++ );
+      cost=4*(160+lv*40);
+      if( cur[1] >= 4 ){
+        ex=maptable[map].eexp*4;
+        cur[1]=cur[1]-4;
+      }else if( cur[1]+cur[2] >= 4 ){
+        ex=maptable[map].eexp*4+(4-cur[1])*30;
+        cur[2]=cur[2]-(4-cur[1]);
+        cur[1]=0;
+      }else if( cur[1]+cur[2]+cur[3] >= 4 ){
+        ex=maptable[map].eexp*4+(4-cur[1])*30;
+        cur[3]=cur[3]-(4-cur[1]-cur[2]);
+        cur[2]=cur[1]=0;
+      }else if( cur[1]+cur[2]+cur[3]+cur[4] >= 4 ){
+        ex=maptable[map].eexp*4+(4-cur[1])*30+(4-cur[1]-cur[2]-cur[3])*30;
+        cur[4]=cur[4]-(4-cur[1]-cur[2]-cur[3]);
+        cur[3]=cur[2]=cur[1]=0;
+      }else{
+        ex=maptable[map].eexp*(cur[1]+cur[2]+cur[3]+cur[4])+30*(cur[2]+cur[3]+cur[4]*2);
+        if( expfrom+ex >= expto ){
+          cost=(cur[1]+cur[2]+cur[3]+cur[4])*(160+lv*40);
+          cur[4]=cur[3]=cur[2]=cur[1]=0;
+        }else{
+          for(ex=0;ex<cur.length;ex++) cur[ex]=cur[ex]+oneset[ex];
+          cost=0;
+          ex=0;
+        }
+      }
+      var obj=document.createElement("TR");
+      var v="";
+      if( ex == 0 ){
+       v="<td colspan=4>1セット巡回 ";
+       v=v+"鉄["+cur[1]+","+cur[2]+"]銅["+cur[3]+","+cur[4]+"]</td>";
+      }else{
+        v="<td>合成</td><td style='border-left-style:none;'>+"+ex+"exp</td>";
+        expfrom += ex ;
+        r[0]++;
+        r[1]+=cost;
+        for(lv=0;lv+1<exptable[rea].length && expfrom >= exptable[rea][lv+1] ; lv++ );
+        v=v+"<td>Lv"+(lv+1);
+        v=v+"あと</td><td style='border-left-style:none;'>"+(( lv+1<exptable[rea][lv+1] )?(exptable[rea][lv+1]-expfrom):0)+"</td>";
+      }
+      v=v+"<td>"+fNum(cur[0]-r[1])+"G</td>";
+      obj.innerHTML=v;
+      outobj[12].appendChild(obj);
+   }
+   return r;
+  };
+
+  var domap=function (){
+    var i,v,r0,n;
+    var rea    = inobj[1].value;
+    var lvfrom = inobj[2].value;
+    var expfrom= inobj[3].value;
+    var lvto   = inobj[4].value;
+    var expto  = inobj[5].value;
+    var map    = inobj[6].value;
+    var cnt    = inobj[7].value;
+    var oneset = [0,0,0,0,0];
+    var e=0;
+    n=(lvfrom<lvto) ?(exptable[rea][lvto] -expto/1 - exptable[rea][lvfrom] +expfrom/1):0;
+    outobj[1].innerText=n;
+    if( map >= 47 && map != 51 ){
+        inobj[ 8].value=0;
+        inobj[11].value=0;
+        inobj[ 8].disabled=true;
+        inobj[11].disabled=true;
+        inobj[ 9].checked=false;
+        inobj[10].checked=false;
+        inobj[12].checked=false;
+        inobj[13].checked=false;
+    }else{
+        inobj[ 8].disabled=false;
+        inobj[11].disabled=false;
+    }
+    for( i=0;i<4;i++ ){
+      v=inobj[i*3+8].value;
+      outobj[i+2].innerText=Math.floor(10*v/cnt)/10;
+      if( v > 0 ){
+        if( inobj[i*3+9 ].checked ){
+          oneset[i+1]=v/1;
+          e=e+(maptable[map].eexp+(i&1)*30+(i&2)*15)*v;
+        }else{
+          if( ! inobj[i*3+10].checked ) inobj[i*3+10].checked=true;
+          oneset[0]=oneset[0]+(500*v);
+        }
+      }else{
+        inobj[i*3+9 ].checked=false;
+        inobj[i*3+10].checked=false;
+      }
+    }
+    outobj[6].innerText=Math.floor(10*inobj[22].value/cnt)/10;
+    v=1;
+    if( inobj[29].checked ){
+      inobj[22].value=0;
+      inobj[22].disabled=true;
+      v=1.5;
+    }else
+    if( inobj[26].checked ){
+      inobj[22].disabled=false;
+    }else
+    if( inobj[27].checked ){
+      inobj[22].disabled=false;
+      v=1.2;
+    }else{
+      if( ! inobj[28].checked ) inobj[28].checked=true;
+      inobj[22].disabled=false;
+      v=1.5;
+    }
+    r0=inobj[22].value*115;
+    if( inobj[21].checked ) r0=Math.floor(r0*1.3);
+    if( inobj[25].checked ) r0=r0*1.5;
+    oneset[0]=oneset[0]+Math.floor(v*r0);
+    r0=maptable[map].g;
+    if( inobj[24].checked) r0=Math.floor(r0*1.15);
+    else if( inobj[23].checked) r0=Math.floor(r0*1.1);
+    if( inobj[0].checked ) r0=r0*1.5; /* shop boost */
+    oneset[0]=oneset[0]+Math.floor(v*r0)*cnt;
+    outobj[7].innerText=maptable[map].charisma*cnt;
+    outobj[8].innerText=fNum(e);
+    outobj[9].innerText=fNum(oneset[0]);
+    if( e*n > 0 ){ /*EXP取得andLvあげ*/
+      r0=Math.floor(n/e)+(( (n/e) > Math.floor(n/e) )?1:0); /*巡回回数*/
+      if( r0 > 0 ){
+        outobj[11].innerText=r0+"セット=カリ"+fNum(maptable[map].charisma*cnt*r0)+"("+fNum(e*r0)+"exp : "+fNum(oneset[0]*r0)+"G)";
+        outobj[12].innerHTML="";
+        v=leveling(rea,
+              (lvfrom<exptable[rea].length)?(exptable[rea][lvfrom]-expfrom):exptable[rea][exptable[rea].length-1],
+              (lvto  <exptable[rea].length)?(exptable[rea][lvto  ]-expto  ):exptable[rea][exptable[rea].length-1],
+              map,oneset,[0,0,0,0,0]);
+        n=oneset[0]*r0-v[1];
+        outobj[10].innerText=fNum(v[0]);
+        outobj[15].innerText=fNum(-v[1]);
+        if(n < 0 ){
+         i=inobj[30].value;
+         if( i >= 1000 ){
+          r0=maptable2[i-1000];
+          i=6000*inobj[31].value;
+         }else{
+          r0=maptable[i];
+          i=500*inobj[31].value;
+         }
+         v=r0.g;
+         if( inobj[33].checked ) v=v*1.2;
+         if( inobj[34].checked ) v=v*1.5;
+         if( inobj[35].checked ) v=v*1.5;
+         if( inobj[38].checked ) v=v*1.15;
+         if( inobj[37].checked ) v=v*1.1;
+         v=v+i+(inobj[40].checked ?149.5:115)*inobj[41].value;
+         i=Math.ceil(-n/v);
+         outobj[13].innerText="↳金策"+i+"周=カリ"+fNum(r0.charisma*i)+" スタ"+(r0.stamina*i)+" ("+fNum(Math.floor(v*i))+"G)";
+         outobj[14].innerText="収支"+fNum(Math.floor(v*i+n))+"Ｇ";
+        }
+      }else{
+        outobj[10].innerText="";
+        outobj[11].innerText="";
+        outobj[12].innerHTML="";
+        outobj[13].innerText="";
+      }
+    }
+  };
+
+  for(i=0;i<=44;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
+  for(i=1;i<=15;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
+
+ inobj[42].addEventListener( "click", function(ev){
+  inobj[43].style.display="block";
+  inobj[44].style.display="inline";
+ });
+
+ inobj[43].addEventListener( "click", function(ev){
+  var lv;
+  var rea=inobj[1].value;
+  var i=ev.target.id;
+  inobj[43].style.display="none";
+  inobj[44].style.display="none";
+  if( /^dlg[01][0-9]$/.test(i) ) i=i.match(/[1]?[0-9]?$/)/1;
+  else return;
+  if( i > 15 ){
+    i=exptable[rea][ [1,1,55,60,65,70,80][rea]-1]-(i-15)*8000;
+  }else{
+    i=exptable[rea][exptable[rea].length-1]-i*8000;
+  }
+  if( i <= 0 ){
+    inobj[4].value=1;
+    inobj[5].value=exptable[rea][1];
+  }else{
+    for(lv=0;lv+1<exptable[rea].length && i >= exptable[rea][lv+1] ; lv++ );
+    inobj[4].value=lv+1;
+    inobj[5].value=exptable[rea][lv+1]-i;
+  }
+  domap();
+ });
+
+  document.body.addEventListener( "change", function(ev){
+    switch(ev.target.id){
+      case "in01": dorea(); dolv(); break;
+      case "in02":  dolv(); break;
+      case "in09": inobj[10].checked=true; break;
+      case "in10": inobj[ 9].checked=true; break;
+      case "in12": inobj[13].checked=true; break;
+      case "in13": inobj[12].checked=true; break;
+      case "in15": inobj[16].checked=true; break;
+      case "in16": inobj[15].checked=true; break;
+      case "in18": inobj[19].checked=true; break;
+      case "in19": inobj[18].checked=true; break;
+      case "in20": inobj[21].checked=true; break;
+      case "in21": inobj[20].checked=true; break;
+      case "in23": inobj[24].checked=true; break;
+      case "in24": inobj[25].checked=true; break;
+      case "in25": inobj[23].checked=true; break;
+      case "in32": inobj[33].checked=true; break;
+      case "in33": inobj[34].checked=true; break;
+      case "in34": inobj[35].checked=true; break;
+      case "in35": inobj[32].checked=true; break;
+      case "in36": inobj[37].checked=true; break;
+      case "in37": inobj[38].checked=true; break;
+      case "in38": inobj[36].checked=true; break;
+      case "in39": inobj[40].checked=true; break;
+      case "in40": inobj[39].checked=true; break;
+    }
+    domap();
+  });
+
+
+  for( i=0 ; i < maptable2.length ; i++ ){
+      obj=document.createElement("OPTION");
+      obj.value=i+1000;
+      obj.innerText=maptable2[i].name;
+      inobj[30].add(obj);
+  }
+  for( sel=0 ; sel<2 ; sel++ ){
+    for( i=0 ; i < maptable.length ; i++ ){
+      obj=document.createElement("OPTION");
+      obj.value=i;
+      obj.innerText=maptable[i].name;
+      inobj[6+24*sel].add(obj);
+    }
+  }
+  for( sel=0 ; sel < 8 ; sel++ ){
+    for(i=0;i<((sel<6)?100:(sel<7)?70:250);i++){
+      obj=document.createElement("OPTION");
+      obj.value=( sel == 0 || sel == 6 )?(i+1):i;
+      if(sel>=6) obj.value /=10.0;
+      obj.innerText=obj.value;
+      inobj[ [7,8,11,14,17,22,31,41][sel] ].add(obj);
+    }
+  }
+  dorea();
+  dolv();
+  inobj[ 4].value=63;
+  inobj[ 5].value=219;
+  inobj[ 6].value=53;
+  inobj[ 7].value=5;
+  inobj[14].value=17;
+  inobj[15].checked=true;
+  inobj[17].value=8;
+  inobj[18].checked=true;
+  inobj[30].value=1004;
+  inobj[31].value=2.7;
+  inobj[41].value=2.1;
+
+  domap();
+
+
+}
+</script>
+</body></html>
+
