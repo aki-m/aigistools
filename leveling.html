@@ -3,7 +3,7 @@
  <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <META http-equiv="Content-Script-Type" content="text/javascript">
  <META http-equiv="Content-Style-Type" content="text/css">
- <title></title>
+ <title> </title>
 <style>
 html,body{ font-size:24px; height:100%; margin:0px; }
 .fl{ display: flex; }
@@ -120,7 +120,7 @@ td input[type="checkbox"].rot:checked + label { display:inline; background-color
    </select>
 Lv<select id="in02" ></select>あと<input id="in03" type="number" min=1 max=3999 />を
 <input type="button" id="in42" value="…" />
-Lv<select id="in04"></select>あと<input id="in05" type="number" min=1 max=3999 />まで<span id="out01"></span> exp</span>
+Lv<select id="in04"></select>あと<input id="in05" type="number" min=1 max=3999 />まで<span id="out01"></span>exp</span>
 <input type="checkbox" id="in00"><label for="in00" title="ショップブースト">　Ｇ ↑</label>
 <div class="fl">
 <span style="margin-right:8px;">
@@ -419,8 +419,22 @@ document.body.onload=function(ev){
     var cnt    = inobj[7].value;
     var oneset = [0,0,0,0,0];
     var e=0;
-    n=(lvfrom<lvto) ?(exptable[rea][lvto] -expto/1 - exptable[rea][lvfrom] +expfrom/1):0;
-    outobj[1].innerText=n;
+    if( lvto >= exptable[rea].length ){
+      expto=0;
+      n=exptable[rea][exptable[rea].length-1];
+      inobj[5].value=0;
+    }else{
+      n=exptable[rea][lvto] -expto/1;
+    }
+    if( lvfrom >= exptable[rea].length ){
+      expfrom=0;
+      n=0;
+      inobj[3].value=0;
+    }else{
+      n=n - exptable[rea][lvfrom] +expfrom/1;
+    }
+    if( n < 0 ) n=0;
+    outobj[1].innerText=fNum(n);
     if( map >= 47 && map != 51 ){
         inobj[ 8].value=0;
         inobj[11].value=0;
