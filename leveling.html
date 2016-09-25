@@ -3,23 +3,22 @@
  <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <META http-equiv="Content-Script-Type" content="text/javascript">
  <META http-equiv="Content-Style-Type" content="text/css">
- <title>アイギス 育成計算機 </title>
+ <title> </title>
 <style>
 html,body{ font-size:24px; height:100%; margin:0px; }
 .fl{ display: flex; }
 .fl span { margin-top:4px; }
-select,input[type="number"],x-b input { font-size:20px;}
+select,input[type="number"] { font-size:20px;}
 input[type="number"]{ width:5em; }
 table{  border-collapse: collapse;}
 tr{ border: none;  }
 td div { padding: 2px 0px 2px 0px;}
-input[type="button"] {
+label ,input[type="button"] {
  background-color: #e8ffff;
  border: solid 1px #999;
  border-radius: 5px;
  padding: 0px;
  margin:0px ;
- cursor: pointer;
  user-select: none;
  -webkit-user-select: none;
  -moz-user-select: none;
@@ -46,7 +45,7 @@ input[type="button"] {
 .list {
  overflow-y:scroll;
  border: solid 1px black;
- height:88px;
+ height:148px;
  background-color: #eef;
  margin: 0px;
 }
@@ -101,85 +100,14 @@ input[type="button"] {
  background-color: yellow;
 }
 td select:disabled { background-color: #e8ffff; }
-input.bon { background-color: #ff4; }
-input.chk { display:inline; background-color:#90ffcf; }
-x-b[type="radio"] input{ margin: 0px 6px; }
+input[type="radio"],input[type="checkbox"] { display:none; }
+input[type="radio"]:checked + label, input[type="checkbox"]:checked + label {
+  background-color: #ff4;
+}
+td input[type="checkbox"].rot +label { display:none; }
+td input[type="checkbox"].rot:checked + label { display:inline; background-color:#90ffcf; }
 </style>
-
-
-<script>
-  document.registerElement('x-n', {
-    prototype: Object.create(HTMLSpanElement.prototype,{
-      value:{
-        get:function(){ return this.getAttribute("value")/1; },
-        set:function(n){
-          this.setAttribute("value",n);
-          this.innerText=String(n).replace( /(-?\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-        }
-      },
-      createdCallback:{
-        value:function(){
-          this.innerText=String(this.value).replace( /(-?\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-        }
-      }
-    })
-  });
-
-  document.registerElement('x-b', {
-    prototype: Object.create(HTMLSpanElement.prototype,{
-      value:{
-        get:function(){ return this.getAttribute("value")/1; },
-        set:function(n){
-          var l=this.getAttribute("label").split("|");
-          if( n >= 2 ) n %= l.length;
-          this.setAttribute("value",n);
-          if( l.length <= 1 ){
-            this.children[0].className=(n?"bon":"");
-          }
-          if( this.getAttribute("type") != "radio" ){
-            this.children[0].value=l[n%l.length];
-          }else{
-            var i;
-            for( i=0 ; i<l.length ; i++ ){
-              this.children[i].className=(i==(n%l.length))?"bon":"";
-            }
-          }
-        }
-      },
-      range:{
-        get:function(){ return this.getAttribute("label").split("|").length;}
-      },
-      createdCallback:{
-        value:function(){
-          var i,obj;
-          var l=this.getAttribute("label").split("|");
-          for( i=0 ; i<l.length ; i++ ){
-            obj=document.createElement("input");
-            obj.type="button";
-            obj.value=l[i];
-            this.appendChild(obj);
-            if( this.getAttribute("type") != "radio" ){
-              obj.className="chk";
-              break;
-            }
-            obj.setAttribute("num",i);
-          }
-          this.value=this.value;
-        }
-      }
-    })
-  });
-
-
-
-</script>
 </head><body>
-<div style="padding:10px 2px;">
-<span>アイギス 育成計算機　　</span>
-<span style="font-size:14px">復活の呪文</span>
-<input id="in28" type="text" size=24 style="font-family:monospace;">
-<input type="button" id="in29" value="復活">
-</div>
 <span class="cinfo">
    <select id="in01">
     <option value="0">アイアン</option>
@@ -188,79 +116,104 @@ x-b[type="radio"] input{ margin: 0px 6px; }
     <option value="3">ゴールド</option>
     <option value="4">サファイア</option>
     <option value="5">プラチナ</option>
-    <option value="6">ブラック</option>
+    <option value="6" selected>ブラック</option>
    </select>
 Lv<select id="in02" ></select>あと<input id="in03" type="number" min=1 max=3999 />を
-<input type="button" id="odlg" value="…" />
-Lv<select id="in04"></select>あと<input id="in05" type="number" min=1 max=3999 />まで<x-n id="out01"></x-n>exp</span>
-<x-b label="Ｇ ↑" id="in00"></x-b>
+<input type="button" id="in42" value="…" />
+Lv<select id="in04"></select>あと<input id="in05" type="number" min=1 max=3999 />まで<span id="out01"></span>exp</span>
+<input type="checkbox" id="in00"><label for="in00" title="ショップブースト">　Ｇ ↑</label>
 <div class="fl">
 <span style="margin-right:8px;">
 <table class="set" >
  <tr>
   <th colspan=5>
    <div>１セット=<select id="in06"></select>を<select id="in07"></select>回</div>
-   <div>↳カリ<x-n id="out02"></x-n>（<x-n id="out03"></x-n>exp:<x-n id="out04"></x-n>G）</div>
+   <div>↳カリ<span id="out07"></span>（<span id="out08"></span>exp:<span id="out09"></span>G）</div>
   </th>
- </tr><tr><td rowspan=2>鉄</td>
+ </tr><tr>
+  <td rowspan=2>鉄</td>
   <td>職ボなし</td>
-  <td style="text-align:left;">ドロ数<select id="in08"></select>(平均<x-n id="out05"></x-n>)</td>
-  <td><x-b label="換金|合成" id="in09"></x-b></td>
+  <td>ドロ数<select id="in08"></select>(平均<span id="out02"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in09"><label for="in09">合成</label>
+      <input type="checkbox" class="rot" id="in10"><label for="in10">換金</label></td>
  </tr><tr>
   <td>職ボあり</td>
-  <td style="text-align:left;">ドロ数<select id="in10" ></select>(平均<x-n id="out06"></x-n>)</td>
-  <td><x-b label="換金|合成" id="in11"></x-b></td>
- </tr><tr><td rowspan=2>銅</td>
+  <td>ドロ数<select id="in11" ></select>(平均<span id="out03"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in12"><label for="in12">合成</label>
+      <input type="checkbox" class="rot" id="in13"><label for="in13">換金</label></td>
+ </tr><tr>
+  <td rowspan=2>銅</td>
   <td>職ボなし</td>
-  <td style="text-align:left;">ドロ数<select id="in12"></select>(平均<x-n id="out07"></x-n>)</td>
-  <td><x-b label="換金|合成" id="in13"></x-b></td>
+  <td>ドロ数<select id="in14"></select>(平均<span id="out04"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in15"><label for="in15">合成</label>
+      <input type="checkbox" class="rot" id="in16"><label for="in16">換金</label></td>
  </tr><tr>
   <td>職ボあり</td>
-  <td style="text-align:left;">ドロ数<select id="in14" ></select>(平均<x-n id="out08"></x-n>)</td>
-  <td><x-b label="換金|合成" id="in15"></x-b></td>
+  <td>ドロ数<select id="in17" ></select>(平均<span id="out05"></span>)</td>
+  <td><input type="checkbox" class="rot" id="in18"><label for="in18">合成</label>
+      <input type="checkbox" class="rot" id="in19"><label for="in19">換金</label></td>
  </tr><tr>
   <td colspan=3>
-   <x-b label="ゴールドゲット|ゴールドゲット＋" id="in16"></x-b>数<select id="in17"></select>(平均<x-n id="out09"></x-n>)
-  </td>
-  <td></td>
+   <input type="checkbox" class="rot" id="in20" checked><label for="in20">ゴールドゲット</label>
+   <input type="checkbox" class="rot" id="in21"        ><label for="in21" title="覚醒トトノ">ゴールドゲット＋</label>
+   <span>数<select id="in22"></select>(平均<span id="out06"></span>)</span>
+  </td><td></td>
  </tr><tr>
-  <td colspan=2><x-b label="報酬↑なし|金運招来|豊穣の杖" id="in18"></x-b></td>
-  <td colspan=2><x-b label="★１|★２|★３|委任" id="in19" type="radio"></x-b></td>
+  <td colspan=2>
+    <input type="checkbox" class="rot" id="in25"        ><label for="in25">報酬↑なし</label>
+    <input type="checkbox" class="rot" id="in23"        ><label for="in23" title="覚醒ノエル">金運招来</label>
+    <input type="checkbox" class="rot" id="in24" checked><label for="in24" title="覚醒ミア">豊穣の杖</label>
+  </td>
+  <td colspan=2>
+   <input type="radio" name="radio6" value=1 id="in26"        ><label for="in26">★１</label>
+   <input type="radio" name="radio6" value=2 id="in27"        ><label for="in27">★２</label>
+   <input type="radio" name="radio6" value=3 id="in28"        ><label for="in28">★３</label>
+   <input type="radio" name="radio6" value=4 id="in29" checked><label for="in29">委任</label>
+  </td>
  </tr>
 </table>
+<div class="bs" style="margin-top:4px;">目標まで合成<span id="out10"></span>回（<span id="out15"></span>G）</div>
 </span><span>
 <div class="bs">
- <div>目標まで合成<x-n id="out10"></x-n>回（<x-n id="out11"></x-n>G）</div>
- <div>↳<x-n id="out12"></x-n>セット=カリ<x-n id="out13"></x-n>(<x-n id="out14"></x-n>G)</div>
- <div class="list">
-<template id="tmpl01">
- <tr><td colspan=4>1セット巡回 鉄[<x-n></x-n>,<x-n></x-n>]銅[<x-n></x-n>,<x-n></x-n>]</td><td><x-n></x-n>G</td></tr>
-</template>
-<template id="tmpl02">
- <tr><td>合成</td><td style='border-left-style:none;'>+<x-n></x-n>exp</td><td>Lv<x-n></x-n>あと</td><td style='border-left-style:none;'><x-n></x-n></td><td><x-n></x-n>G</td></tr>
-</template>
-<table id="out15" >
- </table></div>
+ <div id="out11"></div>
+ <div class="list"><table id="out12" ></table></div>
 </div>
 <div class="bs" style="margin-top:4px;">
 <table class="set">
 <tr>
  <td rowspan=2>金<br />策</td>
- <td><select id="in20"></select></td>
- <td><x-b label="★１|★２|★３|委任" id="in21"></x-b></td>
- <td><x-b label="報酬↑なし|金運招来|豊穣の杖" id="in22"></x-b></td>
+ <td>
+  <select id="in30"></select>
+ </td>
+ <td>
+  <input type="checkbox" class="rot" id="in32"        ><label for="in32">★１</label>
+  <input type="checkbox" class="rot" id="in33"        ><label for="in33">★２</label>
+  <input type="checkbox" class="rot" id="in34" checked><label for="in34">★３</label>
+  <input type="checkbox" class="rot" id="in35"        ><label for="in35">委任</label>
+ </td>
+ <td>
+  <input type="checkbox" class="rot" id="in36" checked><label for="in36">報酬↑なし</label>
+  <input type="checkbox" class="rot" id="in37"        ><label for="in37" title="覚醒ノエル">金運招来</label>
+  <input type="checkbox" class="rot" id="in38"        ><label for="in38" title="覚醒ミア">豊穣の杖</label>
+ </td>
+
 </tr><tr>
- <td>金以下ドロ平均<select id="in23"></select></td>
- <td colspan=2><x-b label="GG|GG+" id="in24"></x-b>平均数<select id="in25" ></select></td>
+ <td>
+金以下ドロ平均<select id="in31"></select>
+ </td>
+ <td colspan=2>
+  <input type="checkbox" class="rot" id="in39"        ><label for="in39">GG</label>
+  <input type="checkbox" class="rot" id="in40" checked><label for="in40" title="覚醒トトノ">GG+</label>平均数<select id="in41" ></select>
+ </td>
 </tr>
 </table>
-<div>↳金策<x-n id="out16"></x-n>周=カリ<x-n id="out17"></x-n> スタ<x-n id="out18"></x-n> (<x-n id="out19"></x-n>G)</div>
+<div id="out13"></div>
 </div>
-<div>収支<x-n id="out20" ></x-n>G</div>
+<div id="out14" colspan=4></div>
 </span>
 </div>
-<div id="in26" class="mask"></div>
-<table id="in27" class="dlg">
+<div id="in44" class="mask"></div>
+<table id="in43" class="dlg">
  <tr>
   <th colspan=4>覚醒カンストからの逆算</th><th style="text-align:right;">☒　</th>
  </tr><tr>
@@ -377,6 +330,10 @@ document.body.onload=function(ev){
   var inobj=[null];
   var outobj=[null];
 
+  var fNum=function(n){
+   return String(n).replace( /(-?\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+  }
+
   var dolv=function (){
     var rea=inobj[1].value;
     var lv =inobj[2].value;
@@ -430,165 +387,25 @@ document.body.onload=function(ev){
           ex=0;
         }
       }
-      var tmpl=document.importNode(document.getElementById((ex==0)?"tmpl01":"tmpl02").content,true);
-      v=tmpl.children[0].querySelectorAll("x-n");
+      var obj=document.createElement("TR");
+      var v="";
       if( ex == 0 ){
-        v[0].value=cur[1];
-        v[1].value=cur[2];
-        v[2].value=cur[3];
-        v[3].value=cur[4];
-        v[4].value=cur[0]-r[1];
+       v="<td colspan=4>1セット巡回 ";
+       v=v+"鉄["+cur[1]+","+cur[2]+"]銅["+cur[3]+","+cur[4]+"]</td>";
       }else{
+        v="<td>合成</td><td style='border-left-style:none;'>+"+ex+"exp</td>";
         expfrom += ex ;
         r[0]++;
         r[1]+=cost;
         for(lv=0;lv+1<exptable[rea].length && expfrom >= exptable[rea][lv+1] ; lv++ );
-        v[0].value=ex;
-        v[1].value=lv+1;
-        v[2].value=( lv+1<exptable[rea][lv+1] )?(exptable[rea][lv+1]-expfrom):0;
-        v[3].value=cur[0]-r[1];
+        v=v+"<td>Lv"+(lv+1);
+        v=v+"あと</td><td style='border-left-style:none;'>"+(( lv+1<exptable[rea][lv+1] )?(exptable[rea][lv+1]-expfrom):0)+"</td>";
       }
-      outobj[15].appendChild(tmpl);
-
+      v=v+"<td>"+fNum(cur[0]-r[1])+"G</td>";
+      obj.innerHTML=v;
+      outobj[12].appendChild(obj);
    }
    return r;
-  };
-
-  var B64={
-    charmap:"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.",
-    toC:function(arg){
-       ret="";
-       while(true){
-         ret=ret+B64.charmap.substr(arg&63,1);
-         if( arg < 64 ) break;
-         arg /= 64;
-       }
-       return ret;
-    },
-    toN:function(arg){
-        for( i=ret=0 ; i< arg.length ; i++ ){
-            ret=ret*64+B64.charmap.indexOf(arg.substr(i,1));
-        }
-        return ret;
-    }
-  };
-  var saveword={
-    backupstr:function(inobj){ //bGigd8nTQfaaaJeqanagXug
-        var i,e;
-        var ret="";
-        var cnt=0;
-        var n=0;
-        var r0=0;
-//var debug="";
-        for( i=0 ; i < inobj.length ; i++ ){
-            switch( inobj[i].tagName.toUpperCase() ){
-              case "INPUT":
-                switch( inobj[i].type.toUpperCase() ){
-                  case "NUMBER": 
-//debug=debug+(ret.length*6+cnt)+"-12:"+inobj[i].value.toString(16)+" ";
-                    n=n*4096+(( inobj[i].value/1 >= 4000 )?3999:(inobj[i].value/1));
-                    cnt+=12;
-//debug=debug+"<"+n.toString(16)+":"+cnt+"> ";
-                    break;
-                }
-                break;
-              case "SELECT":
-//debug=debug+(ret.length*6+cnt)+"-7:"+inobj[i].value.toString(16)+" ";
-                    n=n*128+String(inobj[i].value).replace(/[.]/,'')/1;
-                    cnt += 7;
-//debug=debug+"<"+n.toString(16)+":"+cnt+"> ";
-                    break;
-              case "X-B":
-                    e=inobj[i].range/1;
-                    if( e >= 2 ) e--;
-                    e=(e>7)?4:((e>3)?3:((e>1)?2:1));
-//debug=debug+(ret.length*6+cnt)+"-"+e+":"+inobj[i].value.toString(16)+" ";
-                    n=(n<<e)+inobj[i].value/1;
-                    cnt += e;
-//debug=debug+"<"+n.toString(16)+":"+cnt+"> ";
-                    break;
-            }
-            while( cnt >= 6 ) {
-               cnt-=6;
-               e=n>>cnt;
-               r0=r0^e;
-               ret = ret + B64.toC(e);
-               n-=e<<cnt;
-//debug=debug+"<"+e.toString(16)+"("+B64.toC(e)+"):6"+"+"+n.toString(16)+":"+cnt+"> ";
-            }
-        }
-        if( cnt != 0 ){
-             e=n<<(6-cnt);
-             r0=r0^e;
-             ret = ret + B64.toC(e);
-//debug=debug+"<"+e.toString(16)+"="+B64.toC(e)+"> ";
-        }
-        ret =ret + B64.toC(r0);
-//debug=debug+"#"+r0.toString(16)+"="+B64.toC(r0);
-//alert(debug);
-        return ret;
-    },
-    restorestr:function(str){
-        var i,n,e;
-        var r0=0;
-        var v=str+"aaa";
-//var debug=""
-        for( i=0 ; i < inobj.length ; i++ ){
-            n=r0%6;
-            switch( inobj[i].tagName.toUpperCase() ){
-              case "INPUT":
-                switch( inobj[i].type.toUpperCase() ){
-                  case "RADIO":  case "CHECKBOX":
-                      e=(( B64.toN(v.substr((r0-n)/6,1)) & (1<<(5-n)) )!=0);
-                      inobj[i].value=e;
-                      r0++;
-                      break;
-                  case "NUMBER":
-                      e = v.substr((r0-n)/6,3);
-//debug=debug+r0+"-12:";
-                      e = B64.toN(e);
-                      e = e  >>(18-12-n);
-                      e = e & 4095;
-//debug=debug+e+" ";
-                      inobj[i].value = e;
-                      r0+=12;
-                      break;
-                 }
-                 break;
-              case "SELECT":
-                 e = v.substr((r0-n)/6,2);
-//debug=debug+r0+"-7:";
-                 e = B64.toN(e);
-                 e = e>>(12-7-n); 
-                 e = e&127;
-//debug=debug+e+" ";
-                 inobj[i].value = e/((i>=23)?10:1);
-                 r0+=7;
-                 if( i == 1 ) dorea();
-                 break;
-              case "X-B":
-                 e=inobj[i].range;
-                 if( e >= 2 ) e--;
-                 e=(e>7)?4:((e>3)?3:((e>1)?2:1));
-//debug=debug+r0+"-"+e+":";
-                 r0 += e;
-                 e=(B64.toN(v.substr((r0-n)/6,2)) >>(12-e-n))&((1<<e)-1);
-                 e = e & 4095;
-//debug=debug+e+" ";
-                 inobj[i].value = e;
-                 break;
-            }
-        }
-//alert(debug);
-        domap();
-    },
-    checkstr:function(str){
-      var i,n;
-      for(i=0,n=0 ; i+1 < str.length ; i++ ){
-        n=n^B64.toN(str.substr(i,1));
-      }
-      return ( n == B64.toN(str.substr(i,1)) );
-    }
   };
 
   var domap=function (){
@@ -602,8 +419,6 @@ document.body.onload=function(ev){
     var cnt    = inobj[7].value;
     var oneset = [0,0,0,0,0];
     var e=0;
-
-    ///// calc exp
     if( lvto >= exptable[rea].length ){
       expto=0;
       n=exptable[rea][exptable[rea].length-1];
@@ -619,165 +434,165 @@ document.body.onload=function(ev){
       n=n - exptable[rea][lvfrom] +expfrom/1;
     }
     if( n < 0 ) n=0;
-    outobj[1].value=n;
-
+    outobj[1].innerText=fNum(n);
     if( map >= 47 && map != 51 ){
         inobj[ 8].value=0;
-        inobj[10].value=0;
+        inobj[11].value=0;
         inobj[ 8].disabled=true;
-        inobj[10].disabled=true;
+        inobj[11].disabled=true;
+        inobj[ 9].checked=false;
+        inobj[10].checked=false;
+        inobj[12].checked=false;
+        inobj[13].checked=false;
     }else{
         inobj[ 8].disabled=false;
-        inobj[10].disabled=false;
+        inobj[11].disabled=false;
     }
-
     for( i=0;i<4;i++ ){
-      v=inobj[i*2+8].value/1;
-      outobj[i+5].value=Math.floor(10*v/cnt)/10;
+      v=inobj[i*3+8].value;
+      outobj[i+2].innerText=Math.floor(10*v/cnt)/10;
       if( v > 0 ){
-        if( inobj[i*2+9 ].value > 0 ){
-          oneset[i+1]=v;
+        if( inobj[i*3+9 ].checked ){
+          oneset[i+1]=v/1;
           e=e+(maptable[map].eexp+(i&1)*30+(i&2)*15)*v;
         }else{
+          if( ! inobj[i*3+10].checked ) inobj[i*3+10].checked=true;
           oneset[0]=oneset[0]+(500*v);
         }
-        inobj[i*2+9].style["display"]="inline";
       }else{
-        inobj[i*2+9].style["display"]="none";
+        inobj[i*3+9 ].checked=false;
+        inobj[i*3+10].checked=false;
       }
     }
+    outobj[6].innerText=Math.floor(10*inobj[22].value/cnt)/10;
     v=1;
-    if( inobj[19].value == 1 ) v=1.2; //☆2
-    if( inobj[19].value >= 2 ) v=1.5; //☆3
-    if( inobj[19].value == 3 ) inobj[17].value=0; //委任
-    outobj[9].value=Math.floor(10*inobj[17].value/cnt)/10;
-    inobj[17].disabled=(inobj[19].value == 3)?true:false;
-    oneset[0] += Math.floor(Math.floor(inobj[17].value*115*( inobj[16].value*0.3+1 ) )*v); //GG
-    switch(inobj[18].value ){ //ミア、ノエルl
-      case 1:  r0=Math.floor(maptable[map].g*1.1 ); break;
-      case 2:  r0=Math.floor(maptable[map].g*1.15); break;
-      default: r0=           maptable[map].g;       break;
-    }
-    if( inobj[0].value > 0 ) r0=r0*1.5; /* shop boost */
-    oneset[0]=oneset[0]+Math.floor(v*r0)*cnt;
-    outobj[2].value=maptable[map].charisma*cnt;
-    outobj[3].value=e;
-    outobj[4].value=oneset[0];
-    outobj[15].innerHTML="";
-    r0=( e*n > 0 )?(Math.floor(n/e)+(( (n/e) > Math.floor(n/e) )?1:0)):0; /*巡回回数*/
-    if( r0 > 0 ){
-      outobj[12].innerText=r0;
-      outobj[13].value=maptable[map].charisma*cnt*r0;
-      //outobj[14].value=e*r0;
-      //outobj[15].value=oneset[0]*r0;
-      v=leveling(rea,
-            (lvfrom<exptable[rea].length)?(exptable[rea][lvfrom]-expfrom):exptable[rea][exptable[rea].length-1],
-            (lvto  <exptable[rea].length)?(exptable[rea][lvto  ]-expto  ):exptable[rea][exptable[rea].length-1],
-            map,oneset,[0,0,0,0,0]);
-      n=oneset[0]*r0-v[1];
-      outobj[14].value=n;
-      outobj[10].value=v[0];
-      outobj[11].value=-v[1];
-      if( n < 0 ){ //金策
-        i=inobj[20].value;
-        if( i >= 100 ){
-         r0=maptable2[i-100];
-         i=6000*inobj[23].value;
-        }else{
-         r0=maptable[i];
-         i=500*inobj[23].value;
-        }
-        v=r0.g;
-        if( inobj[21].value == 1 ) v=v*1.2;
-        if( inobj[21].value >= 2 ) v=v*1.5;
-        if( inobj[22].value == 1 ) v=v*1.1;
-        if( inobj[22].value == 2 ) v=v*1.15;
-        v=v+i+(inobj[24].checked ?149.5:115)*inobj[25].value;
-        i=Math.ceil(-n/v);
-        outobj[16].value=i;
-        outobj[17].value=r0.charisma*i;
-        outobj[18].value=r0.stamina*i;
-        outobj[19].value=Math.floor(v*i);
-        outobj[20].value=Math.floor(v*i+n);
-      }else{
-        outobj[16].value=0;
-        outobj[17].value=0;
-        outobj[18].value=0;
-        outobj[19].value=0;
-        outobj[20].value=Math.floor(n);
-      }
+    if( inobj[29].checked ){
+      inobj[22].value=0;
+      inobj[22].disabled=true;
+      v=1.5;
+    }else
+    if( inobj[26].checked ){
+      inobj[22].disabled=false;
+    }else
+    if( inobj[27].checked ){
+      inobj[22].disabled=false;
+      v=1.2;
     }else{
-      outobj[10].innerText="";
-      outobj[11].innerText="";
-      outobj[12].innerHTML="";
-      outobj[13].innerText="";
-      outobj[14].value=0;
-      outobj[15].value=0;
-      outobj[16].value=0;
-      outobj[17].value=0;
-      outobj[18].value=0;
-      outobj[19].value=0;
-      outobj[20].value=oneset[0];
+      if( ! inobj[28].checked ) inobj[28].checked=true;
+      inobj[22].disabled=false;
+      v=1.5;
     }
-    inobj[28].value=saveword.backupstr(inobj);
+    r0=inobj[22].value*115;
+    if( inobj[21].checked ) r0=Math.floor(r0*1.3);
+    if( inobj[25].checked ) r0=r0*1.5;
+    oneset[0]=oneset[0]+Math.floor(v*r0);
+    r0=maptable[map].g;
+    if( inobj[24].checked) r0=Math.floor(r0*1.15);
+    else if( inobj[23].checked) r0=Math.floor(r0*1.1);
+    if( inobj[0].checked ) r0=r0*1.5; /* shop boost */
+    oneset[0]=oneset[0]+Math.floor(v*r0)*cnt;
+    outobj[7].innerText=maptable[map].charisma*cnt;
+    outobj[8].innerText=fNum(e);
+    outobj[9].innerText=fNum(oneset[0]);
+    if( e*n > 0 ){ /*EXP取得andLvあげ*/
+      r0=Math.floor(n/e)+(( (n/e) > Math.floor(n/e) )?1:0); /*巡回回数*/
+      if( r0 > 0 ){
+        outobj[11].innerText=r0+"セット=カリ"+fNum(maptable[map].charisma*cnt*r0)+"("+fNum(e*r0)+"exp : "+fNum(oneset[0]*r0)+"G)";
+        outobj[12].innerHTML="";
+        v=leveling(rea,
+              (lvfrom<exptable[rea].length)?(exptable[rea][lvfrom]-expfrom):exptable[rea][exptable[rea].length-1],
+              (lvto  <exptable[rea].length)?(exptable[rea][lvto  ]-expto  ):exptable[rea][exptable[rea].length-1],
+              map,oneset,[0,0,0,0,0]);
+        n=oneset[0]*r0-v[1];
+        outobj[10].innerText=fNum(v[0]);
+        outobj[15].innerText=fNum(-v[1]);
+        if(n < 0 ){
+         i=inobj[30].value;
+         if( i >= 1000 ){
+          r0=maptable2[i-1000];
+          i=6000*inobj[31].value;
+         }else{
+          r0=maptable[i];
+          i=500*inobj[31].value;
+         }
+         v=r0.g;
+         if( inobj[33].checked ) v=v*1.2;
+         if( inobj[34].checked ) v=v*1.5;
+         if( inobj[35].checked ) v=v*1.5;
+         if( inobj[38].checked ) v=v*1.15;
+         if( inobj[37].checked ) v=v*1.1;
+         v=v+i+(inobj[40].checked ?149.5:115)*inobj[41].value;
+         i=Math.ceil(-n/v);
+         outobj[13].innerText="↳金策"+i+"周=カリ"+fNum(r0.charisma*i)+" スタ"+(r0.stamina*i)+" ("+fNum(Math.floor(v*i))+"G)";
+         outobj[14].innerText="収支"+fNum(Math.floor(v*i+n))+"Ｇ";
+        }
+      }else{
+        outobj[10].innerText="";
+        outobj[11].innerText="";
+        outobj[12].innerHTML="";
+        outobj[13].innerText="";
+      }
+    }
   };
 
-  for(i=0;i<=29;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
-  for(i=1;i<=20;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
+  for(i=0;i<=44;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
+  for(i=1;i<=15;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
 
-  document.body.addEventListener( "click", function(ev){
-    var lv,rea,i,j;
-    if( ev.target.parentNode.tagName.toUpperCase() == "X-B"){
-      if( ev.target.parentNode.getAttribute("type") == "radio" ){
-        ev.target.parentNode.value = ev.target.getAttribute("num")/1;
-      }else{
-        ev.target.parentNode.value += 1;
-      }
-      domap();
-    }else if(ev.target.id == "in29" ){
-      var v=inobj[28].value;
-      var off=0;
-      if( ! saveword.checkstr(v) ){
-        alert("その呪文は正しくないようだ");
-        return;
-      }
-      //saveword.restorestr(v);
-      //if( location.search && location.search.length > 0 ) location.search="";
-      //location.hash="#"+v;
-      //location.reload();
-      location.href="?"+v;
-    }else if(ev.target.id == "odlg" ){
-      inobj[26].style.display="block";
-      inobj[27].style.display="inline";
-    }else{
-      rea=inobj[1].value;
-      i=ev.target.id;
-      inobj[26].style.display="none";
-      inobj[27].style.display="none";
-      if( /^dlg[01][0-9]$/.test(i) ) i=i.match(/[1]?[0-9]?$/)/1;
-      else return;
-      if( i > 15 ){
-        i=exptable[rea][ [1,1,55,60,65,70,80][rea]-1]-(i-15)*8000;
-      }else{
-        i=exptable[rea][exptable[rea].length-1]-i*8000;
-      }
-      if( i <= 0 ){
-        inobj[4].value=1;
-        inobj[5].value=exptable[rea][1];
-      }else{
-        for( lv=0 ; lv+1 < exptable[rea].length && i >= exptable[rea][lv+1] ; lv++ );
-        inobj[4].value=lv+1;
-        inobj[5].value=exptable[rea][lv+1]-i;
-      }
-      domap();
-    }
+ inobj[42].addEventListener( "click", function(ev){
+  inobj[43].style.display="block";
+  inobj[44].style.display="inline";
+ });
+
+ inobj[43].addEventListener( "click", function(ev){
+  var lv;
+  var rea=inobj[1].value;
+  var i=ev.target.id;
+  inobj[43].style.display="none";
+  inobj[44].style.display="none";
+  if( /^dlg[01][0-9]$/.test(i) ) i=i.match(/[1]?[0-9]?$/)/1;
+  else return;
+  if( i > 15 ){
+    i=exptable[rea][ [1,1,55,60,65,70,80][rea]-1]-(i-15)*8000;
+  }else{
+    i=exptable[rea][exptable[rea].length-1]-i*8000;
+  }
+  if( i <= 0 ){
+    inobj[4].value=1;
+    inobj[5].value=exptable[rea][1];
+  }else{
+    for(lv=0;lv+1<exptable[rea].length && i >= exptable[rea][lv+1] ; lv++ );
+    inobj[4].value=lv+1;
+    inobj[5].value=exptable[rea][lv+1]-i;
+  }
+  domap();
  });
 
   document.body.addEventListener( "change", function(ev){
     switch(ev.target.id){
       case "in01": dorea(); dolv(); break;
       case "in02":  dolv(); break;
-      case "in28": return;
+      case "in09": inobj[10].checked=true; break;
+      case "in10": inobj[ 9].checked=true; break;
+      case "in12": inobj[13].checked=true; break;
+      case "in13": inobj[12].checked=true; break;
+      case "in15": inobj[16].checked=true; break;
+      case "in16": inobj[15].checked=true; break;
+      case "in18": inobj[19].checked=true; break;
+      case "in19": inobj[18].checked=true; break;
+      case "in20": inobj[21].checked=true; break;
+      case "in21": inobj[20].checked=true; break;
+      case "in23": inobj[24].checked=true; break;
+      case "in24": inobj[25].checked=true; break;
+      case "in25": inobj[23].checked=true; break;
+      case "in32": inobj[33].checked=true; break;
+      case "in33": inobj[34].checked=true; break;
+      case "in34": inobj[35].checked=true; break;
+      case "in35": inobj[32].checked=true; break;
+      case "in36": inobj[37].checked=true; break;
+      case "in37": inobj[38].checked=true; break;
+      case "in38": inobj[36].checked=true; break;
+      case "in39": inobj[40].checked=true; break;
+      case "in40": inobj[39].checked=true; break;
     }
     domap();
   });
@@ -785,16 +600,16 @@ document.body.onload=function(ev){
 
   for( i=0 ; i < maptable2.length ; i++ ){
       obj=document.createElement("OPTION");
-      obj.value=i+100;
+      obj.value=i+1000;
       obj.innerText=maptable2[i].name;
-      inobj[20].add(obj);
+      inobj[30].add(obj);
   }
   for( sel=0 ; sel<2 ; sel++ ){
     for( i=0 ; i < maptable.length ; i++ ){
       obj=document.createElement("OPTION");
       obj.value=i;
       obj.innerText=maptable[i].name;
-      inobj[6+14*sel].add(obj);
+      inobj[6+24*sel].add(obj);
     }
   }
   for( sel=0 ; sel < 8 ; sel++ ){
@@ -803,40 +618,26 @@ document.body.onload=function(ev){
       obj.value=( sel == 0 || sel == 6 )?(i+1):i;
       if(sel>=6) obj.value /=10.0;
       obj.innerText=obj.value;
-      inobj[ [7,8,10,12,14,17,23,25][sel] ].add(obj);
+      inobj[ [7,8,11,14,17,22,31,41][sel] ].add(obj);
     }
   }
-  for( sel=0 ; sel < 2 ; sel++ ){
-    obj=location[["search","hash"][sel]];
-    if( obj && obj.length > 1 ){
-      obj=obj.substring(obj.indexOf(["?","#"][sel])+1);
-      if( saveword.checkstr(obj) ){
-        saveword.restorestr(obj);
-        return;
-      }
-      alert("その呪文は正しくないようだ");
-    }
-  }
-
-  inobj[ 1].value=6; //なぜかchangeが動作しない
   dorea();
   dolv();
   inobj[ 4].value=63;
   inobj[ 5].value=219;
   inobj[ 6].value=53;
   inobj[ 7].value=5;
-  inobj[12].value=17;
-  inobj[13].value=1;
-  inobj[14].value=8;
-  inobj[15].value=1;
-  inobj[18].value=2;
-  inobj[19].value=3;
-  inobj[20].value=104;
-  inobj[21].value=3;
-  inobj[22].value=2;
-  inobj[23].value=2.7;
-  inobj[25].value=2.1;
+  inobj[14].value=17;
+  inobj[15].checked=true;
+  inobj[17].value=8;
+  inobj[18].checked=true;
+  inobj[30].value=1004;
+  inobj[31].value=2.7;
+  inobj[41].value=2.1;
+
   domap();
+
+
 }
 </script>
 </body></html>
