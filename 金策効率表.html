@@ -1,0 +1,143 @@
+﻿<!DOCTYPE HTML>
+<html lang="ja"><head>
+ <META http-equiv="Content-Type" content="text/html;">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title> </title>
+ <style>
+table{ border:solid 1px #00f; border-collapse: collapse; margin:0px 0px 0px 0px; width:1700px;}
+td,th,span{ border: solid 1px #00f;  }
+td{ text-align:right;  padding-right:10px; }
+th{ background-color: lightblue; }
+.hed1{ background-color: lightcyan; }
+.hed2{ background-color: lightgray; }
+ </style>
+</head>
+<body onload="init()">
+<div>
+<b>結晶当たりの取得Ｇ（ランク２００以上、ドロ換金した場合）</b>
+<span>
+<input type="CHECKBOX" id="bonus0">店 獲得Ｇ up</input>
+</span>
+<span>
+<input type="RADIO" name="ggg" id="gg0" checked >GGなし</input>
+<input type="RADIO" name="ggg" id="gg1"         >ゴールドゲット</input>
+<input type="RADIO" name="ggg" id="gg2"         >ゴールドゲット＋</input>
+</span>
+<span>
+<input type="RADIO" name="bonusg1" id="bonus1" checked >なし</input>
+<input type="RADIO" name="bonusg1" id="bonus2"         >金運招来（ノエル）</input>
+<input type="RADIO" name="bonusg1" id="bonus3"         >豊穣の杖（ミア）</input>
+</span>
+<span>
+<input type="RADIO" name="bonusg2" id="bonus4"         >★１</input>
+<input type="RADIO" name="bonusg2" id="bonus5"         >★２</input>
+<input type="RADIO" name="bonusg2" id="bonus6" checked >★３</input>
+</span>
+</div>
+<br>
+<div><table  id="t">
+<tr><th class="hed1"></td></tr>
+<tr><th class="hed2">★3報酬</td></tr>
+<tr><th class="hed2">+1ドロでのＧ</th></tr>
+<tr><th class="hed2">カリスマ<br>(結晶換算)</th></tr>
+<tr><th class="hed2">スタミナ<br>(結晶換算)</th></tr>
+<tr><th class="hed2">1結晶の周回数<br>(1周の結晶数)</th></tr>
+<tr><th class="hed2">1結晶のﾐｯｼｮﾝ報酬</th></tr>
+<tr><th class="hed2">+1ドロＧ増分</th></tr>
+<tr><th>平均ノードロ</th></tr>
+<tr><th>平均0.5ドロ</th></tr>
+<tr><th>平均1.0ドロ</th></tr>
+<tr><th>平均1.5ドロ</th></tr>
+<tr><th>平均2.0ドロ</th></tr>
+<tr><th>平均2.5ドロ</th></tr>
+<tr><th>平均3.0ドロ</th></tr>
+<tr><th>平均3.5ドロ</th></tr>
+<tr><th>平均4.0ドロ</th></tr>
+<tr><th>平均4.5ドロ</th></tr>
+<tr><th>平均5.0ドロ</th></tr>
+<tr><th>平均5.5ドロ</th></tr>
+<tr><th>平均6.0ドロ</th></tr>
+<tr><td style="text-align:left; border:none;">GGでの加算分</td></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG 3回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG 4回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG 5回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG 6回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG 7回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG 8回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG 9回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG10回</th></tr>
+<tr><th>ﾐｯｼｮﾝ当たりGG11回</th></tr>
+</table></div>
+<div>
+</div>
+<script language="javascript">
+  var d=[
+      {nm:"黄金の鎧<br>初級"  ,charisma:15 ,sta:2, g:7500/1.5 ,mxd:3 ,doro:6000  },
+      {nm:"黄金の鎧<br>中級"  ,charisma:24 ,sta:2, g:9000/1.5 ,mxd:5 ,doro:6000  },
+      {nm:"黄金の鎧<br>上級"  ,charisma:60 ,sta:3, g:10500/1.5 ,mxd:6 ,doro:6000  },
+      {nm:"黄金の鎧<br>極級"  ,charisma:80 ,sta:3, g:15000/1.5 ,mxd:6 ,doro:6000  },
+      {nm:"黄金の鎧<br>神級"  ,charisma:80 ,sta:6, g:31500/1.5 ,mxd:4 ,doro:6000  },
+      {nm:"森林の<br>大道"    ,charisma:20 ,sta:0, g:2250/1.5 ,mxd:4 ,doro:350   },
+      {nm:"田園の門"          ,charisma:12 ,sta:0, g:900/1.5  ,mxd:5 ,doro:340   },
+      {nm:"不死の<br>魔物"    ,charisma:42 ,sta:0, g:4501/1.5 ,mxd:5 ,doro:340   },
+      {nm:"焦熱の<br>オアシス",charisma:30 ,sta:0, g:2265/1.5 ,mxd:6 ,doro:433.33},
+      {nm:"東の国の<br>港町"  ,charisma:45 ,sta:0, g:3600/1.5 ,mxd:6 ,doro:433.33},
+      {nm:"転送の<br>魔法陣"  ,charisma:63 ,sta:0, g:4800/1.5 ,mxd:6 ,doro:500   },
+      {nm:"幾多の<br>水晶"    ,charisma:69 ,sta:0, g:5205/1.5 ,mxd:6 ,doro:500   },
+      {nm:"密林の<br>強者"    ,charisma:63 ,sta:0, g:4830/1.5 ,mxd:6 ,doro:433.33},
+      {nm:"立ち並ぶ<br>軍旗"  ,charisma:66 ,sta:0, g:4995/1.5 ,mxd:6 ,doro:500   },
+      {nm:"オークの<br>勇士"  ,charisma:72 ,sta:0, g:5520/1.5 ,mxd:6 ,doro:500   },
+      {nm:"湿地の<br>激戦"        ,charisma:74 ,sta:0, g:5640/1.5 ,mxd:6 ,doro:500   },
+      {nm:"ﾀﾞｰｸｴﾙﾌ<br>の女王" ,charisma:71 ,sta:0, g:5475/1.5 ,mxd:6 ,doro:500   },
+      {nm:"魔界の<br>深層"        ,charisma:72 ,sta:0, g:5490/1.5 ,mxd:6 ,doro:500   },
+      {nm:"病魔の鼠"          ,charisma:73 ,sta:0, g:5700/1.5 ,mxd:6 ,doro:500   },
+      {nm:"魔界に<br>降りし天兵",charisma:74 ,sta:0, g:5745/1.5 ,mxd:6 ,doro:500   },
+  ];
+
+ function cnvN(v){
+    if( (""+v).length > 3 ) return cnvN((""+v).substr(0,(""+v).length-3))+","+(""+v).substr((""+v).length-3,3);
+    return v;
+  }
+  function init(){
+    doDraw();
+    document.body.addEventListener( "click", function(ev){
+      doDraw();
+    });
+  }
+  function doDraw(){
+    var i,j,g,c,n,b0,b1,b2;
+    var gg=0;
+    var t=document.getElementById("t");
+    b0=b1=b2=1.0;/*★1 ノエル・ミアなし 店UPなし*/
+    if( document.getElementById("bonus5").checked ) b0=1.2;  /*★2*/
+    if( document.getElementById("bonus6").checked ) b0=1.5;  /*★3*/
+    if( document.getElementById("bonus2").checked ) b1=1.1;  /*ノエル*/
+    if( document.getElementById("bonus3").checked ) b1=1.15; /*ミア*/
+    if( document.getElementById("bonus0").checked ) b2=1.5;  /*店UP*/
+    if( document.getElementById("gg1").checked ) gg=100;
+    if( document.getElementById("gg2").checked ) gg=130;
+    for( i=0; i<t.rows.length ; i++ ) while( t.rows[i].cells.length > 1 ) t.rows[i].deleteCell(1);
+    for( i=0 ; i<d.length ; i++ ){
+      g=Math.floor(Math.floor(Math.floor(d[i].g *b1)*b2)*b0);
+      n=1/(d[i].charisma/427+d[i].sta/18);
+      c=t.rows[0].insertCell(-1); c.className="hed1"; c.innerHTML=d[i].nm;
+      c=t.rows[1].insertCell(-1); c.className="hed2"; c.innerText=cnvN(g);
+      c=t.rows[2].insertCell(-1); c.className="hed2"; c.innerText=cnvN(d[i].doro);
+      c=t.rows[3].insertCell(-1); c.className="hed2"; c.innerHTML=d[i].charisma?d[i].charisma+"<br>("+Math.round(1000*d[i].charisma/427)/1000+")":"";
+      c=t.rows[4].insertCell(-1); c.className="hed2"; c.innerHTML=d[i].sta? d[i].sta+"<br>("+Math.round(1000.0*d[i].sta/18)/1000+")":"";
+      c=t.rows[5].insertCell(-1); c.className="hed2"; c.innerHTML=Math.round(1000*n)/1000+"<br>("+Math.round(1000.0*d[i].charisma/427+1000.0*d[i].sta/18)/1000+")";
+      c=t.rows[6].insertCell(-1); c.className="hed2"; c.innerText=cnvN( Math.round(n*g) );
+      c=t.rows[7].insertCell(-1); c.className="hed2"; c.innerText=cnvN( Math.round(n*d[i].doro) );
+      for(j=0;j<13;j++){
+        c=t.rows[8+j].insertCell(-1);
+        if( j <= d[i].mxd*2 ) c.innerText=cnvN( Math.round(n*g + n*d[i].doro*j*0.5) );
+      }
+      for(j=0;j<9;j++) if( gg > 0 ){
+        c=t.rows[22+j].insertCell(-1);
+        c.innerText=cnvN( Math.round(gg*b0*b1*n*(3+j) ) );
+      }
+    }
+  }
+</script>
+</body>

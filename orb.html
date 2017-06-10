@@ -1,0 +1,355 @@
+﻿<!DOCTYPE HTML>
+<html lang="ja"><head>
+ <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title>アイギス 覚醒宝珠計算機 </title>
+ <style>
+table{  border-collapse: collapse;}
+.orb , .icon {
+ display: inline-block;
+ vertical-align:top;
+ }
+.orb tr td {
+ width: 92px;
+ height:99px;
+ padding: 0px 4px;
+ vertical-align:bottom;
+}
+.icon tr td {
+ width: 90px;
+ height:98px;
+ padding: 0px 4px;
+ background-repert: norepert;
+ background-position:0px,0px;
+ vertical-align:bottom;
+}
+
+#orb00 { background-image: url(orb月スナイパー.png); }
+#orb01 { background-image: url(orb月ダークナイト.png); }
+#orb02 { background-image: url(orb月プリースト.png); }
+#orb03 { background-image: url(orb月後衛軍師.png); }
+#orb04 { background-image: url(orb月重砲士.png); }
+#orb10 { background-image: url(orb火ユニコーン.png); }
+#orb11 { background-image: url(orb火ペガサスナイト.png); }
+#orb12 { background-image: url(orb火マスターモンク.png); }
+#orb13 { background-image: url(orb火バーサーカー.png); }
+#orb14 { background-image: url(orb火風水士.png); }
+#orb20 { background-image: url(orb水キャプテン.png); }
+#orb21 { background-image: url(orb水アサシン.png); }
+#orb22 { background-image: url(orb水ソルジャーチーフ.png); }
+#orb23 { background-image: url(orb水ハイシャーマン.png); }
+#orb24 { background-image: url(orb水ハイビショップ.png); }
+#orb30 { background-image: url(orb木バトルマスター.png); }
+#orb31 { background-image: url(orb木セーラーチーフ.png); }
+#orb32 { background-image: url(orb木サムライマスター.png); }
+#orb33 { background-image: url(orb木ルーンフェンサー.png); }
+#orb34 { background-image: url(orb木ヴァンパイアキラー.png); }
+#orb40 { background-image: url(orb金ウォーロック.png); }
+#orb41 { background-image: url(orb金アークエンジェル.png); }
+#orb42 { background-image: url(orb金ロードウィッチ.png); }
+#orb43 { background-image: url(orb金前衛軍師.png); }
+#orb44 { background-image: url(orb金忍者マスター.png); }
+#orb50 { background-image: url(orb土バトルメイジ.png); }
+#orb51 { background-image: url(orb土神官戦士長.png); }
+#orb52 { background-image: url(orb土トップダンサー.png); }
+#orb53 { background-image: url(orb土ドラゴンナイト.png); }
+#orb54 { background-image: url(orb土ハイレンジャー.png); }
+#orb60 { background-image: url(orb日ボウライダーチーフ.png); }
+#orb61 { background-image: url(orb日ハイアルケミスト.png); }
+#orb62 { background-image: url(orb日マスターシーフ.png); }
+#orb63 { background-image: url(orb日呪術師.png); }
+#orb64 { background-image: url(orb日機甲士.png); }
+#icon000 {background-image: url(★３ソルジャー.png); }
+#icon001 {background-image: url(★３ヘビーアーマー.png); }
+#icon002 {background-image: url(★３ワルキューレ.png); }
+#icon003 {background-image: url(★３ローグ.png); }
+#icon004 {background-image: url(★３バンデット.png); }
+#icon005 {background-image: url(★３中級竜兵.png); }
+#icon006 {background-image: url(★３サムライ.png); }
+#icon007 {background-image: url(★３忍者.png); }
+#icon008 {background-image: url(★３モンク.png); }
+/*#icon009 {background-image: url(★３魔法剣士.png); } */
+#icon010 {background-image: url(★３エンジェル.png); }
+/*#icon011 {background-image: url(★３神官戦士.png); } */
+/*#icon012 {background-image: url(★３アーチャー.png); } */
+#icon013 {background-image: url(★３メイジ.png); }
+#icon014 {background-image: url(★３ヒーラー.png); }
+#icon015 {background-image: url(★３ウィッチ.png); }
+#icon016 {background-image: url(★３パイレーツ.png); }
+#icon017 {background-image: url(★３ヴァンパイアハンター.png); }
+//#icon018 {background-image: url(★３砲術士.png); }  //X
+#icon019 {background-image: url(★３ビショップ.png); }
+#icon020 {background-image: url(★６覚醒精霊.png); }
+
+ </style>
+</head><body>
+ <template id="temp01">
+  <div class="u"></div>
+  <div class="d"></div>
+  <style>
+    div{ 
+      margin: 0px;
+      font-weight: bold;
+      text-align: right;
+    }
+    .u {
+      margin-bottom: 10px;
+      font-size: 42px;
+      color: black;
+      text-shadow: -2px 2px 3px white;
+    }
+    .d {
+      font-size: 42px;
+      color: white;
+      text-shadow: -2px -2px 3px #000202;
+    }
+  </style>
+ </template>
+<script>
+  document.registerElement('x-o', {
+    prototype: Object.create(HTMLTableCellElement.prototype,{
+      value:{
+        get:function(){ return this.getAttribute("value")/1; },
+        set:function(n){
+          this.setAttribute("value",n);
+          this.shadowRoot.children[0].innerText=n;
+          this.shadowRoot.children[1].innerText="99";
+        }
+      },
+      createdCallback:{
+        value:function(){
+          this.createShadowRoot().appendChild(document.importNode(document.getElementById("temp01").content, true));
+          this.value=this.value;
+        }
+      }
+    }),
+    extends: "TD"
+  });
+</script>
+<table class="orb">
+<tr><th>月</th></tr>
+<tr><th>火</th></tr>
+<tr><th>水</th></tr>
+<tr><th>木</th></tr>
+<tr><th>金</th></tr>
+<tr><th>土</th></tr>
+<tr><th>日</th></tr>
+</table>
+<table class="icon"><tr>
+<td id="icon000"></td><td id="icon001"></td><td id="icon002"></td>
+</tr><tr>
+<td id="icon003"></td>
+<td id="icon004"></td><td id="icon005"></td>
+</tr><tr>
+<td id="icon006"></td><td id="icon007"></td>
+<td id="icon008"></td>
+</tr><tr>
+<td id="icon009"></td><td id="icon010"></td><td id="icon011"></td>
+</tr><tr>
+<td id="icon012"></td><td id="icon013"></td><td id="icon014"></td>
+</tr><tr>
+<td id="icon015"></td>
+<td id="icon016"></td><td id="icon017"></td>
+</tr><tr>
+<td id="icon018"></td><td id="icon019"></td>
+<td id="icon020"></td>
+</tr></table>
+<script>
+  document.body.onload=function(ev){
+    var clsnm={
+"sol":["下級ソルジャー"    ,"ソルジャー"          ,"ソルジャーチーフ"      ,"ソルジャーエリート"        ],
+"arm":["下級ヘビーアーマー","ヘビーアーマー"      ,"バトルマスター"        ,"ギガントアーマー"          ],
+"val":[""                  ,"ワルキューレ"        ,"ユニコーンナイト"      ,"ブリュンヒルデ"            ],
+"rog":[""                  ,"ローグ"              ,"アサシン"              ,"マスターアサシン"          ],
+"pri":[""                  ,""                    ,"プリンセス"            ,"ハイプリンセス"            ],
+"v.p":[""                  ,""                    ,"ヴァンパイアプリンセス","ヴァンパイアクイーン"      ],
+"i.p":[""                  ,""                    ,"イモータルプリンセス"  ,"イモータルクイーン"        ],
+"ban":["下級バンデッド"    ,"バンデッド"          ,"バーサーカー"          ,"デストロイヤー"            ],
+"ryu":["下級竜兵"          ,"中級竜兵"            ,"上級竜兵"              ,"超急竜兵"                  ],
+"r.k":[""                  ,"竜戦士"              ,"ドラゴンプリンセス"    ,"真竜戦士"                  ],
+"sam":["下級サムライ"      ,"サムライ"            ,"サムライマスター"      ,"ショーグン"                ],
+"nin":["下級忍者"          ,"忍者"                ,"忍者マスター"          ,"超忍"                      ],
+"peg":[""                  ,"ペガサスライダー"    ,"ペガサスナイト"        ,"ペガサスロード"            ],
+"d.f":[""                  ,"ダークファイター"    ,"ダークナイト"          ,"パラディン"                ],
+"ave":[""                  ,""                    ,"アベンジャー"          ,"デスアベンジャー"          ],
+"mon":[""                  ,"モンク"              ,"マスターモンク"        ,"拳聖"                      ],
+"zen":[""                  ,"前衛戦術家"          ,"前衛軍師"              ,"武人軍師"                  ],
+"m.k":[""                  ,"魔法剣士"            ,"ルーンフェイサー"      ,"ルーンロード"              ],
+"ang":[""                  ,"エンジェル"          ,"アークエンジェル"      ,"ドミニオン"                ],
+"kug":[""                  ,"くぐつ使い"          ,"機甲士"                ,"超電機甲士"                ],
+"sai":[""                  ,"セーラー"            ,"セーラーチーフ"        ,"セーラーエリート"          ],
+"yok":[""                  ,""                    ,"妖狐"                  ,"天孤"                      ],
+"sin":[""                  ,"神官戦士"            ,"神官戦士長"            ,"ディバインアーマー"        ],
+"m.a":[""                  ,"メイジアーマー"      ,"バトルメイジ"          ,"超伝導鎧将"                ],
+"d.r":[""                  ,"ドラゴンライダー"    ,"ドラゴンナイト"        ,"ドラゴンロード"            ],
+"b.r":[""                  ,"ボウライダー"        ,"ボウライダーチーフ"    ,"ボウライダーエリート"      ],
+"mid":[""                  ,""                    ,"メイド"                ,"メイド長"                  ],
+"vam":[""                  ,""                    ,"ヴァンパイアロード"    ,"ヴァンパイアハイロード"    ],
+"s.m":[""                  ,""                    ,"ソードマスター"        ,"剣聖"                      ],
+"r.g":[""                  ,""                    ,"ロイヤルガード"        ,"ロイヤルオーダー"          ],
+"snn":[""                  ,""                    ,"仙人"                  ,"大仙人"                    ],
+"mjn":[""                  ,""                    ,"魔人"                  ,"魔人王"                    ],
+"sne":[""                  ,""                    ,"仙猿"                  ,"大仙猿"                    ],
+"dks":[""                  ,""                    ,"ダークストーカー"      ,"アビスダークストーカー"    ],
+"iku":[""                  ,""                    ,"戦の精霊"              ,"戦の大精霊"                ],
+"ouj":[""                  ,""                    ,"王子"                  ,"王子【神器装備】"          ],
+"arc":["下級アーチャー"    ,"アーチャー"          ,"スナイパー"            ,"アルテミス"                ],
+"mig":["下級メイジ"        ,"メイジ"              ,"ウォーロック"          ,"アークメイジ"              ],
+"hea":[""                  ,"ヒーラー"            ,"プリースト"            ,"セイント"                  ],
+"wit":[""                  ,"ウィッチ"            ,"ロードウィッチ"        ,"アークウィッチ"            ],
+"pir":["下級パイレーツ"    ,"パイレーツ"          ,"キャプテン"            ,"キングオブパイレーツ"      ],
+"d.s":[""                  ,""                    ,"ドラゴンシャーマン"    ,"ドラゴンシャーマンロード"  ],
+"v.h":[""                  ,"ヴァンパイアハンター","ヴァンパイアキラー"    ,"アンデッドキラー"          ],
+"sya":[""                  ,"シャーマン"          ,"ハイシャーマン"        ,"シャーマンロード"          ],
+"bis":[""                  ,"ビショプ"            ,"ハイビショップ"        ,"エルダービショップ"        ],
+"kou":[""                  ,"後衛戦術家"          ,"後衛軍師"              ,"参謀軍師"                  ],
+"onm":[""                  ,""                    ,"陰陽師"                ,"陰陽頭"                    ],
+"smn":[""                  ,""                    ,"サモナー"              ,"サモンマスター"            ],
+"fuu":[""                  ,"風水使い"            ,"風水士"                ,"風水導士"                  ],
+"hou":[""                  ,"砲術士"              ,"重砲士"                ,"キャノンマスター"          ],
+"dan":[""                  ,"ダンサー"            ,"トップダンサー"        ,"スーパーダンサー"          ],
+"sei":[""                  ,"政務官"              ,""                      ,""                          ],
+"nec":[""                  ,""                    ,"ネクロマンサー"        ,"ヘルネクロマンサー"        ],
+"cro":[""                  ,""                    ,"クロノウィッチ"        ,"アーククロノウィッチ"      ],
+"dru":[""                  ,""                    ,"ドルイド"              ,"マスタードルイド"          ],
+"alc":[""                  ,"アルケミスト"        ,"ハイアルケミスト"      ,"マスターアルケミスト"      ],
+"ran":[""                  ,"レンジャー"          ,"ハイレンジャー"        ,"マスターレンジャー"        ],
+"thi":[""                  ,"シーフ"              ,"マスターシーフ"        ,"トレジャーハンター"        ],
+"jyu":[""                  ,"呪術使い"            ,"呪術師"                ,"大呪術師長"                ],
+"mmn":[""                  ,""                    ,"魔物使い"              ,"魔獣使い"                  ],
+"d.p":[""                  ,"ダークプリースト"    ,"ダークハイプリースト"  ,"ダークカーディナル"        ],
+"enc":[""                  ,""                    ,"エンチャンター"        ,"ハイエンチャンター"        ],
+"mer":[""                  ,""                    ,"マーチャント"          ,"エルダーマーチャント"      ],
+"f.s":[""                  ,""                    ,"フェンリルシャーマン"  ,"フェンリルシャーマンロード"],
+"m.s":[""                  ,""                    ,"モンスタースレイヤー"  ,"モンスターバスター"        ],
+"dms":[""                  ,""                    ,"デモンサモナー"        ,""                          ]
+};
+//var v="names="+Object.keys(clsnm).length; for( var name in clsnm ) v=v+" "+clsnm[name][2]; alert(v );
+    var cctbl={
+            "sol":["sol","sol","arm"], 
+            "arm":["arm","sol","arm"], 
+            "val":["val","sol","arm"], 
+            "peg":["val","sol","arm"], 
+            "d.r":["val","sol","arm"], 
+            "d.f":["ban","sol","arm"], 
+            "ang":["ang","sol","arm"], 
+            "sai":["pir","sol","arm"], 
+            "sin":["sin","sol","arm"], 
+            "rog":["rog","sol","arc"], 
+            "ban":["ban","sol","ban"], 
+            "ryu":["arm","sol","ban"], 
+            "sam":["sam","sol","mig"], 
+            "nin":["nin","sol","ban"], 
+            "mon":["mon","sol","arc"], 
+            "m.k":["m.k","sol","mig"],
+            "zen":["sam","mig","val"], 
+            "kug":["rog","arm","pir"], 
+            "m.a":["arm","arm","mig"], 
+            "b.r":["val","arc","arc"], 
+            "r.k":[""   ,"ryu","ryu"], 
+            "arc":["arc","arc","arc"], 
+            "v.h":["v.h","arc","arc"], 
+            "ran":["rog","arc","arc"], 
+            "hea":["hea","arc","mig"], 
+            "wit":["wit","arc","mig"], 
+            "sya":["wit","arc","mig"], 
+            "fuu":["hea","arc","mig"], 
+            "mig":["mig","sol","mig"], 
+            "pir":["pir","arc","ban"], 
+            "bis":["hea","mig","mig"], 
+            "kou":["wit","mig","hea"], 
+            "hou":["hou","sol","arc"], 
+            "dan":["hea","val","hea"], 
+            "alc":["hou","mig","mig"], 
+            "thi":["rog","arc","ban"], 
+            "jyu":["wit","nin","mig"], 
+            "d.p":["bis","mig","hea"]
+    };
+//var v="cc="+Object.keys(cctbl).length; for( var name in cctbl ) v=v+" "+(clsnm[name][1])+"["+((cctbl[name][0]=="")?"":clsnm[cctbl[name][0]][1])+","+clsnm[cctbl[name][1]][1]+","+clsnm[cctbl[name][2]][1]+"] "; alert(v);
+    var kktbl={
+"sol":["sol","rog","ban","sol"],
+"arm":["arm","arm","sol","arm"],
+"val":["val","rog","arm","val"],
+"rog":["rog","ban","sam","rog"],
+"ban":["ban","sam","pir","ban"],
+"sam":["sam","arm","mig","sam"],
+"nin":["nin","wit","val","nin"],
+"peg":["val","arm","mig","peg"],
+"d.f":["sol","arm","hea","d.f"],
+"mon":["mon","ban","sol","mon"],
+"zen":["sam","val","sol","zen"],
+"m.k":["m.k","nin","sol","m.k"],
+"ang":["ang","val","hea","ang"],
+"kug":["arm","mon","pir","kug"],
+"sai":["sol","nin","mig","sai"],
+"sin":["sin","sol","hea","sin"],
+"m.a":["arm","arm","mig","m.a"],
+"d.r":["arm","val","ban","d.r"],
+"b.r":["arc","arc","val","b.r"],
+"ryu":["ryu","sol","ban","ryu"],
+"pri":["sol","val","wit","val","m.k"],
+"v.p":["val","wit","v.h","d.f","v.h"],
+"i.p":["val","hea","v.h","hea","bis"],
+"r.k":["ryu","arm","sam","m.k","arm"],
+"ave":["arm","val","ban","ban","mon"],
+"yok":["val","sam","nin","mon","sam"],
+"mid":["rog","nin","mon","mon","dan"],
+"r.g":["sol","arm","val","d.f","val"],
+"snn":["val","mon","hou","fuu","kug"],
+"mjn":["mon","ang","v.h","m.k","ang"],
+"sne":["val","mon","hou","fuu","kug"],
+"vam":["sol","rog","v.h","sin","zen"],
+"iku":["rog","sam","ang","sol","arm"],
+"s.m":["ban","sam","m.k","sam","nin"],
+"dks":["sol","ang","v.h","rog","d.f"],
+"arc":["arc","arc","pir","arc"],
+"mig":["mig","wit","sam","mig"],
+"hea":["hea","hea","mig","hea"],
+"wit":["wit","wit","mig","wit"],
+"pir":["pir","rog","ban","pir"],
+"v.h":["v.h","wit","hea","v.h"],
+"sya":["wit","hea","arc","sya"],
+"bis":["mig","hea","arc","bis"],
+"kou":["arc","nin","pir","kou"],
+"fuu":["mig","hea","hea","fuu"],
+"hou":["hou","mig","pir","hou"],
+"dan":["val","nin","hea","dan"],
+"alc":["sin","mig","hou","alc"],
+"ran":["arc","arc","nin","ran"],
+"thi":["rog","ban","nin","thi"],
+"jyu":["nin","wit","bis","jyu"],
+"d.p":["hea","ang","bis","hea"],
+"d.s":["ryu","hea","mig","hea","sya"],
+"onm":["sam","mig","wit","wit","sya"],
+"smn":["mig","hea","wit","mig","dan"],
+"nec":["arc","mig","wit","mig","alc"],
+"mmn":["arc","mig","bis","kou","rog"],
+"dru":["rog","m.k","bis","bis","jyu"],
+"enc":["m.k","wit","hea","alc","m.a"],
+"cro":["sin","mig","wit","kou","ran"],
+"mer":["arc","pir","hou","sai","thi"],
+"f.s":["arc","hea","bis","hea","jyu"],
+"m.s":["arc","pir","v.h","hou","pir"]
+    };
+var v="kk="+Object.keys(kktbl).length;
+for( var name in kktbl ) v=v+"\n"+clsnm[name][2]+"["+clsnm[kktbl[name][0]][1]+","+clsnm[kktbl[name][1]][1]+","+clsnm[kktbl[name][2]][1]+"]\n"
+alert(v);
+var v=""
+for( var name in kktbl ) v=v+"\n"+clsnm[name][2]+"["+clsnm[kktbl[name][3]][2]+((kktbl[name].length>4)?clsnm[kktbl[name][4]][2]:"")+"]\n";
+alert(v);
+
+    var i,j;
+    var obj=document.body.querySelector(".orb").children[0];
+    for( i=0 ; i<obj.children.length ; i++ ){
+      for( j=0 ; j<5 ; j++ ){
+        var cld=document.createElement("TD","X-O");
+        cld.id="orb"+i.toString()+j.toString();
+        obj.children[i].appendChild(cld);
+        cld.value=i*10+j;
+      }
+    }
+  }
+</script>
+</body>
+</html>
