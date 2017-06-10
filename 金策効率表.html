@@ -39,7 +39,7 @@ th{ background-color: lightblue; }
 <div><table  id="t">
 <tr><th class="hed1"></td></tr>
 <tr><th class="hed2">★3報酬</td></tr>
-<tr><th class="hed2">+1ドロでのＧ</th></tr>
+<tr><th class="hed2">換金1ユニ当たり</th></tr>
 <tr><th class="hed2">カリスマ<br>(結晶換算)</th></tr>
 <tr><th class="hed2">スタミナ<br>(結晶換算)</th></tr>
 <tr><th class="hed2">1結晶の周回数<br>(1周の結晶数)</th></tr>
@@ -123,7 +123,7 @@ th{ background-color: lightblue; }
       n=1/(d[i].charisma/427+d[i].sta/18);
       c=t.rows[0].insertCell(-1); c.className="hed1"; c.innerHTML=d[i].nm;
       c=t.rows[1].insertCell(-1); c.className="hed2"; c.innerText=cnvN(g);
-      c=t.rows[2].insertCell(-1); c.className="hed2"; c.innerText=cnvN(d[i].doro);
+      c=t.rows[2].insertCell(-1); c.className="hed2"; c.innerText=d[i].doro;
       c=t.rows[3].insertCell(-1); c.className="hed2"; c.innerHTML=d[i].charisma?d[i].charisma+"<br>("+Math.round(1000*d[i].charisma/427)/1000+")":"";
       c=t.rows[4].insertCell(-1); c.className="hed2"; c.innerHTML=d[i].sta? d[i].sta+"<br>("+Math.round(1000.0*d[i].sta/18)/1000+")":"";
       c=t.rows[5].insertCell(-1); c.className="hed2"; c.innerHTML=Math.round(1000*n)/1000+"<br>("+Math.round(1000.0*d[i].charisma/427+1000.0*d[i].sta/18)/1000+")";
