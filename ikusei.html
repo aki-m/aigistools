@@ -1,0 +1,884 @@
+﻿<!DOCTYPE HTML>
+<html lang="ja"><head>
+ <META http-equiv="Content-Type" content="text/html;">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title> </title>
+ <style>
+
+select,div>span{ font-size:18px; height:100%; margin:0px; }
+select{ background-color: yellow; }
+x-b input { font-size:16px;}
+table td[is="x-d"] { text-align:right; }
+div{ padding:4px; }
+span{ padding:2px; }
+table th { background-color:cadetblue; color:white; }
+table .l{ border-width:0px 0px 0px 5px; border-style:solid; border-color:white; }
+
+table tr.odd{ background-color:honeydew; }
+table td.d1{ text-align:right; }
+table td.a{ border:solid 1px red; background-color:rebeccapurple; color:white; text-align:center; font-size:22px; }
+#t{
+ border:solid 1px blue;
+ border-collapse: collapse;
+ margin:0px 0px 0px 0px; 
+ user-select:none;
+ -webkit-user-select:none;
+ -moz-user-select:none;
+ -ms-user-select:none;
+ -o-user-select:none;
+ cursor:default;
+}
+#t td,#t th, span{ border: solid 1px #00f;  }
+#t td.k1{ text-align:right; padding:0px 1px 0px 2px; background-color:lightgray; border-top:none; border-left:none; border-right:none; }
+#t td.k2{ text-align:right; padding:0px 0px 0px 0px; background-color:lightgray; border-top:none; border-left:none; border-right:none; }
+#t td.k3{ text-align:left;  padding:0px 4px 0px 1px; background-color:lightgray; border-top:none; border-left:none;  }
+#t td.d1{ text-align:right; padding:0px 1px 0px 2px; border-top:none; border-left:none; border-right:none; }
+#t td.d2{ text-align:right; padding:0px 0px 0px 0px; border-top:none; border-left:none; border-right:none; }
+#t td.d3{ text-align:left;  padding:0px 4px 0px 1px; border-top:none; border-left:none;  }
+#t th{ background-color: steelblue; }
+#t .hed1{ background-color: cornflowerblue; }
+
+input[type="button"] {
+ background-color: #e8ffff;
+ border: solid 1px #999;
+ border-radius: 5px;
+ padding: 0px 6px;
+ margin:0px ;
+ cursor: pointer;
+ user-select: none;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ -o-user-select: none;
+}
+input.bon { background-color: #ff4; }
+input.chk { display:inline; background-color:#90ffcf; }
+x-b[type="radio"] input{ margin: 0px 4px; }
+
+
+ </style>
+</head>
+<body>
+
+<script>
+  document.registerElement('x-b', {
+    prototype: Object.create(HTMLSpanElement.prototype,{
+      value:{
+        get:function(){ return this.getAttribute("value")/1; },
+        set:function(n){
+          var l=this.getAttribute("label").split("|");
+          if( n >= 2 ) n %= l.length;
+          this.setAttribute("value",n);
+          if( l.length <= 1 ){
+            this.children[0].className=(n?"bon":"");
+          }
+          if( this.getAttribute("type") != "radio" ){
+            this.children[0].value=l[n%l.length];
+          }else{
+            var i;
+            for( i=0 ; i<l.length ; i++ ){
+              this.children[i].className=(i==(n%l.length))?"bon":"";
+            }
+          }
+        }
+      },
+      visible:{
+        set:function(n){
+           var i;
+           for(i=0;i<n.length ; i++ ){
+            this.children[i].style["display"]=n[i]?"inline":"none";
+           }
+        }
+      },
+      range:{
+        get:function(){ return this.getAttribute("label").split("|").length;}
+      },
+      createdCallback:{
+        value:function(){
+          var i,obj;
+          var l=this.getAttribute("label").split("|");
+          for( i=0 ; i<l.length ; i++ ){
+            obj=document.createElement("input");
+            obj.type="button";
+            obj.value=l[i];
+            this.appendChild(obj);
+            if( this.getAttribute("type") != "radio" ){ /* toggle */
+              obj.className="chk";
+              break;
+            }
+            obj.setAttribute("num",i);
+          }
+          this.value=this.value;
+        }
+      }
+    })
+  });
+  document.registerElement('x-l', {
+    prototype: Object.create(HTMLSpanElement.prototype,{
+      value:{
+        get:function(){ return this.getAttribute("value")/1; },
+        set:function(n){
+          this.setAttribute("value",n);
+          this.innerText=(function cnvN(v){
+            if( (""+v).length <= 3 ) return v;
+            if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
+            return cnvN((""+v).substr(0,(""+v).length-3))+","+(""+v).substr((""+v).length-3,3);
+          })(n);
+        }
+      },
+      createdCallback:{
+        value:function(){ this.value=this.value; }
+      }
+    })
+  });
+  document.registerElement('x-d', {
+    prototype: Object.create(HTMLTableCellElement.prototype,{
+      pre:{
+        get:function(){ return this.getAttribute("pre"); },
+        set:function(n){ this.setAttribute("sur",n); }
+      },
+      sur:{
+        get:function(){ return this.getAttribute("sur"); },
+        set:function(n){ this.setAttribute("sur",n); }
+      },
+      value:{
+        get:function(){ return this.getAttribute("value")/1; },
+        set:function(n){
+          this.setAttribute("value",n);
+          this.innerHTML=(this.pre?this.pre:"")+(function cnvN(v){
+            if( (""+v).length <= 3 ) return v;
+            if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
+            return cnvN((""+v).substr(0,(""+v).length-3))+","+(""+v).substr((""+v).length-3,3);
+          })(n)+(this.sur?this.sur:"");
+        }
+      },
+      createdCallback:{
+        value:function(){ this.value=this.value; }
+      }
+    }),
+    extends: "TD"
+  });
+
+document.body.onload=function(olev){
+  var exptable=[
+    [0,32,65,100,135,172,211,250,291,333,418,506,598,693,791,893,998,1106,1218,1333,1503,1679,1862,2052,2249,2452,2662,2879,3103,3333],
+    [0,35,72,110,149,189,232,275,320,366,460,557,658,762,870,982,1098,1217,1340,1466,1653,1847,2048,2257,2474,2697,2928,3167,3413,3666,3978,4301,4637,4984,5345,5718,6103,6501,6910,7334],
+    [0,38,78,120,162,206,253,300,349,400,502,607,718,832, 949,1072,1198,1327,1462,1600,1804,2015,2234,2462,2699,2942,3194,3455,3724,4000,4339,4692,5058,5437,5831,6238,6658,7092,7538,8000,8678,9383,10115,10874,11662,12474,13315,14183,15078,16000,17017,18074,19172,20312,21492],
+    [0,42,85,130,176,224,274,325,378,433,543,658,777,901,1028,1161,1297,1438,1583,1733,1954,2183,2421,2668,2924,3188,3461,3743,4034,4333,4701,5083,5480,5890,6317,6757,7212,7683,8167,8667,9402,10165,10958,11781,12633,13514,14425,15365,16335,17333,18435,19581,20770,22005,23283,24605,25970,27381,28835,30333,31802,33329,34917,36561,38266,40028,41850,43729,45669,47667,49503,51412,53395,55452,57582,59786,62062,64412,66836,69333,71904,74577,77354,80233,83214,86299,89487,92777,96170,99667,102237,104911,107687,110567,113549,116634,119820,123112,126505],
+    [0,45,91,140,189,241,295,350,407,466,585,708,837,970,1107,1250,1397,1548,1705,1866,2104,2351,2607,2873,3149,3433,3727,4031,4344,4666,5062,5474,5901,6343,6803,7277,7767,8274,8795,9334,10125,10947,11801,12687,13605,14553,15534,16547,17591,18666,19853,21087,22368,23698,25074,26498,27968,29487,31053,32666,34248,35893,37603,39374,41209,43107,45069,47093,49182,51334,53311,55367,57502,59717,62012,64385,66836,69367,71977,74666,77435,80314,83304,86405,89615,92938,96370,99914,103568,107334,110102,112982,115971,119072,122284,125606,129037,132582,136236],
+    [0,45,91,140,189,241,295,350,407,466,585,708,837,970,1107,1250,1397,1548,1705,1866,2104,2351,2607,2873,3149,3433,3727,4031,4344,4666,5062,5474,5901,6343,6803,7277,7767,8274,8795,9334,10125,10947,11801,12687,13605,14553,15534,16547,17591,18666,19853,21087,22368,23698,25074,26498,27968,29487,31053,32666,34248,35893,37603,39374,41209,43107,45069,47093,49182,51334,53311,55367,57502,59717,62012,64385,66836,69367,71977,74666,77435,80314,83304,86405,89615,92938,96370,99914,103568,107334,110102,112982,115971,119072,122284,125606,129037,132582,136236],
+    [0,48,98,150,203,258,317,375,437,500,627,759,897,1040,1187,1340,1497,1659,1827,2000,2255,2519,2793,3078,3374,3678,3993,4319,4655,5000,5424,5865,6323,6797,7289,7797,8322,8865,9423,10001,10848,11729,12644,13593,14577,15593,16644,17729,18848,20000,21272,22593,23966,25391,26865,28391,29966,31593,33272,35000,36695,38457,40289,42186,44153,46187,48288,50457,52695,55001,57119,59322,61610,63983,66441,68984,71610,74322,77118,80000,82967,86051,89255,92577,96017,99576,103254,107051,110966,115001,117966,121052,124254,127577,131018,134577,138254,142052,145967],
+  ];
+  var emx=[ 30,40,50,55,60,65,70,80,85,90,99];
+  var smx=[[ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], /*鉄*/
+           [ 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], /*銅*/
+           [ 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0], /*銀*/
+           [ 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1], /*金*/
+           [ 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1], /*青*/
+           [ 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1], /*白*/
+           [ 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1]  /*黒*/
+  ];
+  var fnm=["","","アムール","アレグリア","リーベ","フロイデ","ファラハ"];
+  var fex=[ 0, 0,4000,18000 , 19000 , 19000, 20000 ];
+            /*    0        1            2             3        4       5         6             7          8*/
+  var classN=["その他","ソルジャー系","アーマー系","山賊系","侍系","忍者系","アーチャー系","メイジ系","海賊系"];
+  maptable=[
+    /* name,charisma,G,e-cnt,e-lv */
+/*** 鉄が落ちるところは除外[鉄、鉄、銅]
+    {name:"神殿の森"          ,charisma:10 ,g:720/1.5  ,ecnt:10  ,eexp:40  ,drop:[2,0,1] ,syoku:[3,0,3] },
+    {name:"女神の神殿"        ,charisma:11 ,g:810/1.5  ,ecnt:40  ,eexp:40  ,drop:[3,0,1] ,syoku:[3,0,3] },
+    {name:"神殿を守れ！"      ,charisma:12 ,g:900/1.5  ,ecnt:32  ,eexp:45  ,drop:[3,0,1] ,syoku:[3,0,3] },
+    {name:"残党退治1"         ,charisma:12 ,g:990/1.5  ,ecnt:32  ,eexp:50  ,drop:[3,0,1] ,syoku:[3,0,3] },
+    {name:"田園の門"          ,charisma:12 ,g:900/1.5  ,ecnt:45  ,eexp:50  ,drop:[2,2,1] ,syoku:[6,1,1] },
+    {name:"住民救出1"         ,charisma:14 ,g:990/1.5  ,ecnt:21  ,eexp:50  ,drop:[2,2,1] ,syoku:[6,1,1] },
+    {name:"住民救出2"         ,charisma:15 ,g:1080/1.5 ,ecnt:30  ,eexp:50  ,drop:[2,2,1] ,syoku:[6,7,1] },
+    {name:"田園の門防衛戦"    ,charisma:16 ,g:1170/1.5 ,ecnt:58  ,eexp:50  ,drop:[2,2,1] ,syoku:[1,2,6] },
+    {name:"住民救出3"         ,charisma:18 ,g:1350/1.5 ,ecnt:56  ,eexp:60  ,drop:[2,2,1] ,syoku:[1,7,7] },
+    {name:"狼の巣"            ,charisma:15 ,g:1080/1.5 ,ecnt:30  ,eexp:50  ,drop:[4,0,1] ,syoku:[6,0,6] },
+    {name:"火事場泥棒"        ,charisma:19 ,g:1440/1.5 ,ecnt:28  ,eexp:50  ,drop:[4,0,1] ,syoku:[3,0,3] },
+    {name:"謎の魔物"          ,charisma:20 ,g:1440/1.5 ,ecnt:92  ,eexp:70  ,drop:[2,1,1] ,syoku:[1,6,1] },
+    {name:"砦の戦い"          ,charisma:21 ,g:1575/1.5 ,ecnt:61  ,eexp:70  ,drop:[2,2,1] ,syoku:[6,7,2] },
+    {name:"王都に続く道"      ,charisma:22 ,g:1620/1.5 ,ecnt:56  ,eexp:80  ,drop:[2,2,1] ,syoku:[1,2,1] },
+    {name:"山賊の隠れ家"      ,charisma:15 ,g:1350/1.5 ,ecnt:36  ,eexp:55  ,drop:[3,0,1] ,syoku:[3,0,3] },
+    {name:"深森の大道"        ,charisma:20 ,g:2250/1.5 ,ecnt:67  ,eexp:70  ,drop:[3,0,1] ,syoku:[1,0,1] },
+    {name:"残党退治2"         ,charisma:22 ,g:1665/1.5 ,ecnt:73  ,eexp:70  ,drop:[4,0,1] ,syoku:[3,0,3] },
+    {name:"哀しみの墓地"      ,charisma:23 ,g:1710/1.5 ,ecnt:42  ,eexp:85  ,drop:[2,2,1] ,syoku:[1,2,1] },
+    {name:"廃都への帰還"      ,charisma:23 ,g:1800/1.5 ,ecnt:58  ,eexp:105 ,drop:[1,3,1] ,syoku:[2,7,2] },
+    {name:"戦場の群狼"        ,charisma:24 ,g:1890/1.5 ,ecnt:45  ,eexp:95  ,drop:[4,0,1] ,syoku:[6,0,6] },
+    {name:"見張り塔"          ,charisma:25 ,g:1980/1.5 ,ecnt:61  ,eexp:100 ,drop:[2,2,1] ,syoku:[1,2,2] },
+    {name:"亡者の鎧"          ,charisma:26 ,g:2070/1.5 ,ecnt:70  ,eexp:95  ,drop:[4,0,1] ,syoku:[2,0,2] },
+    {name:"城門の戦い"        ,charisma:28 ,g:2160/1.5 ,ecnt:77  ,eexp:105 ,drop:[2,2,1] ,syoku:[1,7,2] },
+    {name:"王城奪還"          ,charisma:29 ,g:2250/1.5 ,ecnt:80  ,eexp:110 ,drop:[4,0,1] ,syoku:[2,0,7] },
+    {name:"残党退治3"         ,charisma:30 ,g:2700/1.5 ,ecnt:49  ,eexp:115 ,drop:[4,0,1] ,syoku:[1,0,1] },
+    {name:"竜の狩場"          ,charisma:37 ,g:3600/1.5 ,ecnt:46  ,eexp:125 ,drop:[3,0,1] ,syoku:[6,0,7] },
+    {name:"炎の竜"            ,charisma:34 ,g:3150/1.5 ,ecnt:41  ,eexp:120 ,drop:[4,0,1] ,syoku:[7,0,7] },
+    {name:"不死の魔物"        ,charisma:42 ,g:4500/1.5 ,ecnt:83  ,eexp:135 ,drop:[2,2,1] ,syoku:[2,7,7] },
+    {name:"砂の廃都"          ,charisma:28 ,g:2130/1.5 ,ecnt:60  ,eexp:100 ,drop:[2,1,2] ,syoku:[8,7,8] },
+    {name:"砂海に潜む魔物"    ,charisma:33 ,g:2445/1.5 ,ecnt:55  ,eexp:120 ,drop:[2,1,2] ,syoku:[4,2,3] },
+    {name:"拠点争奪戦・前"    ,charisma:36 ,g:2625/1.5 ,ecnt:74  ,eexp:125 ,drop:[2,1,2] ,syoku:[5,6,5] },
+    {name:"魔法都市への誘い"  ,charisma:58 ,g:4500/1.5 ,ecnt:39  ,eexp:175 ,drop:[3,0,3] ,syoku:[7,0,7] },
+*/
+/*** 鉄が落ちるところは除外[鉄、銅、指南]
+    {name:"熱砂の戦場"        ,charisma:25 ,g:1950/1.5 ,ecnt:39  ,eexp:95  ,drop:[2,2,1] ,syoku:[1,6] },
+    {name:"焦熱のオアシス"    ,charisma:30 ,g:2265/1.5 ,ecnt:28  ,eexp:110 ,drop:[2,2,2] ,syoku:[1,7] },
+    {name:"拠点争奪戦・後"    ,charisma:40 ,g:2970/1.5 ,ecnt:97  ,eexp:135 ,drop:[2,2,2] ,syoku:[1,1] },
+    {name:"砂漠のサソリ"      ,charisma:44 ,g:3135/1.5 ,ecnt:51  ,eexp:135 ,drop:[2,2,2] ,syoku:[6,6] },
+    {name:"オアシスに迫る危機",charisma:47 ,g:3330/1.5 ,ecnt:37  ,eexp:140 ,drop:[2,2,2] ,syoku:[1,1] },
+    {name:"二つのピラミッド"  ,charisma:51 ,g:3525/1.5 ,ecnt:54  ,eexp:145 ,drop:[1,3,2] ,syoku:[2,2] },
+    {name:"東の国の港町"      ,charisma:45 ,g:3600/1.5 ,ecnt:51  ,eexp:140 ,drop:[2,3,1] ,syoku:[4,5] },
+    {name:"風に散る桜"        ,charisma:58 ,g:3870/1.5 ,ecnt:55  ,eexp:145 ,drop:[1,3,2] ,syoku:[1,1] },
+    {name:"田を返せ！"        ,charisma:52 ,g:4230/1.5 ,ecnt:34  ,eexp:155 ,drop:[2,2,2] ,syoku:[7,7] },
+    {name:"絶望の城下町"      ,charisma:56 ,g:4380/1.5 ,ecnt:30  ,eexp:160 ,drop:[1,2,3] ,syoku:[5,8] },
+    {name:"風神退治"          ,charisma:59 ,g:4560/1.5 ,ecnt:47  ,eexp:170 ,drop:[1,2,3] ,syoku:[6,6] },
+    {name:"落ち武者たちの行進",charisma:61 ,g:4680/1.5 ,ecnt:26  ,eexp:175 ,drop:[1,2,3] ,syoku:[2,2] },
+    {name:"雷神襲来"          ,charisma:63 ,g:4845/1.5 ,ecnt:41  ,eexp:180 ,drop:[2,1,3] ,syoku:[3,3] },
+    {name:"鋼鉄の手刀"        ,charisma:60 ,g:4620/1.5 ,ecnt:55  ,eexp:180 ,drop:[2,2,2] ,syoku:[7,7] },
+    {name:"鋼鉄の手斧"        ,charisma:62 ,g:4740/1.5 ,ecnt:21  ,eexp:185 ,drop:[2,1,3] ,syoku:[7,7] },
+    {name:"密林の強者"        ,charisma:63 ,g:4830/1.5 ,ecnt:100 ,eexp:185 ,drop:[2,1,3] ,syoku:[6,6] },
+*/
+    {name:"転送の魔法陣"      ,charisma:63 ,g:4800/1.5 ,ecnt:27  ,eexp:190 ,drop:[1,2,3] ,syoku:[2,7] },
+    {name:"研究塔の巨兵"      ,charisma:65 ,g:4920/1.5 ,ecnt:28  ,eexp:195 ,drop:[2,1,3] ,syoku:[1,7] },
+    {name:"幾多の水晶"        ,charisma:69 ,g:5205/1.5 ,ecnt:100 ,eexp:200 ,drop:[1,3,2] ,syoku:[1,7] },
+    {name:"二体の巨兵"        ,charisma:71 ,g:5475/1.5 ,ecnt:37  ,eexp:205 ,drop:[2,1,3] ,syoku:[2,7] },
+    {name:"黒き狂戦士"        ,charisma:64 ,g:4890/1.5 ,ecnt:52  ,eexp:190 ,drop:[2,2,2] ,syoku:[5,6] },
+    {name:"立ち並ぶ軍旗"      ,charisma:66 ,g:4995/1.5 ,ecnt:50  ,eexp:195 ,drop:[2,1,3] ,syoku:[8,6] },
+    {name:"解き放たれし封印"  ,charisma:68 ,g:5145/1.5 ,ecnt:32  ,eexp:200 ,drop:[3,1,2] ,syoku:[3,6] },
+    {name:"魔界の洗礼"        ,charisma:70 ,g:5380/1.5 ,ecnt:53  ,eexp:200 ,drop:[2,1,3] ,syoku:[1,6] },
+    {name:"オークの勇士"      ,charisma:72 ,g:5520/1.5 ,ecnt:100 ,eexp:205 ,drop:[1,1,4] ,syoku:[5,6] },
+    {name:"湿地の激戦"        ,charisma:74 ,g:5640/1.5 ,ecnt:150 ,eexp:210 ,drop:[2,2,2] ,syoku:[8,6] },
+    {name:"魔界を行く者たち"  ,charisma:68 ,g:5130/1.5 ,ecnt:59  ,eexp:195 ,drop:[2,1,3] ,syoku:[1,6] },
+    {name:"魔界都市"          ,charisma:69 ,g:5280/1.5 ,ecnt:62  ,eexp:200 ,drop:[2,2,2] ,syoku:[3,6] },
+    {name:"ダークエルフの女王",charisma:71 ,g:5475/1.5 ,ecnt:61  ,eexp:205 ,drop:[2,1,3] ,syoku:[2,7] },
+    {name:"魔界の深層"        ,charisma:72 ,g:5490/1.5 ,ecnt:78  ,eexp:205 ,drop:[2,2,2] ,syoku:[3,8] },
+    {name:"病魔の鼠"          ,charisma:73 ,g:5700/1.5 ,ecnt:85  ,eexp:210 ,drop:[1,2,3] ,syoku:[2,6] },
+    {name:"魔界に降りし天兵"  ,charisma:74 ,g:5745/1.5 ,ecnt:66  ,eexp:210 ,drop:[2,1,3] ,syoku:[1,7] }
+  ];
+  var youbi=[
+    {name:"精霊救出 初級",charisma:15 ,stamina:2 ,g:1875/1.5  ,ecnt:27},
+    {name:"精霊救出 中級",charisma:30 ,stamina:3 ,g:2250/1.5  ,ecnt:40},
+    {name:"精霊救出 上級",charisma:60 ,stamina:6 ,g:3750/1.5  ,ecnt:57},
+    {name:"精霊救出 極級",charisma:80 ,stamina:6 ,g:4500/1.5  ,ecnt:39},
+    {name:"精霊救出 神級",charisma:80 ,stamina:8 ,g:4500/1.5  ,ecnt:33},
+    {name:"黄金の鎧 初級",charisma:15 ,stamina:2 ,g:2250/1.5  ,ecnt:23},
+    {name:"黄金の鎧 中級",charisma:24 ,stamina:2 ,g:3000/1.5  ,ecnt:27},
+    {name:"黄金の鎧 上級",charisma:60 ,stamina:3 ,g:4500/1.5  ,ecnt:30},
+    {name:"黄金の鎧 極級",charisma:80 ,stamina:3 ,g:15000/1.5 ,ecnt:30},
+    {name:"黄金の鎧 神級",charisma:80 ,stamina:6 ,g:22500/1.5 ,ecnt:30}
+  ];
+
+  var inobj=[null];
+  var outobj=[null];
+  var saveword={
+    charmap:"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.",
+    addS:function(n,v,l){
+      n[0]=n[0]+(v<<n[1]);
+      n[1]=n[1]+l;
+      while( n[1] >= 6 ){
+        n[2] += saveword.charmap.substr(n[0]&63,1);
+/*
+        n[2] +=(n[0]&32)?"1":"0";
+        n[2] +=(n[0]&16)?"1":"0";
+        n[2] +=(n[0]&8 )?"1":"0";
+        n[2] +=(n[0]&4 )?"1":"0";
+        n[2] +=(n[0]&2 )?"1":"0";
+        n[2] +=(n[0]&1)?"1":"0";
+        n[2] += " ";
+*/
+        n[0] >>= 6;
+        n[1] -= 6;
+      }
+    },
+    getS(n,l){
+      var r;
+      while( n[1] < l && n[2].length > 0 ){
+        n[0] += saveword.charmap.indexOf(n[2].substr(0,1)) << n[1];
+        n[1] +=6;
+        n[2] = n[2].substr(1,n[2].length-1);
+      }
+      r=n[0]&((1<<l)-1);
+      n[0] >>= l;
+      n[1] -= l;
+      return r;
+    },
+    backupstr:function(){
+      var w=[0,0,""];
+      var i,j;
+      saveword.addS(w, inobj[  0].value ,3); /*3bit:レア*/
+      saveword.addS(w, inobj[  1].value ,1); /*1bit:サリエット*/
+      saveword.addS(w, inobj[  2].value ,2); /*2bit:豊穣の杖*/
+      saveword.addS(w, inobj[  3].value ,1); /*1bit:店 獲得G up*/
+      saveword.addS(w, inobj[  4].value ,4); /*4bit:目的Lv*/
+      saveword.addS(w, inobj[  5].value ,1); /*1bit:千孤*/
+      saveword.addS(w, inobj[  6].value ,4); /*4bit:祝福の精霊回数*/
+      saveword.addS(w, inobj[  7].value ,6); /*6bit:皇帝Lv*/
+      saveword.addS(w, inobj[  8].value ,3); /*3bit:精霊MAP*/
+      saveword.addS(w, inobj[  9].value ,6); /*6bit: =1.35/0.05 精霊ドロ率 */;
+      saveword.addS(w, inobj[ 10].value ,6); /*6bit: =0.85/0.05 鎧神白バケツ率 */
+      saveword.addS(w, inobj[ 11].value ,7); /*7bit: =3.15/0.05 鎧神金バケツ率 */
+      saveword.addS(w, inobj[ 12].value ,5); /*5bit: =0.15/0.05 鎧中白バケツ率 */
+      saveword.addS(w, inobj[ 13].value ,7); /*7bit: =3.00/0.05 鎧中金バケツ率 */
+      saveword.addS(w, inobj[ 14].value ,4); /*4bit:委任MAP*/
+      saveword.addS(w, inobj[ 15].value ,5); /*5bit:委任ドロ率*/
+      saveword.addS(w, inobj[ 16].value ,4); /*4bit:職*/
+      saveword.addS(w, inobj[ 17].value ,7); /*7bit:育成元Lv*/
+      saveword.addS(w, inobj[ 18].value ,12); /*12bit:育成元"あと"*/
+      saveword.addS(w, outobj[ 8].value ,4); /*4bit:皇帝8倍回数*/
+      saveword.addS(w, outobj[14].value ,5); /*5bit:白バケツ8倍回数*/
+      if( w[1] > 0 ) w[2] += saveword.charmap.substr( w[0]&63,1 );
+      for(i=j=0 ; i<w[2].length ; i++ ) j=j^saveword.charmap.indexOf(w[2].substr(i,1));
+      w[2] += saveword.charmap.substr( j,1 );
+      return w[2];
+    },
+    restorestr:function(s){
+      var w=[0,0,s];
+      inobj[  0].value = saveword.getS(w, 3);
+      inobj[  1].value = saveword.getS(w, 1);
+      inobj[  2].value = saveword.getS(w, 2);
+      inobj[  3].value = saveword.getS(w, 1);
+      inobj[  4].value = saveword.getS(w, 4);
+      inobj[  5].value = saveword.getS(w, 1);
+      inobj[  6].value = saveword.getS(w, 4);
+      inobj[  7].value = saveword.getS(w, 6);
+      inobj[  8].value = saveword.getS(w, 3);
+      inobj[  9].value = saveword.getS(w, 6);
+      inobj[ 10].value = saveword.getS(w, 6);
+      inobj[ 11].value = saveword.getS(w, 7);
+      inobj[ 12].value = saveword.getS(w, 5);
+      inobj[ 13].value = saveword.getS(w, 7);
+      inobj[ 14].value = saveword.getS(w, 4);
+      inobj[ 15].value = saveword.getS(w, 5);
+      inobj[ 16].value = saveword.getS(w, 4);
+      inobj[ 17].value = saveword.getS(w, 7);
+      inobj[ 18].value = saveword.getS(w,12);
+      outobj[ 8].value = saveword.getS(w, 4);
+      outobj[14].value = saveword.getS(w, 5);
+    },
+    checkstr:function(str){
+      var i,j;
+      for(i=j=0 ; i+1 < str.length ; i++ ){
+        j=j^saveword.charmap.indexOf(str.substr(i,1));
+      }
+      return ( j == saveword.charmap.indexOf(str.substr(i,1)) );
+    }
+ }
+ function cnvN(v){
+    if( (""+v).length <= 3 ) return v;
+    if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
+    return cnvN((""+v).substr(0,(""+v).length-3))+","+(""+v).substr((""+v).length-3,3);
+ }
+ function getLv(rea,n){
+    var lv;
+    for( lv=1 ; lv < exptable[rea].length && n >= exptable[rea][lv] ; lv++ );
+    return lv;
+ }
+ function doDraw(ev){
+
+    var i,j,k,n0,n1,n2,n3,c,y;
+    var ex,ex0,ex1,ex2,ex3,ex4,ex5,ex6;
+    var g0,g1,g2,g3,g4,g5,g6,g7,g8,g9;
+    var t=document.getElementById("t");
+    var rea=inobj[0].value;          /*レア */
+    var s0=inobj[1].value*0.1+1;     /*サリエット*/
+    var abi=(inobj[2].value<2)?(1+inobj[2].value*0.1):1.15;
+    var shopG=inobj[3].value?1.5:1;
+    var targetlv=inobj[4].value;      /* 30,40,50,55,60,65,70,80,85,90,99 */
+    var doT=(ev.type != "click" || ev.target.tagName.toUpperCase() != "TD");
+    for( i=2; doT && i<t.rows.length ; i++ ) while( t.rows[i].cells.length > 1) t.rows[i].deleteCell(1);
+
+    /*育成元*/
+    if( inobj[17].value >= exptable[rea].length ){
+      inobj[17].value=exptable[rea].length;
+      inobj[18].value=0;
+      ex=exptable[rea][exptable[rea].length-1];
+    }else{
+      if( inobj[18].value/1 > 0 && inobj[18].value/1 > exptable[rea][inobj[17].value]-exptable[rea][inobj[17].value-1] )  inobj[18].value=exptable[rea][inobj[17].value]-exptable[rea][inobj[17].value-1]
+      ex=exptable[rea][inobj[17].value]-inobj[18].value;
+    }
+    outobj[42].value=ex;
+
+    /*目的Lv,exp*/
+    if( smx[rea][targetlv] == 0 ){ targetlv=(rea>=3)?10:(rea==2)?3:rea; inobj[4].value=targetlv; } 
+    inobj[4].visible=smx[rea]; /* custom element visible array */
+    outobj[0].value=ex0=exptable[rea][emx[targetlv]-1]; /*目的LvまでのEXP*/
+    if( doT ) t.rows[1].cells[1].innerText="Lv"+emx[targetlv]+"あと0"; /*0行目＝目的Lv*/
+    y=2;
+
+    /*千孤*/
+    if( ex >= ex0 ) inobj[5].value=0;
+    if( inobj[5].value > 0 ){ 
+      outobj[1].value=ex1=10005*8*s0;
+      lv=getLv(rea,ex0-ex1);
+      outobj[2].value=g1 =(lv*40+160)*4; 
+      outobj[3].value=sp1=3;
+      if( n0 < 0 ) return;
+      if( doT ){ c=t.rows[y].insertCell(-1); c.colSpan=45; c.style["background-color"]="beige"; c.innerText="Lv"+lv+"あと"+cnvN(exptable[rea][lv]+ex1-ex0)+"exp"; }
+      y++;
+    }else{
+      outobj[1].value=ex1=0;
+      outobj[2].value=g1 =0;
+      outobj[3].value=sp1=0;
+    }
+
+    /*祝福の精霊*/
+    if( fex[rea] > 0 ){
+      document.getElementById("g4").style["display"] ="table-cell";
+      document.getElementById("i2").innerText=fnm[rea];
+    }else{
+      document.getElementById("g4").style["display"] ="none";
+      inobj[6].value=0; /*回数*/
+    }
+    outobj[4].value=ex2=Math.floor(fex[rea]*s0);            /*祝福の精霊 1回のEXP*/
+    for( i=1,g2=0 ; i <= inobj[6].value && (ex0-ex1-i*ex2) > ex2 ; i++ ){
+      lv=getLv(rea,ex0-ex1-i*ex2);
+      g2+=(lv*40+160);
+      if( doT ){ c=t.rows[y].insertCell(-1); c.colSpan=45; c.style["background-color"]="honeydew"; c.innerText="Lv"+lv+"あと"+cnvN(exptable[rea][lv]+ex1+i*ex2-ex0)+"exp"; }
+      y++;
+    }
+    if( i <= inobj[6].value ) inobj[6].value=i-1;
+    outobj[5].value=ex2=ex2*(i-1);  /*祝福の精霊EXP合計*/
+    outobj[6].value=g2;
+
+    /*皇帝*/
+    outobj[7].value=ex3=Math.floor((inobj[7].value*20+1980)*8*s0); /*皇帝1回分のEXP*/
+    for( i=1,g3=0 ; i <= outobj[8].value && (ex0-ex1-ex2-i*ex3) > ex3 ; i++ ){
+      g3+=(getLv(rea,ex0-ex1-ex2-i*ex3)*40+160)*4;
+    }
+    outobj[8].value=i-1;        /*回*/
+    outobj[9].value=exptable[6][inobj[7].value/1-1]*(i-1); /*皇帝育成EXP*/
+    outobj[10].value=ex3*(i-1);  /*EXP合計*/
+    outobj[11].value=g3;        /*G*/
+    outobj[12].value=3*(i-1);   /*精霊*/
+
+    /*白バケツ*/
+    outobj[13].value=ex4=8000*s0;                  /*1回分のEXP*/
+    for( i=1,g4=0 ; i <= outobj[14].value && (ex0-ex1-ex2-ex3*outobj[8].value-i*ex4) > 0 ; i++ ){
+      g4+=(getLv(rea,ex0-ex1-ex2-ex3*outobj[8].value-i*ex4)*40+160)*4;
+    }
+    outobj[14].value=i-1;           /*回*/
+    outobj[15].value=8000*s0*(i-1); /*EXP*/
+    outobj[16].value=g4;            /*G*/
+    outobj[17].value=(i-1)*3;       /*精霊*/
+    outobj[18].value=(i-1);         /*白バケツ*/
+
+    /*委任*/
+    ex5=ex0-ex1-ex2-ex3*outobj[8].value-8000*s0*(i-1); /*必要EXP(対象ユニ)*/
+    ex6=exptable[6][inobj[7].value/1-1];               /*必要EXP(皇帝1体分)*/
+    if( ex5 < ex ) ex5=ex;
+    var w=maptable[inobj[14].value];
+    i=w.drop[2];                                    /*指南のドロユニ数*/
+    if(inobj[16].value == w.syoku[0]) i+=w.drop[0]; /*職ボのドロユニ数*/
+    if(inobj[16].value == w.syoku[1]) i+=w.drop[1]; /*職ボのドロユニ数*/
+    i=(i*30+(w.eexp+30)*(w.drop[0]+w.drop[1]+w.drop[2]))*s0;   /*ドロップ100%時の1周EXP */
+    i=i/(w.drop[0]+w.drop[1]+w.drop[2]);                           /*合成１体当たりのEXP*/
+
+    for( g5=j=0 ; i*j+ex < ex5 ; ){
+      if(      i*(j+4)+ex <= ex5 ){ g5+=(getLv(rea,i*j+ex)*40+160)*4; j=j+4; }
+      else if( i*(j+3)+ex <= ex5 ){ g5+=(getLv(rea,i*j+ex)*40+160)*3; j=j+3; }
+      else if( i*(j+2)+ex <= ex5 ){ g5+=(getLv(rea,i*j+ex)*40+160)*2; j=j+2; }
+      else                        { g5+=(getLv(rea,i*j+ex)*40+160)  ; j=j+1; }
+    }
+    outobj[35].value=j;                   /*合成ユニ数(対象)*/
+    outobj[37].value=Math.ceil(j*i);      /*生食いEXP*/
+    outobj[38].value=g5;                  /*生食い費用*/
+
+    for( j=0 ; i*j < ex6 ; ){
+      if(      i*(j+4) <= ex6 ){ g5+=(getLv(rea,i*j)*40+160)*4; j=j+4; }
+      else if( i*(j+3) <= ex6 ){ g5+=(getLv(rea,i*j)*40+160)*3; j=j+3; }
+      else if( i*(j+2) <= ex6 ){ g5+=(getLv(rea,i*j)*40+160)*2; j=j+2; }
+      else                     { g5+=(getLv(rea,i*j)*40+160)  ; j=j+1; }
+    }
+    outobj[43].value=outobj[8].value * j;                     /*合成ユニ数(皇帝)*/
+    outobj[44].value=outobj[8].value * Math.ceil(j*i);        /*生食いEXP*/
+    outobj[45].value=outobj[8].value * (g5-outobj[38].value); /*生食い費用*/
+
+
+    outobj[34].value=j=Math.ceil( (outobj[35].value+outobj[43].value)/((w.drop[0]+w.drop[1]+w.drop[2])*inobj[15].value/20.0));     /*周回数*/
+    outobj[36].value=Math.ceil((w.drop[0]+w.drop[1]+w.drop[2])*j*inobj[15].value/20.0);         /*ドロップの総数*/
+    outobj[39].value=g9=j*Math.floor(Math.floor( abi *w.g)*1.5*shopG ) /*G*/;
+    outobj[40].value=j*w.charisma;
+
+
+    /*精霊救出*/
+    outobj[19].value=i=Math.ceil( (outobj[3].value + outobj[12].value +outobj[17].value)*20/inobj[9].value);    /*回*/
+    outobj[20].value=g6=Math.floor(Math.floor(abi*youbi[inobj[8].value].g)*1.5*shopG)*i;
+    outobj[21].value=Math.floor(i*inobj[9].value/20);
+    outobj[22].value=i*youbi[inobj[8].value].charisma;
+    outobj[23].value=i*youbi[inobj[8].value].stamina;
+
+    /*鎧神*/
+    i=outobj[18].value;
+    outobj[24].value=Math.ceil(i*20/inobj[10].value); /*周回数*/;
+    outobj[25].value=g7=Math.floor(outobj[24].value*inobj[11].value/20)*6000  /*金バケツ換金*/
+                       +outobj[24].value*Math.floor(Math.floor(abi*youbi[9].g)*1.5*shopG ); /*G*/
+    outobj[26].value=Math.floor(outobj[24].value*inobj[10].value/20); /*白バケツ*/
+    outobj[27].value=outobj[24].value*youbi[9].charisma;
+    outobj[28].value=outobj[24].value*youbi[9].stamina;
+
+    /*鎧中*/
+    g8=g1+g2+g3+g4+g5-g6-g7-g9;
+    if( g8<0 ) g8=0;
+    i=inobj[13].value*6000/20+Math.floor(Math.floor(abi*youbi[6].g)*1.5*shopG); /*1周分のG*/
+    outobj[29].value=Math.ceil(g8/i); /*回*/
+    outobj[30].value=Math.floor(outobj[29].value*inobj[13].value/20)*6000 /*金バケツ換金*/
+                    +outobj[29].value*Math.floor(Math.floor(abi*youbi[6].g)*1.5*shopG); /*G*/
+    outobj[31].value=Math.floor(outobj[29].value*inobj[12].value/20); /*白バケツ*/
+    outobj[32].value=outobj[29].value*youbi[6].charisma;
+    outobj[33].value=outobj[29].value*youbi[6].stamina;
+
+    /*パリン*/
+    outobj[41].value=Math.ceil((outobj[22].value+outobj[27].value+outobj[32].value+outobj[40].value)/427)
+                    +Math.ceil((outobj[23].value+outobj[28].value+outobj[33].value)/18);
+
+    for( n4=y ; doT &&  n4 < t.rows.length ; n4++ ) t.rows[n4].style["display"]="none";
+    for( i=0 ; doT && i < 9 && (i==0 || (ex0-ex1-ex2-ex3*i-ex) >= ex3) ; i++ ){
+      t.rows[0].cells[i+1].style["display"]="table-cell"
+      n2=ex0-ex1-ex2;
+      n3=n1;
+      n4=y;
+      if( i>0 ){
+        n2=n2-ex3*i;
+        n4=n4+(i-1);
+        lv=getLv(rea,n2);
+        n3=n3+(lv*40+160)*4;
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="k1"; c.innerText="Lv"; c.setAttribute("value",n2);
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="k2"; c.innerText=lv;
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="k2"; c.innerText="あと"; 
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="k2"; c.innerText=cnvN(exptable[rea][lv]-n2);
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="k3"; c.innerText="exp"; c.colSpan=(9-i)*5; c.setAttribute("value",n3);/*G*/
+        n4++;
+      }
+      for( j=0 ; n2-ex > 8000*s0 && n4 < t.rows.length ; j++ ){
+        if( i == 0 )  t.rows[n4].style["display"]="table-row"
+        n2=n2-8000*s0;
+        lv=getLv(rea,n2);
+        n3=n3+(160+lv*40)*4;
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="d1"; c.innerText="Lv"; c.setAttribute("value",n2);
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="d2"; c.innerText=(""+lv);
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="d2"; c.innerText="あと"; c.setAttribute("value",j+1);  /*バケツ数*/
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="d2"; c.innerText=cnvN(exptable[rea][lv]-n2);
+        c=t.rows[n4].insertCell(-1); c.setAttribute("nowrap",""); c.className="d3"; c.innerText="exp"; c.setAttribute("value",n3); /*G*/
+        n4++;
+      }
+    }
+    for( ; doT && i < 9 ; i++ ) if( i > 0 ) t.rows[0].cells[i+1].style["display"]="none";
+    inobj[19].value=saveword.backupstr();
+ }
+
+ document.body.addEventListener( "click", function(ev){
+    var lv,i,j,m,u,v,w,x,y,z;
+    var t=document.getElementById("t");
+    switch( ev.target.parentNode.tagName.toUpperCase() ){
+      case "X-B":
+        if( ev.target.parentNode.getAttribute("type") == "radio" ){
+          ev.target.parentNode.value = ev.target.getAttribute("num")/1;
+        }else{
+          ev.target.parentNode.value += 1;
+        }
+        doDraw(ev);
+        break;
+      case "TR":
+        if( !  ev.target.parentNode.parentNode.parentNode.id ) return;
+        if( ev.target.cellIndex == 0 ) return; /* header colunm */
+        if( ev.target.parentNode.rowIndex == 0 ) return; /* header line */
+        if( ev.target.parentNode.rowIndex == 1 ){ /* target lv */
+          inobj[5].value=0; /*千孤*/
+          inobj[6].value=0; /*祝福の精霊の回数*/
+          outobj[8].value=0; /*皇帝の回数*/
+          outobj[14].value=0; /*白バケツの回数*/
+          doDraw(ev);
+          break;
+        }
+        if( ev.target.parentNode.rowIndex == 2 && inobj[5].value ){ /* 千孤 */
+          inobj[6].value=0; /*祝福の精霊の回数*/
+          outobj[8].value=0; /*皇帝の回数*/
+          outobj[14].value=0; /*白バケツの回数*/
+          doDraw(ev);
+          break;
+        }
+        if( ev.target.parentNode.rowIndex <= 1 + inobj[5].value + inobj[6].value/1 ){ /* 祝福の精霊 */
+          outobj[8].value=0; /*皇帝の回数*/
+          outobj[14].value=0; /*白バケツの回数*/
+          doDraw(ev);
+          break;
+        }
+        outobj[8].value=Math.floor((ev.target.cellIndex-1)/5); /*皇帝の回数*/
+        outobj[14].value=ev.target.parentNode.rowIndex-1-inobj[5].value - inobj[6].value/1 - outobj[8].value; /*白バケツの回数*/
+        doDraw(ev);
+        break;
+      case "SPAN":
+        if( ev.target.id == "restoreB" ){
+          if( inobj[19].value.length >= 2 && saveword.checkstr(inobj[19].value) ){
+            location.href="?"+inobj[19].value;
+          }else{
+            alert("その呪文は正しくないようだ");
+          }
+        }
+        break;
+    }
+ });
+
+ /* initialize */
+ (function(){
+    var i,j;
+    for(i=0;i<=19;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
+    for(i=0;i<=45;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
+    for(i=0;i<99;i++){ /* 育成元レベル */
+      var obj=document.createElement("OPTION");
+      obj.value=i+1;
+      obj.innerText="Lv"+obj.value;
+      inobj[17].add(obj);
+    }
+    for(i=0;i<50;i++){ /*皇帝Lv*/
+      var obj=document.createElement("OPTION");
+      obj.value=i+1;
+      obj.innerText="Lv"+obj.value;
+      inobj[7].add(obj);
+    }
+    for(i=0;i<5;i++){ /*精霊救出*/
+      var obj=document.createElement("OPTION");
+      obj.value=i;
+      obj.innerText=youbi[i].name;
+      inobj[8].add(obj);
+    }
+    for(j=9;j<=13;j++)for(i=0;i<[60,60,80,20,100][j-9];i++) { /*精霊、バケツ*/
+      var obj=document.createElement("OPTION");
+      obj.value=(i+1);
+      obj.innerText=obj.value/20+"体";
+      inobj[j].add(obj);
+    }
+    for(i=1;i<=20;i++){ /*ドロ率*/
+      var obj=document.createElement("OPTION");
+      obj.value=i;
+      obj.innerText=(i*5)+"%";
+      inobj[15].add(obj);
+    }
+    for(i=0;i<maptable.length;i++){ /*委任MAP*/
+      var obj=document.createElement("OPTION");
+      obj.value=i;
+      obj.innerText=maptable[i].name;
+      inobj[14].add(obj);
+    }
+
+    for( i=0 ; i < 2 ; i++ ){
+      var obj=location[["search","hash"][i]];
+      if( obj && obj.length > 1 ){
+        obj=obj.substring(obj.indexOf(["?","#"][i])+1);
+        if( saveword.checkstr(obj) ){
+          saveword.restorestr(obj);
+          return;
+        }
+        alert("その呪文は正しくないようだ");
+      }
+    }
+
+    inobj[ 0].value=6;   /*レア*/
+    inobj[ 1].value=1;   /*サリエット*/
+    inobj[ 2].value=2;   /*豊穣の杖*/
+    inobj[ 3].value=0;   /*店 獲得G up*/
+    inobj[ 4].value=10   /*目的Lv*/
+    inobj[ 5].value=0    /*千孤*/
+    inobj[ 6].value=0    /*祝福の精霊回数*/
+    inobj[ 7].value=1    /*皇帝Lv*/
+    inobj[ 8].value=4;   /*精霊MAP*/
+    inobj[ 9].value=27;  /* =1.35/0.05 精霊ドロ率 */;
+    inobj[10].value=17;  /* =0.85/0.05 鎧神白バケツ率 */
+    inobj[11].value=63;  /* =3.15/0.05 鎧神金バケツ率 */
+    inobj[12].value=3;   /* =0.15/0.05 鎧中白バケツ率 */
+    inobj[13].value=60;  /* =3.00/0.05 鎧中金バケツ率 */
+    inobj[14].value=maptable.length-2; /*委任MAP*/
+    inobj[15].value=12;  /* =60/20 委任ドロ率*/
+    inobj[16].value=0;   /*クラス*/
+    inobj[17].value=1;   /* Lv */
+    inobj[18].value=exptable[inobj[ 0].value][inobj[17].value]; /* あと */
+    outobj[ 8].value=0;   /*皇帝8倍回数*/
+    outobj[14].value=0;   /*白バケツ8倍回数*/
+
+ })();
+
+ document.body.addEventListener( "change", function(ev){
+   if( ev.target.id != "in19" ) doDraw(ev);
+ });
+
+ doDraw(olev);
+
+}
+
+</script>
+
+<div><b>千年戦争アイギス　育成試算表　　　</b>
+<span>復活の呪文<input type="text" size=32 style="font-family:monospace;" id="in19"/><input type="button" id="restoreB" value="復活" id="in20"/></span>
+</div>
+<div>
+  <span>サリエット<x-b label="なし|あり" id="in01" type="radio"></x-b></span>
+  <span><x-b label="アビなし(未所持)|金運招来(ノエル)|豊穣の杖(ミア)" id="in02" type="radio"></x-b></span>
+  <span>ショップ 獲得G up<x-b label="未発動|発動中" id="in03" type="radio"></x-b></span>
+</div>
+<table>
+<tr>
+  <th nowrap>条件</th>
+  <th nowrap class="l" colspan=2>経験値</th>
+  <th nowrap class="l" colspan=2>G</th>
+  <th nowrap class="l" colspan=2>精霊</th>
+  <th nowrap class="l" colspan=2>白バケツ</th>
+  <th nowrap class="l">カリスマ</th>
+  <th nowrap class="l">スタミナ</th>
+</tr>
+<tr>
+  <td nowrap>対象<span>レア<x-b label="鉄|銅|銀|金|青|白|黒" id="in00" type="radio"></x-b></span>
+  <span><select id="in17"></select>あと<input type="number" id="in18" min=0 max=3999 /></span></td>
+  <td></td><td is="x-d" id="out42" sur="exp"></td>
+</tr>
+<tr>
+  <td nowrap>　　<span>職<x-b label="他|兵士|鎧|山賊|侍|忍者|弓兵|メイジ|海賊" id="in16" type="radio"></x-b></span></td>
+</tr>
+<tr class="odd">
+  <td>目標<x-b label="Lv30まで|Lv40まで|Lv50まで|Lv55まで|Lv60まで|Lv65まで|Lv70まで|Lv80まで|Lv85まで|Lv90まで|Lv99まで" id="in04" type="radio" value=10></x-b></td>
+  <td is="x-d" id="out00" sur="exp" class="l"></td>  <td></td>
+  <td class="l" colspan=2></td>
+  <td class="l" colspan=2></td>
+  <td class="l" colspan=2></td>
+  <td class="l"></td>
+  <td class="l"></td>
+</tr>
+<tr>
+  <td>合成：千孤<x-b label="未使用|使用" id="in05" type="radio"></x-b>8倍</td>
+  <td></td>
+  <td class="l" nowrap is="x-d" id="out01" sur="exp" ></td>
+  <td class="l" nowrap is="x-d" id="out02" sur="G"></td>  <td ></td>
+  <td class="l" nowrap is="x-d" id="out03" sur="体"></td>  <td ></td>
+  <td class="l" colspan=2></td>
+  <td class="l"></td>
+  <td class="l"></td>
+</tr>
+<tr class="odd">
+  <td id="g4">合成：<text id="i2"></text><select id="in06">
+   <option value=0 >未使用</option>
+   <option value=1 >1回</option>
+   <option value=2 >2回</option>
+   <option value=3 >3回</option>
+   <option value=4 >4回</option>
+   <option value=5 >5回</option>
+   <option value=6 >6回</option>
+   <option value=7 >7回</option>
+   <option value=8 >8回</option>
+   <option value=9 >9回</option>
+  </select> × <x-l id="out04"></x-l>exp</td>
+  <td class="l" nowrap is="x-d" id="out05" sur="exp" colspan=2></td>
+  <td class="l" nowrap is="x-d" id="out06" sur="G"></td> <td ></td>
+  <td class="l" colspan=2></td>
+  <td class="l" colspan=2></td>
+  <td class="l"></td>
+  <td class="l"></td>
+</tr>
+<tr">
+  <td>合成：皇帝<select id="in07"></select>8倍<x-l id="out07"></x-l>exp × <x-l id="out08"></x-l>回</td>
+  <td nowrap is="x-d" id="out09" pre="(" sur="exp)" class="l"></td>
+  <td nowrap is="x-d" id="out10" sur="exp"></td>
+  <td nowrap is="x-d" id="out11" sur="G" class="l"></td>
+  <td ></td>
+  <td nowrap is="x-d" id="out12" sur="体" class="l"></td>
+  <td></td>
+  <td colspan=2  class="l"></td> <td class="l"></td> <td class="l"></td>
+</tr>
+<tr class="odd">
+ <td>合成：白バケツ8倍<x-l id="out13"></x-l>exp × <x-l id="out14"></x-l>回</td>
+  <td nowrap class="l" is="x-d" id="out15" sur="exp" colspan=2></td>
+  <td nowrap class="l" is="x-d" id="out16" sur="G" ></td>  <td ></td>
+  <td nowrap class="l" is="x-d" id="out17" sur="体"></td> <td ></td>
+  <td nowrap class="l" is="x-d" id="out18" sur="体"></td> <td ></td>
+  <td nowrap class="l"></td>
+  <td nowrap class="l"></td>
+</tr>
+<tr>
+  <td><select id="in08"></select>：(周回あたり同色精霊<select id="in09"></select>) × <x-l id="out19"></x-l>周</td>
+  <td nowrap class="l" colspan=2></td>
+  <td nowrap class="l"></td><td nowrap is="x-d" id="out20" sur="G"></td>
+  <td nowrap class="l"></td><td nowrap is="x-d" id="out21" sur="体"></td>
+  <td nowrap class="l" colspan=2></td>
+  <td nowrap class="l" is="x-d" id="out22"></td><!-- カリ -->
+  <td nowrap class="l" is="x-d" id="out23"></td><!-- スタ -->
+</tr>
+<tr class="odd">
+  <td>鎧神級：(周回あたり白バケツ<select id="in10"></select>金バケツ<select id="in11"></select>) × <x-l id="out24"></x-l>周</td>
+  <td nowrap colspan=3 class="d1 l">(金バケツ換金分込み)</td>
+  <td nowrap is="x-d" id="out25" sur="G"></td>
+  <td nowrap class="l" colspan=2></td>
+  <td nowrap class="l"></td><td is="x-d" id="out26" sur="体"></td>
+  <td nowrap class="l" is="x-d" id="out27"></td><!-- カリ -->
+  <td nowrap class="l" is="x-d" id="out28"></td><!-- スタ -->
+</tr>
+<tr>
+  <td>鎧中級：(周回あたり白バケツ<select id="in12"></select>金バケツ<select id="in13"></select>) × <x-l id="out29"></x-l>周</td>
+  <td nowrap colspan=3 class="d1 l" >(金バケツ換金分込み)</td>
+  <td nowrap is="x-d" id="out30" sur="G"></td>
+  <td nowrap class="l" colspan=2></td>
+  <td nowrap class="l"></td><td is="x-d" id="out31" sur="体"></td>
+  <td nowrap class="l" is="x-d" id="out32"></td><!-- カリ -->
+  <td nowrap class="l" is="x-d" id="out33"></td><!-- スタ -->
+</tr>
+<tr class="odd">
+  <td>委任<select id="in14"></select>ドロ率<select id="in15" ></select> × <x-l id="out34"></x-l>周＝<x-l id="out36"></x-l>体</td>
+  <td class="l" nowrap colspan=2></td>
+  <td class="l"></td><td nowrap is="x-d" id="out39" sur="G" ></td>
+  <td class="l" nowrap colspan=2></td>
+  <td class="l" nowrap colspan=2></td>
+  <td class="l" nowrap is="x-d" id="out40"></td><!-- カリ -->
+  <td class="l"></td>
+</tr>
+<tr>
+  <td>　　生喰い(対象) <x-l id="out35"></x-l>体</td>
+  <td class="l"></td><td nowrap is="x-d" id="out37" sur="exp"></td>
+  <td class="l" nowrap is="x-d" id="out38" sur="G"></td>
+  <td colspan=4></td>
+  <td nowrap rowspan=3 colspan=3 is="x-d" id="out41" pre="<b>カリスタ合算<br>" sur="パリン</b>" class="a"></td>
+</tr>
+<tr>
+  <td>　　生喰い(皇帝)<x-l id="out43"></x-l>体</td>
+  <td class="l"></td><td nowrap is="x-d" id="out44" pre="(" sur="exp)"></td>
+  <td class="l" nowrap is="x-d" id="out45" sur="G"></td>
+  <td colspan=4></td>
+</tr>
+<tr>
+  <th colspan=8>(皇帝8倍、白バケツ8倍の回数は下表のマスをクリック)　(刻集めにかかる費用、GG/GG+は未考慮)　(皇帝のLv上げは生食いにて)</th>
+</tr>
+</table>
+<br>
+<b>合成に必要なLv（白：白バケツ8倍 , グレー：皇帝8倍 , 薄緑：祝福の精霊 , 薄黄：千孤8倍)</b>
+<div><table  id="t">
+<tr>
+<th nowrap class="hed1">合成<br>回数</th>
+<th nowrap colspan=5>皇帝0回</th>
+<th nowrap colspan=5>皇帝1回</th>
+<th nowrap colspan=5>皇帝2回</th>
+<th nowrap colspan=5>皇帝3回</th>
+<th nowrap colspan=5>皇帝4回</th>
+<th nowrap colspan=5>皇帝5回</th>
+<th nowrap colspan=5>皇帝6回</th>
+<th nowrap colspan=5>皇帝7回</th>
+<th nowrap colspan=5>皇帝8回</th>
+</tr>
+<tr><th nowrap class="hed1">0<br></th><td colspan=45></td></tr>
+<tr><th nowrap class="hed1">1</th></tr>
+<tr><th nowrap class="hed1">2</th></tr>
+<tr><th nowrap class="hed1">3</th></tr>
+<tr><th nowrap class="hed1">4</th></tr>
+<tr><th nowrap class="hed1">5</th></tr>
+<tr><th nowrap class="hed1">6</th></tr>
+<tr><th nowrap class="hed1">7</th></tr>
+<tr><th nowrap class="hed1">8</th></tr>
+<tr><th nowrap class="hed1">9</th></tr>
+<tr><th nowrap class="hed1">10</th></tr>
+<tr><th nowrap class="hed1">11</th></tr>
+<tr><th nowrap class="hed1">12</th></tr>
+<tr><th nowrap class="hed1">13</th></tr>
+<tr><th nowrap class="hed1">14</th></tr>
+<tr><th nowrap class="hed1">15</th></tr>
+<tr><th nowrap class="hed1">16</th></tr>
+<tr><th nowrap class="hed1">17</th></tr>
+</table></div>
+<div>
+</div>
+<script language="javascript">
+</script>
+</body>
