@@ -1,17 +1,17 @@
 ﻿<!DOCTYPE HTML>
 <html lang="ja"><head>
- <META http-equiv="Content-Type" content="text/html;">
+ <META http-equiv="Content-Type" content="text/html;"  charset="UTF-8">
  <META http-equiv="Content-Script-Type" content="text/javascript">
  <META http-equiv="Content-Style-Type" content="text/css">
  <title> </title>
  <style>
-
+td{ padding: 3px 0px 2px 0px; }
 select,div>span{ font-size:18px; height:100%; margin:0px; }
 select{ background-color: yellow; }
-x-b input { font-size:16px;}
+.x-b input { font-size:16px;}
 table td[is="x-d"] { text-align:right; }
 div{ padding:4px; }
-span{ padding:2px; }
+span{ padding:5px 2px 2px 2px; }
 table th { background-color:cadetblue; color:white; }
 table .l{ border-width:0px 0px 0px 5px; border-style:solid; border-color:white; }
 
@@ -38,6 +38,7 @@ table td.a{ border:solid 1px red; background-color:rebeccapurple; color:white; t
 #t td.d3{ text-align:left;  padding:0px 4px 0px 1px; border-top:none; border-left:none;  }
 #t th{ background-color: steelblue; }
 #t .hed1{ background-color: cornflowerblue; }
+span.x-b,span.x-l { border: none; }
 
 input[type="button"] {
  background-color: #e8ffff;
@@ -54,7 +55,7 @@ input[type="button"] {
 }
 input.bon { background-color: #ff4; }
 input.chk { display:inline; background-color:#90ffcf; }
-x-b[type="radio"] input{ margin: 0px 4px; }
+.x-b[type="radio"] input{ margin: 2px 1px; }
 
 
  </style>
@@ -62,104 +63,6 @@ x-b[type="radio"] input{ margin: 0px 4px; }
 <body>
 
 <script>
-  document.registerElement('x-b', {
-    prototype: Object.create(HTMLSpanElement.prototype,{
-      value:{
-        get:function(){ return this.getAttribute("value")/1; },
-        set:function(n){
-          var l=this.getAttribute("label").split("|");
-          if( n >= 2 ) n %= l.length;
-          this.setAttribute("value",n);
-          if( l.length <= 1 ){
-            this.children[0].className=(n?"bon":"");
-          }
-          if( this.getAttribute("type") != "radio" ){
-            this.children[0].value=l[n%l.length];
-          }else{
-            var i;
-            for( i=0 ; i<l.length ; i++ ){
-              this.children[i].className=(i==(n%l.length))?"bon":"";
-            }
-          }
-        }
-      },
-      visible:{
-        set:function(n){
-           var i;
-           for(i=0;i<n.length ; i++ ){
-            this.children[i].style["display"]=n[i]?"inline":"none";
-           }
-        }
-      },
-      range:{
-        get:function(){ return this.getAttribute("label").split("|").length;}
-      },
-      createdCallback:{
-        value:function(){
-          var i,obj;
-          var l=this.getAttribute("label").split("|");
-          for( i=0 ; i<l.length ; i++ ){
-            obj=document.createElement("input");
-            obj.type="button";
-            obj.value=l[i];
-            this.appendChild(obj);
-            if( this.getAttribute("type") != "radio" ){ /* toggle */
-              obj.className="chk";
-              break;
-            }
-            obj.setAttribute("num",i);
-          }
-          this.value=this.value;
-        }
-      }
-    })
-  });
-  document.registerElement('x-l', {
-    prototype: Object.create(HTMLSpanElement.prototype,{
-      value:{
-        get:function(){ return this.getAttribute("value")/1; },
-        set:function(n){
-          this.setAttribute("value",n);
-          this.innerText=(function cnvN(v){
-            if( (""+v).length <= 3 ) return v;
-            if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
-            return cnvN((""+v).substr(0,(""+v).length-3))+","+(""+v).substr((""+v).length-3,3);
-          })(n);
-        }
-      },
-      createdCallback:{
-        value:function(){ this.value=this.value; }
-      }
-    })
-  });
-  document.registerElement('x-d', {
-    prototype: Object.create(HTMLTableCellElement.prototype,{
-      pre:{
-        get:function(){ return this.getAttribute("pre"); },
-        set:function(n){ this.setAttribute("sur",n); }
-      },
-      sur:{
-        get:function(){ return this.getAttribute("sur"); },
-        set:function(n){ this.setAttribute("sur",n); }
-      },
-      value:{
-        get:function(){ return this.getAttribute("value")/1; },
-        set:function(n){
-          this.setAttribute("value",n);
-          this.innerHTML=(this.pre?this.pre:"")+(function cnvN(v){
-            if( (""+v).length <= 3 ) return v;
-            if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
-            return cnvN((""+v).substr(0,(""+v).length-3))+","+(""+v).substr((""+v).length-3,3);
-          })(n)+(this.sur?this.sur:"");
-        }
-      },
-      createdCallback:{
-        value:function(){ this.value=this.value; }
-      }
-    }),
-    extends: "TD"
-  });
-
 document.body.onload=function(olev){
   var exptable=[
     [0,32,65,100,135,172,211,250,291,333,418,506,598,693,791,893,998,1106,1218,1333,1503,1679,1862,2052,2249,2452,2662,2879,3103,3333],
@@ -295,27 +198,27 @@ document.body.onload=function(olev){
     backupstr:function(){
       var w=[0,0,""];
       var i,j;
-      saveword.addS(w, inobj[  0].value ,3); /*3bit:レア*/
-      saveword.addS(w, inobj[  1].value ,1); /*1bit:サリエット*/
-      saveword.addS(w, inobj[  2].value ,2); /*2bit:豊穣の杖*/
-      saveword.addS(w, inobj[  3].value ,1); /*1bit:店 獲得G up*/
-      saveword.addS(w, inobj[  4].value ,4); /*4bit:目的Lv*/
-      saveword.addS(w, inobj[  5].value ,1); /*1bit:千孤*/
-      saveword.addS(w, inobj[  6].value ,4); /*4bit:祝福の精霊回数*/
-      saveword.addS(w, inobj[  7].value ,6); /*6bit:皇帝Lv*/
-      saveword.addS(w, inobj[  8].value ,3); /*3bit:精霊MAP*/
-      saveword.addS(w, inobj[  9].value ,6); /*6bit: =1.35/0.05 精霊ドロ率 */;
-      saveword.addS(w, inobj[ 10].value ,6); /*6bit: =0.85/0.05 鎧神白バケツ率 */
-      saveword.addS(w, inobj[ 11].value ,7); /*7bit: =3.15/0.05 鎧神金バケツ率 */
-      saveword.addS(w, inobj[ 12].value ,5); /*5bit: =0.15/0.05 鎧中白バケツ率 */
-      saveword.addS(w, inobj[ 13].value ,7); /*7bit: =3.00/0.05 鎧中金バケツ率 */
-      saveword.addS(w, inobj[ 14].value ,4); /*4bit:委任MAP*/
-      saveword.addS(w, inobj[ 15].value ,5); /*5bit:委任ドロ率*/
-      saveword.addS(w, inobj[ 16].value ,4); /*4bit:職*/
-      saveword.addS(w, inobj[ 17].value ,7); /*7bit:育成元Lv*/
-      saveword.addS(w, inobj[ 18].value ,12); /*12bit:育成元"あと"*/
-      saveword.addS(w, outobj[ 8].value ,4); /*4bit:皇帝8倍回数*/
-      saveword.addS(w, outobj[14].value ,5); /*5bit:白バケツ8倍回数*/
+      saveword.addS(w, getV(inobj[  0]) ,3); /*3bit:レア*/
+      saveword.addS(w, getV(inobj[  1]) ,1); /*1bit:サリエット*/
+      saveword.addS(w, getV(inobj[  2]) ,2); /*2bit:豊穣の杖*/
+      saveword.addS(w, getV(inobj[  3]) ,1); /*1bit:店 獲得G up*/
+      saveword.addS(w, getV(inobj[  4]) ,4); /*4bit:目的Lv*/
+      saveword.addS(w, getV(inobj[  5]) ,1); /*1bit:千孤*/
+      saveword.addS(w, getV(inobj[  6]) ,4); /*4bit:祝福の精霊回数*/
+      saveword.addS(w, getV(inobj[  7]) ,6); /*6bit:皇帝Lv*/
+      saveword.addS(w, getV(inobj[  8]) ,3); /*3bit:精霊MAP*/
+      saveword.addS(w, getV(inobj[  9]) ,6); /*6bit: =1.35/0.05 精霊ドロ率 */;
+      saveword.addS(w, getV(inobj[ 10]) ,6); /*6bit: =0.85/0.05 鎧神白バケツ率 */
+      saveword.addS(w, getV(inobj[ 11]) ,7); /*7bit: =3.15/0.05 鎧神金バケツ率 */
+      saveword.addS(w, getV(inobj[ 12]) ,5); /*5bit: =0.15/0.05 鎧中白バケツ率 */
+      saveword.addS(w, getV(inobj[ 13]) ,7); /*7bit: =3.00/0.05 鎧中金バケツ率 */
+      saveword.addS(w, getV(inobj[ 14]) ,4); /*4bit:委任MAP*/
+      saveword.addS(w, getV(inobj[ 15]) ,5); /*5bit:委任ドロ率*/
+      saveword.addS(w, getV(inobj[ 16]) ,4); /*4bit:職*/
+      saveword.addS(w, getV(inobj[ 17]) ,7); /*7bit:育成元Lv*/
+      saveword.addS(w, getV(inobj[ 18]) ,12); /*12bit:育成元"あと"*/
+      saveword.addS(w, getV(outobj[ 8]) ,4); /*4bit:皇帝8倍回数*/
+      saveword.addS(w, getV(outobj[14]) ,5); /*5bit:白バケツ8倍回数*/
       if( w[1] > 0 ) w[2] += saveword.charmap.substr( w[0]&63,1 );
       for(i=j=0 ; i<w[2].length ; i++ ) j=j^saveword.charmap.indexOf(w[2].substr(i,1));
       w[2] += saveword.charmap.substr( j,1 );
@@ -323,27 +226,27 @@ document.body.onload=function(olev){
     },
     restorestr:function(s){
       var w=[0,0,s];
-      inobj[  0].value = saveword.getS(w, 3);
-      inobj[  1].value = saveword.getS(w, 1);
-      inobj[  2].value = saveword.getS(w, 2);
-      inobj[  3].value = saveword.getS(w, 1);
-      inobj[  4].value = saveword.getS(w, 4);
-      inobj[  5].value = saveword.getS(w, 1);
-      inobj[  6].value = saveword.getS(w, 4);
-      inobj[  7].value = saveword.getS(w, 6);
-      inobj[  8].value = saveword.getS(w, 3);
-      inobj[  9].value = saveword.getS(w, 6);
-      inobj[ 10].value = saveword.getS(w, 6);
-      inobj[ 11].value = saveword.getS(w, 7);
-      inobj[ 12].value = saveword.getS(w, 5);
-      inobj[ 13].value = saveword.getS(w, 7);
-      inobj[ 14].value = saveword.getS(w, 4);
-      inobj[ 15].value = saveword.getS(w, 5);
-      inobj[ 16].value = saveword.getS(w, 4);
-      inobj[ 17].value = saveword.getS(w, 7);
-      inobj[ 18].value = saveword.getS(w,12);
-      outobj[ 8].value = saveword.getS(w, 4);
-      outobj[14].value = saveword.getS(w, 5);
+      setV(inobj[  0] , saveword.getS(w, 3));
+      setV(inobj[  1] , saveword.getS(w, 1));
+      setV(inobj[  2] , saveword.getS(w, 2));
+      setV(inobj[  3] , saveword.getS(w, 1));
+      setV(inobj[  4] , saveword.getS(w, 4));
+      setV(inobj[  5] , saveword.getS(w, 1));
+      setV(inobj[  6] , saveword.getS(w, 4));
+      setV(inobj[  7] , saveword.getS(w, 6));
+      setV(inobj[  8] , saveword.getS(w, 3));
+      setV(inobj[  9] , saveword.getS(w, 6));
+      setV(inobj[ 10] , saveword.getS(w, 6));
+      setV(inobj[ 11] , saveword.getS(w, 7));
+      setV(inobj[ 12] , saveword.getS(w, 5));
+      setV(inobj[ 13] , saveword.getS(w, 7));
+      setV(inobj[ 14] , saveword.getS(w, 4));
+      setV(inobj[ 15] , saveword.getS(w, 5));
+      setV(inobj[ 16] , saveword.getS(w, 4));
+      setV(inobj[ 17] , saveword.getS(w, 7));
+      setV(inobj[ 18] , saveword.getS(w,12));
+      setV(outobj[ 8] , saveword.getS(w, 4));
+      setV(outobj[14] , saveword.getS(w, 5));
     },
     checkstr:function(str){
       var i,j;
@@ -363,52 +266,99 @@ document.body.onload=function(olev){
     for( lv=1 ; lv < exptable[rea].length && n >= exptable[rea][lv] ; lv++ );
     return lv;
  }
+ function getV(o){
+    if( o.getAttribute("is") == "x-d" ) return o.getAttribute("value")/1;
+    switch( o.className ){
+      case "x-b":
+      case "x-l":
+      case "x-d": return o.getAttribute("value")/1; break;
+      default: return o.value; break;
+    }
+  }
+  function setV(o,n){
+    if( o.getAttribute("is") == "x-d" ){
+          o.setAttribute("value",n);
+          o.innerHTML=(o.getAttribute("pre")?o.getAttribute("pre"):"")+cnvN(n)+(o.getAttribute("sur")?o.getAttribute("sur"):"");
+          return;
+    }
+    switch( o.className ){
+      case "x-b":
+          var l=o.children.length;
+          if( n >= 2 ) n %= l;
+          o.setAttribute("value",n);
+          if( l <= 1 ){
+            o.children[0].className=(n?"bon":"");
+          }
+          if( o.getAttribute("type") != "radio" ){
+            o.children[0].value=l[n%l];
+          }else{
+            var i;
+            for( i=0 ; i<l ; i++ ){
+              o.children[i].className=(i==(n%l))?"bon":"";
+            }
+          }
+          break;
+      case "x-l":
+          o.setAttribute("value",n);
+          o.innerText=cnvN(n);
+          break;
+      case "x-d":
+          o.setAttribute("value",n);
+          o.innerHTML=(o.pre?o.pre:"")+cnvN(n)+(o.sur?o.sur:"");
+          break;
+      default: o.value=n; break;
+    }
+  }
+
+
  function doDraw(ev){
 
     var i,j,k,n0,n1,n2,n3,c,y;
     var ex,ex0,ex1,ex2,ex3,ex4,ex5,ex6;
     var g0,g1,g2,g3,g4,g5,g6,g7,g8,g9;
-    var t=document.getElementById("t");
-    var rea=inobj[0].value;          /*レア */
-    var s0=inobj[1].value*0.1+1;     /*サリエット*/
-    var abi=(inobj[2].value<2)?(1+inobj[2].value*0.1):1.15;
-    var shopG=inobj[3].value?1.5:1;
-    var targetlv=inobj[4].value;      /* 30,40,50,55,60,65,70,80,85,90,99 */
-    var doT=(ev.type != "click" || ev.target.tagName.toUpperCase() != "TD");
+    var t        = document.getElementById("t");
+    var rea      = getV(inobj[0]);          /*レア */
+    var s0       = getV(inobj[1])*0.1+1;     /*サリエット*/
+    var abi      = (getV(inobj[2])<2)?(1+getV(inobj[2])*0.1):1.15;
+    var shopG    = getV(inobj[3])?1.5:1;
+    var targetlv = getV(inobj[4]);      /* 30,40,50,55,60,65,70,80,85,90,99 */
+    var doT      = (ev.type != "click" || ev.target.tagName.toUpperCase() != "TD");
     for( i=2; doT && i<t.rows.length ; i++ ) while( t.rows[i].cells.length > 1) t.rows[i].deleteCell(1);
 
     /*育成元*/
-    if( inobj[17].value >= exptable[rea].length ){
-      inobj[17].value=exptable[rea].length;
-      inobj[18].value=0;
+    if( getV(inobj[17]) >= exptable[rea].length ){
+      setV(inobj[17],exptable[rea].length);
+      setV(inobj[18],0);
       ex=exptable[rea][exptable[rea].length-1];
     }else{
-      if( inobj[18].value/1 > 0 && inobj[18].value/1 > exptable[rea][inobj[17].value]-exptable[rea][inobj[17].value-1] )  inobj[18].value=exptable[rea][inobj[17].value]-exptable[rea][inobj[17].value-1]
-      ex=exptable[rea][inobj[17].value]-inobj[18].value;
+      if( getV(inobj[18])/1 > 0 && getV(inobj[18])/1 > exptable[rea][getV(inobj[17])]-exptable[rea][getV(inobj[17])-1] ) setV(inobj[18],exptable[rea][getV(inobj[17])]-exptable[rea][getV(inobj[17])-1]);
+      ex=exptable[rea][getV(inobj[17])]-getV(inobj[18]);
     }
-    outobj[42].value=ex;
+    setV(outobj[42],ex);
 
     /*目的Lv,exp*/
-    if( smx[rea][targetlv] == 0 ){ targetlv=(rea>=3)?10:(rea==2)?3:rea; inobj[4].value=targetlv; } 
-    inobj[4].visible=smx[rea]; /* custom element visible array */
-    outobj[0].value=ex0=exptable[rea][emx[targetlv]-1]; /*目的LvまでのEXP*/
+    if( smx[rea][targetlv] == 0 ){ targetlv=(rea>=3)?10:(rea==2)?3:rea; setV(inobj[4],targetlv); } 
+    for( i=0 ; i < smx[rea].length ; i++ ){
+      inobj[4].children[i].style["display"]=smx[rea][i]?"inline":"none";
+    }
+    setV(outobj[0],ex0=exptable[rea][emx[targetlv]-1]); /*目的LvまでのEXP*/
     if( doT ) t.rows[1].cells[1].innerText="Lv"+emx[targetlv]+"あと0"; /*0行目＝目的Lv*/
     y=2;
 
     /*千孤*/
-    if( ex >= ex0 ) inobj[5].value=0;
-    if( inobj[5].value > 0 ){ 
-      outobj[1].value=ex1=10005*8*s0;
+    if( ex >= ex0 ) setV(inobj[5],0);
+    if( getV(inobj[5]) > 0 ){ 
+      setV(outobj[1],ex1=10005*8*s0);
       lv=getLv(rea,ex0-ex1);
-      outobj[2].value=g1 =(lv*40+160)*4; 
-      outobj[3].value=sp1=3;
+      setV(outobj[2],g1 =(lv*40+160)*4); 
+      setV(outobj[3],sp1=3);
       if( n0 < 0 ) return;
       if( doT ){ c=t.rows[y].insertCell(-1); c.colSpan=45; c.style["background-color"]="beige"; c.innerText="Lv"+lv+"あと"+cnvN(exptable[rea][lv]+ex1-ex0)+"exp"; }
       y++;
     }else{
-      outobj[1].value=ex1=0;
-      outobj[2].value=g1 =0;
-      outobj[3].value=sp1=0;
+      setV(outobj[1],ex1=0);
+      setV(outobj[2],g1 =0);
+      setV(outobj[3],sp1=0);
     }
 
     /*祝福の精霊*/
@@ -417,49 +367,49 @@ document.body.onload=function(olev){
       document.getElementById("i2").innerText=fnm[rea];
     }else{
       document.getElementById("g4").style["display"] ="none";
-      inobj[6].value=0; /*回数*/
+      setV(inobj[6],0); /*回数*/
     }
-    outobj[4].value=ex2=Math.floor(fex[rea]*s0);            /*祝福の精霊 1回のEXP*/
-    for( i=1,g2=0 ; i <= inobj[6].value && (ex0-ex1-i*ex2) > ex2 ; i++ ){
+    setV(outobj[4],ex2=Math.floor(fex[rea]*s0));            /*祝福の精霊 1回のEXP*/
+    for( i=1,g2=0 ; i <= getV(inobj[6]) && (ex0-ex1-i*ex2) > ex2 ; i++ ){
       lv=getLv(rea,ex0-ex1-i*ex2);
       g2+=(lv*40+160);
       if( doT ){ c=t.rows[y].insertCell(-1); c.colSpan=45; c.style["background-color"]="honeydew"; c.innerText="Lv"+lv+"あと"+cnvN(exptable[rea][lv]+ex1+i*ex2-ex0)+"exp"; }
       y++;
     }
-    if( i <= inobj[6].value ) inobj[6].value=i-1;
-    outobj[5].value=ex2=ex2*(i-1);  /*祝福の精霊EXP合計*/
-    outobj[6].value=g2;
+    if( i <= getV(inobj[6]) ) setV(inobj[6],i-1);
+    setV(outobj[5],ex2=ex2*(i-1));  /*祝福の精霊EXP合計*/
+    setV(outobj[6],g2);
 
     /*皇帝*/
-    outobj[7].value=ex3=Math.floor((inobj[7].value*20+1980)*8*s0); /*皇帝1回分のEXP*/
-    for( i=1,g3=0 ; i <= outobj[8].value && (ex0-ex1-ex2-i*ex3) > ex3 ; i++ ){
+    setV(outobj[7],ex3=Math.floor((getV(inobj[7])*20+1980)*8*s0)); /*皇帝1回分のEXP*/
+    for( i=1,g3=0 ; i <= getV(outobj[8]) && (ex0-ex1-ex2-i*ex3) > ex3 ; i++ ){
       g3+=(getLv(rea,ex0-ex1-ex2-i*ex3)*40+160)*4;
     }
-    outobj[8].value=i-1;        /*回*/
-    outobj[9].value=exptable[6][inobj[7].value/1-1]*(i-1); /*皇帝育成EXP*/
-    outobj[10].value=ex3*(i-1);  /*EXP合計*/
-    outobj[11].value=g3;        /*G*/
-    outobj[12].value=3*(i-1);   /*精霊*/
+    setV(outobj[ 8], i-1);        /*回*/
+    setV(outobj[ 9], exptable[6][getV(inobj[7])/1-1]*(i-1)); /*皇帝育成EXP*/
+    setV(outobj[10], ex3*(i-1));  /*EXP合計*/
+    setV(outobj[11], g3);        /*G*/
+    setV(outobj[12], 3*(i-1));   /*精霊*/
 
     /*白バケツ*/
-    outobj[13].value=ex4=8000*s0;                  /*1回分のEXP*/
-    for( i=1,g4=0 ; i <= outobj[14].value && (ex0-ex1-ex2-ex3*outobj[8].value-i*ex4) > 0 ; i++ ){
-      g4+=(getLv(rea,ex0-ex1-ex2-ex3*outobj[8].value-i*ex4)*40+160)*4;
+    setV(outobj[13], ex4=8000*s0);                  /*1回分のEXP*/
+    for( i=1,g4=0 ; i <= getV(outobj[14]) && (ex0-ex1-ex2-ex3*getV(outobj[8])-i*ex4) > 0 ; i++ ){
+      g4+=(getLv(rea,ex0-ex1-ex2-ex3*getV(outobj[8])-i*ex4)*40+160)*4;
     }
-    outobj[14].value=i-1;           /*回*/
-    outobj[15].value=8000*s0*(i-1); /*EXP*/
-    outobj[16].value=g4;            /*G*/
-    outobj[17].value=(i-1)*3;       /*精霊*/
-    outobj[18].value=(i-1);         /*白バケツ*/
+    setV(outobj[14], i-1);           /*回*/
+    setV(outobj[15], 8000*s0*(i-1)); /*EXP*/
+    setV(outobj[16], g4);            /*G*/
+    setV(outobj[17], (i-1)*3);       /*精霊*/
+    setV(outobj[18], (i-1));         /*白バケツ*/
 
     /*委任*/
-    ex5=ex0-ex1-ex2-ex3*outobj[8].value-8000*s0*(i-1); /*必要EXP(対象ユニ)*/
-    ex6=exptable[6][inobj[7].value/1-1];               /*必要EXP(皇帝1体分)*/
+    ex5=ex0-ex1-ex2-ex3*getV(outobj[8])-8000*s0*(i-1); /*必要EXP(対象ユニ)*/
+    ex6=exptable[6][getV(inobj[7])/1-1];               /*必要EXP(皇帝1体分)*/
     if( ex5 < ex ) ex5=ex;
-    var w=maptable[inobj[14].value];
+    var w=maptable[getV(inobj[14])];
     i=w.drop[2];                                    /*指南のドロユニ数*/
-    if(inobj[16].value == w.syoku[0]) i+=w.drop[0]; /*職ボのドロユニ数*/
-    if(inobj[16].value == w.syoku[1]) i+=w.drop[1]; /*職ボのドロユニ数*/
+    if(getV(inobj[16]) == w.syoku[0]) i+=w.drop[0]; /*職ボのドロユニ数*/
+    if(getV(inobj[16]) == w.syoku[1]) i+=w.drop[1]; /*職ボのドロユニ数*/
     i=(i*30+(w.eexp+30)*(w.drop[0]+w.drop[1]+w.drop[2]))*s0;   /*ドロップ100%時の1周EXP */
     i=i/(w.drop[0]+w.drop[1]+w.drop[2]);                           /*合成１体当たりのEXP*/
 
@@ -469,9 +419,9 @@ document.body.onload=function(olev){
       else if( i*(j+2)+ex <= ex5 ){ g5+=(getLv(rea,i*j+ex)*40+160)*2; j=j+2; }
       else                        { g5+=(getLv(rea,i*j+ex)*40+160)  ; j=j+1; }
     }
-    outobj[35].value=j;                   /*合成ユニ数(対象)*/
-    outobj[37].value=Math.ceil(j*i);      /*生食いEXP*/
-    outobj[38].value=g5;                  /*生食い費用*/
+    setV(outobj[35], j);                   /*合成ユニ数(対象)*/
+    setV(outobj[37], Math.ceil(j*i));      /*生食いEXP*/
+    setV(outobj[38], g5);                  /*生食い費用*/
 
     for( j=0 ; i*j < ex6 ; ){
       if(      i*(j+4) <= ex6 ){ g5+=(getLv(rea,i*j)*40+160)*4; j=j+4; }
@@ -479,47 +429,47 @@ document.body.onload=function(olev){
       else if( i*(j+2) <= ex6 ){ g5+=(getLv(rea,i*j)*40+160)*2; j=j+2; }
       else                     { g5+=(getLv(rea,i*j)*40+160)  ; j=j+1; }
     }
-    outobj[43].value=outobj[8].value * j;                     /*合成ユニ数(皇帝)*/
-    outobj[44].value=outobj[8].value * Math.ceil(j*i);        /*生食いEXP*/
-    outobj[45].value=outobj[8].value * (g5-outobj[38].value); /*生食い費用*/
+    setV(outobj[43], getV(outobj[8]) * j);                     /*合成ユニ数(皇帝)*/
+    setV(outobj[44], getV(outobj[8]) * Math.ceil(j*i));        /*生食いEXP*/
+    setV(outobj[45], getV(outobj[8]) * (g5-getV(outobj[38]))); /*生食い費用*/
 
 
-    outobj[34].value=j=Math.ceil( (outobj[35].value+outobj[43].value)/((w.drop[0]+w.drop[1]+w.drop[2])*inobj[15].value/20.0));     /*周回数*/
-    outobj[36].value=Math.ceil((w.drop[0]+w.drop[1]+w.drop[2])*j*inobj[15].value/20.0);         /*ドロップの総数*/
-    outobj[39].value=g9=j*Math.floor(Math.floor( abi *w.g)*1.5*shopG ) /*G*/;
-    outobj[40].value=j*w.charisma;
+    setV(outobj[34], j=Math.ceil( (getV(outobj[35])+getV(outobj[43]))/((w.drop[0]+w.drop[1]+w.drop[2])*getV(inobj[15])/20.0)));     /*周回数*/
+    setV(outobj[36], Math.ceil((w.drop[0]+w.drop[1]+w.drop[2])*j*getV(inobj[15])/20.0));         /*ドロップの総数*/
+    setV(outobj[39], g9=j*Math.floor(Math.floor( abi *w.g)*1.5*shopG )); /*G*/
+    setV(outobj[40], j*w.charisma);
 
 
     /*精霊救出*/
-    outobj[19].value=i=Math.ceil( (outobj[3].value + outobj[12].value +outobj[17].value)*20/inobj[9].value);    /*回*/
-    outobj[20].value=g6=Math.floor(Math.floor(abi*youbi[inobj[8].value].g)*1.5*shopG)*i;
-    outobj[21].value=Math.floor(i*inobj[9].value/20);
-    outobj[22].value=i*youbi[inobj[8].value].charisma;
-    outobj[23].value=i*youbi[inobj[8].value].stamina;
+    setV(outobj[19], i=Math.ceil( (getV(outobj[3]) + getV(outobj[12]) +getV(outobj[17]))*20/getV(inobj[9])));    /*回*/
+    setV(outobj[20], g6=Math.floor(Math.floor(abi*youbi[getV(inobj[8])].g)*1.5*shopG)*i);
+    setV(outobj[21], Math.floor(i*getV(inobj[9])/20));
+    setV(outobj[22], i*youbi[getV(inobj[8])].charisma);
+    setV(outobj[23], i*youbi[getV(inobj[8])].stamina);
 
     /*鎧神*/
-    i=outobj[18].value;
-    outobj[24].value=Math.ceil(i*20/inobj[10].value); /*周回数*/;
-    outobj[25].value=g7=Math.floor(outobj[24].value*inobj[11].value/20)*6000  /*金バケツ換金*/
-                       +outobj[24].value*Math.floor(Math.floor(abi*youbi[9].g)*1.5*shopG ); /*G*/
-    outobj[26].value=Math.floor(outobj[24].value*inobj[10].value/20); /*白バケツ*/
-    outobj[27].value=outobj[24].value*youbi[9].charisma;
-    outobj[28].value=outobj[24].value*youbi[9].stamina;
+    i=getV(outobj[18]);
+    setV(outobj[24], Math.ceil(i*20/getV(inobj[10]))); /*周回数*/;
+    setV(outobj[25], g7=Math.floor(getV(outobj[24])*getV(inobj[11])/20)*6000  /*金バケツ換金*/
+                       +getV(outobj[24])*Math.floor(Math.floor(abi*youbi[9].g)*1.5*shopG )); /*G*/
+    setV(outobj[26], Math.floor(getV(outobj[24])*getV(inobj[10])/20)); /*白バケツ*/
+    setV(outobj[27], getV(outobj[24])*youbi[9].charisma);
+    setV(outobj[28], getV(outobj[24])*youbi[9].stamina);
 
     /*鎧中*/
     g8=g1+g2+g3+g4+g5-g6-g7-g9;
     if( g8<0 ) g8=0;
-    i=inobj[13].value*6000/20+Math.floor(Math.floor(abi*youbi[6].g)*1.5*shopG); /*1周分のG*/
-    outobj[29].value=Math.ceil(g8/i); /*回*/
-    outobj[30].value=Math.floor(outobj[29].value*inobj[13].value/20)*6000 /*金バケツ換金*/
-                    +outobj[29].value*Math.floor(Math.floor(abi*youbi[6].g)*1.5*shopG); /*G*/
-    outobj[31].value=Math.floor(outobj[29].value*inobj[12].value/20); /*白バケツ*/
-    outobj[32].value=outobj[29].value*youbi[6].charisma;
-    outobj[33].value=outobj[29].value*youbi[6].stamina;
+    i=getV(inobj[13])*6000/20+Math.floor(Math.floor(abi*youbi[6].g)*1.5*shopG); /*1周分のG*/
+    setV(outobj[29], Math.ceil(g8/i)); /*回*/
+    setV(outobj[30], Math.floor(getV(outobj[29])*getV(inobj[13])/20)*6000 /*金バケツ換金*/
+                    +getV(outobj[29])*Math.floor(Math.floor(abi*youbi[6].g)*1.5*shopG)); /*G*/
+    setV(outobj[31], Math.floor(getV(outobj[29])*getV(inobj[12])/20)); /*白バケツ*/
+    setV(outobj[32], getV(outobj[29])*youbi[6].charisma);
+    setV(outobj[33], getV(outobj[29])*youbi[6].stamina);
 
     /*パリン*/
-    outobj[41].value=Math.ceil((outobj[22].value+outobj[27].value+outobj[32].value+outobj[40].value)/427)
-                    +Math.ceil((outobj[23].value+outobj[28].value+outobj[33].value)/18);
+    setV(outobj[41], Math.ceil((getV(outobj[22])+getV(outobj[27])+getV(outobj[32])+getV(outobj[40]))/427)
+                    +Math.ceil((getV(outobj[23])+getV(outobj[28])+getV(outobj[33]))/18));
 
     for( n4=y ; doT &&  n4 < t.rows.length ; n4++ ) t.rows[n4].style["display"]="none";
     for( i=0 ; doT && i < 9 && (i==0 || (ex0-ex1-ex2-ex3*i-ex) >= ex3) ; i++ ){
@@ -553,54 +503,55 @@ document.body.onload=function(olev){
       }
     }
     for( ; doT && i < 9 ; i++ ) if( i > 0 ) t.rows[0].cells[i+1].style["display"]="none";
-    inobj[19].value=saveword.backupstr();
+    setV(inobj[19], saveword.backupstr());
  }
 
  document.body.addEventListener( "click", function(ev){
     var lv,i,j,m,u,v,w,x,y,z;
     var t=document.getElementById("t");
     switch( ev.target.parentNode.tagName.toUpperCase() ){
-      case "X-B":
-        if( ev.target.parentNode.getAttribute("type") == "radio" ){
-          ev.target.parentNode.value = ev.target.getAttribute("num")/1;
-        }else{
-          ev.target.parentNode.value += 1;
-        }
-        doDraw(ev);
-        break;
       case "TR":
         if( !  ev.target.parentNode.parentNode.parentNode.id ) return;
         if( ev.target.cellIndex == 0 ) return; /* header colunm */
         if( ev.target.parentNode.rowIndex == 0 ) return; /* header line */
         if( ev.target.parentNode.rowIndex == 1 ){ /* target lv */
-          inobj[5].value=0; /*千孤*/
-          inobj[6].value=0; /*祝福の精霊の回数*/
-          outobj[8].value=0; /*皇帝の回数*/
-          outobj[14].value=0; /*白バケツの回数*/
+          setV(inobj[  5], 0); /*千孤*/
+          setV(inobj[  6], 0); /*祝福の精霊の回数*/
+          setV(outobj[ 8], 0); /*皇帝の回数*/
+          setV(outobj[14], 0); /*白バケツの回数*/
           doDraw(ev);
           break;
         }
-        if( ev.target.parentNode.rowIndex == 2 && inobj[5].value ){ /* 千孤 */
-          inobj[6].value=0; /*祝福の精霊の回数*/
-          outobj[8].value=0; /*皇帝の回数*/
-          outobj[14].value=0; /*白バケツの回数*/
+        if( ev.target.parentNode.rowIndex == 2 && getV(inobj[5]) ){ /* 千孤 */
+          setV(inobj[  6], 0); /*祝福の精霊の回数*/
+          setV(outobj[ 8], 0); /*皇帝の回数*/
+          setV(outobj[14], 0); /*白バケツの回数*/
           doDraw(ev);
           break;
         }
-        if( ev.target.parentNode.rowIndex <= 1 + inobj[5].value + inobj[6].value/1 ){ /* 祝福の精霊 */
-          outobj[8].value=0; /*皇帝の回数*/
-          outobj[14].value=0; /*白バケツの回数*/
+        if( ev.target.parentNode.rowIndex <= 1 + getV(inobj[5]) + getV(inobj[6])/1 ){ /* 祝福の精霊 */
+          setV(outobj[ 8], 0); /*皇帝の回数*/
+          setV(outobj[14], 0); /*白バケツの回数*/
           doDraw(ev);
           break;
         }
-        outobj[8].value=Math.floor((ev.target.cellIndex-1)/5); /*皇帝の回数*/
-        outobj[14].value=ev.target.parentNode.rowIndex-1-inobj[5].value - inobj[6].value/1 - outobj[8].value; /*白バケツの回数*/
+        setV(outobj[ 8], Math.floor((ev.target.cellIndex-1)/5)); /*皇帝の回数*/
+        setV(outobj[14], ev.target.parentNode.rowIndex-1-getV(inobj[5]) - getV(inobj[6])/1 - getV(outobj[8])); /*白バケツの回数*/
         doDraw(ev);
         break;
       case "SPAN":
+        if( ev.target.parentNode.className == "x-b" ){
+          if( ev.target.parentNode.getAttribute("type") == "radio" ){
+            setV(ev.target.parentNode, ev.target.getAttribute("num")/1);
+          }else{
+            setV(ev.target.parentNode , getV(ev.target.parentNode)+1);
+          }
+          doDraw(ev);
+          break;
+        }
         if( ev.target.id == "restoreB" ){
-          if( inobj[19].value.length >= 2 && saveword.checkstr(inobj[19].value) ){
-            location.href="?"+inobj[19].value;
+          if( getV(inobj[19]).length >= 2 && saveword.checkstr(getV(inobj[19])) ){
+            location.href="?"+getV(inobj[19]);
           }else{
             alert("その呪文は正しくないようだ");
           }
@@ -663,27 +614,27 @@ document.body.onload=function(olev){
       }
     }
 
-    inobj[ 0].value=6;   /*レア*/
-    inobj[ 1].value=1;   /*サリエット*/
-    inobj[ 2].value=2;   /*豊穣の杖*/
-    inobj[ 3].value=0;   /*店 獲得G up*/
-    inobj[ 4].value=10   /*目的Lv*/
-    inobj[ 5].value=0    /*千孤*/
-    inobj[ 6].value=0    /*祝福の精霊回数*/
-    inobj[ 7].value=1    /*皇帝Lv*/
-    inobj[ 8].value=4;   /*精霊MAP*/
-    inobj[ 9].value=27;  /* =1.35/0.05 精霊ドロ率 */;
-    inobj[10].value=17;  /* =0.85/0.05 鎧神白バケツ率 */
-    inobj[11].value=63;  /* =3.15/0.05 鎧神金バケツ率 */
-    inobj[12].value=3;   /* =0.15/0.05 鎧中白バケツ率 */
-    inobj[13].value=60;  /* =3.00/0.05 鎧中金バケツ率 */
-    inobj[14].value=maptable.length-2; /*委任MAP*/
-    inobj[15].value=12;  /* =60/20 委任ドロ率*/
-    inobj[16].value=0;   /*クラス*/
-    inobj[17].value=1;   /* Lv */
-    inobj[18].value=exptable[inobj[ 0].value][inobj[17].value]; /* あと */
-    outobj[ 8].value=0;   /*皇帝8倍回数*/
-    outobj[14].value=0;   /*白バケツ8倍回数*/
+    setV(inobj[ 0],6);   /*レア*/
+    setV(inobj[ 1],1);    /*サリエット*/
+    setV(inobj[ 2],2);    /*豊穣の杖*/
+    setV(inobj[ 3],0);    /*店 獲得G up*/
+    setV(inobj[ 4],10);  /*目的Lv*/
+    setV(inobj[ 5],0);   /*千孤*/
+    setV(inobj[ 6],0);   /*祝福の精霊回数*/
+    setV(inobj[ 7],1);   /*皇帝Lv*/
+    setV(inobj[ 8],4);   /*精霊MAP*/
+    setV(inobj[ 9],27);  /* =1.35/0.05 精霊ドロ率 */;
+    setV(inobj[10],17);  /* =0.85/0.05 鎧神白バケツ率 */
+    setV(inobj[11],63);  /* =3.15/0.05 鎧神金バケツ率 */
+    setV(inobj[12],3);   /* =0.15/0.05 鎧中白バケツ率 */
+    setV(inobj[13],60);  /* =3.00/0.05 鎧中金バケツ率 */
+    setV(inobj[14],maptable.length-2); /*委任MAP*/
+    setV(inobj[15],12);  /* =60/20 委任ドロ率*/
+    setV(inobj[16],0);   /*クラス*/
+    setV(inobj[17],1);   /* Lv */
+    setV(inobj[18],exptable[getV(inobj[ 0])][getV(inobj[17])]); /* あと */
+    setV(outobj[ 8],0);   /*皇帝8倍回数*/
+    setV(outobj[14],0);   /*白バケツ8倍回数*/
 
  })();
 
@@ -701,9 +652,19 @@ document.body.onload=function(olev){
 <span>復活の呪文<input type="text" size=32 style="font-family:monospace;" id="in19"/><input type="button" id="restoreB" value="復活" id="in20"/></span>
 </div>
 <div>
-  <span>サリエット<x-b label="なし|あり" id="in01" type="radio"></x-b></span>
-  <span><x-b label="アビなし(未所持)|金運招来(ノエル)|豊穣の杖(ミア)" id="in02" type="radio"></x-b></span>
-  <span>ショップ 獲得G up<x-b label="未発動|発動中" id="in03" type="radio"></x-b></span>
+  <span>サリエット<span class="x-b" id="in01" type="radio">
+    <input type="button" num=0 value="なし" />
+    <input type="button" num=1 value="あり" />
+  </span></span>
+  <span><span class="x-b" id="in02" type="radio">
+    <input type="button" num=0 value="アビなし(未所持)" />
+    <input type="button" num=1 value="金運招来(ノエル)" />
+    <input type="button" num=2 value="豊穣の杖(ミア)" />
+  </span></span>
+  <span>ショップ 獲得G up<span class="x-b" id="in03" type="radio">
+    <input type="button" num=0 value="未発動" />
+    <input type="button" num=1 value="発動中" />
+  </span></span>
 </div>
 <table>
 <tr>
@@ -716,15 +677,45 @@ document.body.onload=function(olev){
   <th nowrap class="l">スタミナ</th>
 </tr>
 <tr>
-  <td nowrap>対象<span>レア<x-b label="鉄|銅|銀|金|青|白|黒" id="in00" type="radio"></x-b></span>
-  <span><select id="in17"></select>あと<input type="number" id="in18" min=0 max=3999 /></span></td>
+  <td nowrap>対象<span>レア<span class="x-b" id="in00" type="radio">
+    <input type="button" num=0 value="鉄" />
+    <input type="button" num=1 value="銅" />
+    <input type="button" num=2 value="銀" />
+    <input type="button" num=3 value="金" />
+    <input type="button" num=4 value="青" />
+    <input type="button" num=5 value="白" />
+    <input type="button" num=6 value="黒" />
+  </span></span>
+  <span><select id="in17"></select>あと<input type="number" id="in18" min=0 max=3999 size=4/></span></td>
   <td></td><td is="x-d" id="out42" sur="exp"></td>
 </tr>
 <tr>
-  <td nowrap>　　<span>職<x-b label="他|兵士|鎧|山賊|侍|忍者|弓兵|メイジ|海賊" id="in16" type="radio"></x-b></span></td>
+  <td nowrap>　　<span>職<span class="x-b" id="in16" type="radio">
+    <input type="button" num=0 value="他"    />
+    <input type="button" num=1 value="兵士"  />
+    <input type="button" num=2 value="鎧"    />
+    <input type="button" num=3 value="山賊"  />
+    <input type="button" num=4 value="侍"    />
+    <input type="button" num=5 value="忍者"  />
+    <input type="button" num=6 value="弓兵"  />
+    <input type="button" num=7 value="メイジ" />
+    <input type="button" num=8 value="海賊"  />
+  </span></span></td>
 </tr>
 <tr class="odd">
-  <td>目標<x-b label="Lv30まで|Lv40まで|Lv50まで|Lv55まで|Lv60まで|Lv65まで|Lv70まで|Lv80まで|Lv85まで|Lv90まで|Lv99まで" id="in04" type="radio" value=10></x-b></td>
+  <td>目標<span class="x-b" id="in04" type="radio" value=10>
+    <input type="button" num=0 value="Lv30まで" />
+    <input type="button" num=1 value="Lv40まで" />
+    <input type="button" num=2 value="Lv50まで" />
+    <input type="button" num=3 value="Lv55まで" />
+    <input type="button" num=4 value="Lv60まで" />
+    <input type="button" num=5 value="Lv65まで" />
+    <input type="button" num=6 value="Lv70まで" />
+    <input type="button" num=7 value="Lv80まで" />
+    <input type="button" num=8 value="Lv85まで" />
+    <input type="button" num=9 value="Lv90まで" />
+    <input type="button" num=10 value="Lv99まで" />
+  </span></td>
   <td is="x-d" id="out00" sur="exp" class="l"></td>  <td></td>
   <td class="l" colspan=2></td>
   <td class="l" colspan=2></td>
@@ -733,7 +724,10 @@ document.body.onload=function(olev){
   <td class="l"></td>
 </tr>
 <tr>
-  <td>合成：千孤<x-b label="未使用|使用" id="in05" type="radio"></x-b>8倍</td>
+  <td>合成：千孤<span class="x-b" id="in05" type="radio">
+    <input type="button" num=0 value="未使用" />
+    <input type="button" num=1 value="使用" />
+  </span>8倍</td>
   <td></td>
   <td class="l" nowrap is="x-d" id="out01" sur="exp" ></td>
   <td class="l" nowrap is="x-d" id="out02" sur="G"></td>  <td ></td>
@@ -754,7 +748,7 @@ document.body.onload=function(olev){
    <option value=7 >7回</option>
    <option value=8 >8回</option>
    <option value=9 >9回</option>
-  </select> × <x-l id="out04"></x-l>exp</td>
+  </select> × <span class="x-l" id="out04"></span>exp</td>
   <td class="l" nowrap is="x-d" id="out05" sur="exp" colspan=2></td>
   <td class="l" nowrap is="x-d" id="out06" sur="G"></td> <td ></td>
   <td class="l" colspan=2></td>
@@ -762,8 +756,8 @@ document.body.onload=function(olev){
   <td class="l"></td>
   <td class="l"></td>
 </tr>
-<tr">
-  <td>合成：皇帝<select id="in07"></select>8倍<x-l id="out07"></x-l>exp × <x-l id="out08"></x-l>回</td>
+<tr>
+  <td>合成：皇帝<select id="in07"></select>8倍<span class="x-l" id="out07"></span>exp × <span class="x-l" id="out08"></span>回</td>
   <td nowrap is="x-d" id="out09" pre="(" sur="exp)" class="l"></td>
   <td nowrap is="x-d" id="out10" sur="exp"></td>
   <td nowrap is="x-d" id="out11" sur="G" class="l"></td>
@@ -773,7 +767,7 @@ document.body.onload=function(olev){
   <td colspan=2  class="l"></td> <td class="l"></td> <td class="l"></td>
 </tr>
 <tr class="odd">
- <td>合成：白バケツ8倍<x-l id="out13"></x-l>exp × <x-l id="out14"></x-l>回</td>
+ <td>合成：白バケツ8倍<span class="x-l" id="out13"></span>exp × <span class="x-l" id="out14"></span>回</td>
   <td nowrap class="l" is="x-d" id="out15" sur="exp" colspan=2></td>
   <td nowrap class="l" is="x-d" id="out16" sur="G" ></td>  <td ></td>
   <td nowrap class="l" is="x-d" id="out17" sur="体"></td> <td ></td>
@@ -782,7 +776,7 @@ document.body.onload=function(olev){
   <td nowrap class="l"></td>
 </tr>
 <tr>
-  <td><select id="in08"></select>：(周回あたり同色精霊<select id="in09"></select>) × <x-l id="out19"></x-l>周</td>
+  <td><select id="in08"></select>：(周回あたり同色精霊<select id="in09"></select>) × <span class="x-l" id="out19"></span>周</td>
   <td nowrap class="l" colspan=2></td>
   <td nowrap class="l"></td><td nowrap is="x-d" id="out20" sur="G"></td>
   <td nowrap class="l"></td><td nowrap is="x-d" id="out21" sur="体"></td>
@@ -791,7 +785,7 @@ document.body.onload=function(olev){
   <td nowrap class="l" is="x-d" id="out23"></td><!-- スタ -->
 </tr>
 <tr class="odd">
-  <td>鎧神級：(周回あたり白バケツ<select id="in10"></select>金バケツ<select id="in11"></select>) × <x-l id="out24"></x-l>周</td>
+  <td>鎧神級：(周回あたり白バケツ<select id="in10"></select>金バケツ<select id="in11"></select>) × <span class="x-l" id="out24"></span>周</td>
   <td nowrap colspan=3 class="d1 l">(金バケツ換金分込み)</td>
   <td nowrap is="x-d" id="out25" sur="G"></td>
   <td nowrap class="l" colspan=2></td>
@@ -800,7 +794,7 @@ document.body.onload=function(olev){
   <td nowrap class="l" is="x-d" id="out28"></td><!-- スタ -->
 </tr>
 <tr>
-  <td>鎧中級：(周回あたり白バケツ<select id="in12"></select>金バケツ<select id="in13"></select>) × <x-l id="out29"></x-l>周</td>
+  <td>鎧中級：(周回あたり白バケツ<select id="in12"></select>金バケツ<select id="in13"></select>) × <span class="x-l" id="out29"></span>周</td>
   <td nowrap colspan=3 class="d1 l" >(金バケツ換金分込み)</td>
   <td nowrap is="x-d" id="out30" sur="G"></td>
   <td nowrap class="l" colspan=2></td>
@@ -809,7 +803,7 @@ document.body.onload=function(olev){
   <td nowrap class="l" is="x-d" id="out33"></td><!-- スタ -->
 </tr>
 <tr class="odd">
-  <td>委任<select id="in14"></select>ドロ率<select id="in15" ></select> × <x-l id="out34"></x-l>周＝<x-l id="out36"></x-l>体</td>
+  <td>委任<select id="in14"></select>ドロ率<select id="in15" ></select> × <span class="x-l" id="out34"></span>周＝<span class="x-l" id="out36"></span>体</td>
   <td class="l" nowrap colspan=2></td>
   <td class="l"></td><td nowrap is="x-d" id="out39" sur="G" ></td>
   <td class="l" nowrap colspan=2></td>
@@ -818,14 +812,14 @@ document.body.onload=function(olev){
   <td class="l"></td>
 </tr>
 <tr>
-  <td>　　生喰い(対象) <x-l id="out35"></x-l>体</td>
+  <td>　　生喰い(対象) <span class="x-l" id="out35"></span>体</td>
   <td class="l"></td><td nowrap is="x-d" id="out37" sur="exp"></td>
   <td class="l" nowrap is="x-d" id="out38" sur="G"></td>
   <td colspan=4></td>
   <td nowrap rowspan=3 colspan=3 is="x-d" id="out41" pre="<b>カリスタ合算<br>" sur="パリン</b>" class="a"></td>
 </tr>
 <tr>
-  <td>　　生喰い(皇帝)<x-l id="out43"></x-l>体</td>
+  <td>　　生喰い(皇帝)<span class="x-l" id="out43"></span>体</td>
   <td class="l"></td><td nowrap is="x-d" id="out44" pre="(" sur="exp)"></td>
   <td class="l" nowrap is="x-d" id="out45" sur="G"></td>
   <td colspan=4></td>
