@@ -31,7 +31,7 @@ document.body.onload=function(olev){
     var in08=document.getElementById("in08").value/1; //dd
     var dt=new Date( in06,in07-1,1 );
     var i=dt.getDay();
-    if( document.getElementById("in09").value == "" ) return dt;
+    //if( document.getElementById("in09").value == "" ) return dt;
     if(( i <  4 && i+in08 <= 4 ) || (i >= 5 && i+in08 <= 11 )) dt.setMonth(in07-2);
     return dt;
   }
@@ -137,19 +137,38 @@ document.body.onload=function(olev){
     calc_ttl();
   });
   document.body.addEventListener( "change", function(ev){
+   var x,y,i;
     switch( ev.target.id ){
-      case "in05":
+      case "in05": /*日付*/
         if( document.getElementById("in06").value != ev.target.valueAsDate.getFullYear() ) document.getElementById("in06").value = ev.target.valueAsDate.getFullYear();
         if( document.getElementById("in07").value != ev.target.valueAsDate.getMonth()+1  ) document.getElementById("in07").value = ev.target.valueAsDate.getMonth()+1;
         if( document.getElementById("in08").value != ev.target.valueAsDate.getDate()     ) document.getElementById("in08").value = ev.target.valueAsDate.getDate();
         break;
-      case "in06": break;
-      case "in07": break;
-      case "in08": break;
-      case "in09": calc_ttl(); return;
-      case "in10": calc_ttl(); return;
-      case "in11": calc_ttl(); return;
-      case "in12": calc_ttl(); return;
+      case "in06": break; /*年*/
+      case "in07": break; /*月*/
+      case "in08": break; /*日*/
+      case "in09": calc_ttl(); return; /*指定日累積値*/
+      case "in10":  /*デイリー*/
+        for( y=0 ; y<6; y++ ) for( x=0 ; x<7 ; x++ ){
+          i= document.getElementById("dt"+y+""+x).innerText;
+          if( i != "" && i != "　" && i != ev.target.value ) document.getElementById("dt"+y+""+x).innerText = ev.target.value;
+        }
+        calc_ttl();
+        return;
+      case "in11": /*マンスリー*/
+        for( y=0 ; y<6; y++ ) for( x=0 ; x<7 ; x++ ){
+          i= document.getElementById("mn"+y+""+x).innerText;
+          if( i != "" && i != "　" && i != ev.target.value ) document.getElementById("mn"+y+""+x).innerText = ev.target.value;
+        }
+        calc_ttl();
+        return;
+      case "in12": /*イベント*/
+        for( y=0 ; y<6; y++ ) for( x=0 ; x<7 ; x++ ){
+          i= document.getElementById("ev"+y+""+x).innerText;
+          if( i != "" && i != "　" && i != ev.target.value ) document.getElementById("ev"+y+""+x).innerText = ev.target.value;
+        }
+        calc_ttl();
+        return;
       default: return;
     }
     if( getM().getMonth() != last_dt.getMonth() ) make_cal();
