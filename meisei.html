@@ -132,7 +132,7 @@ document.body.onload=function(olev){
   
   make_cal();
   calc_ttl();
-  document.body.addEventListener( "click", function(ev){
+  function selectCB(ev){
     if( ! ev.target.id ) return;
     switch( ev.target.className ){
       case "dt": ev.target.innerText=(ev.target.innerText/1)?"　":document.getElementById("in10").value; break;
@@ -141,7 +141,9 @@ document.body.onload=function(olev){
       default: return;
     }
     calc_ttl();
-  });
+  }
+  document.body.addEventListener( "click", selectCB );
+  document.body.addEventListener( "touchend", selectCB );
   document.body.addEventListener( "change", function(ev){
    var x,y,i;
     switch( ev.target.id ){
