@@ -133,13 +133,21 @@ document.body.onload=function(olev){
   make_cal();
   calc_ttl();
   function selectCB(ev){
+    var x,y;
     if( ! ev.target.id ) return;
     switch( ev.target.className ){
-      case "dt": ev.target.innerText=(ev.target.innerText/1)?"　":document.getElementById("in10").value; break;
-      case "mn": ev.target.innerText=(ev.target.innerText/1)?"　":document.getElementById("in11").value; break;
-      case "ev": ev.target.innerText=(ev.target.innerText/1)?"　":document.getElementById("in12").value; break;
+      case "dt": x="in10"; y="in20"; break;
+      case "mn": x="in11"; y="in21"; break;
+      case "ev": x="in12"; y="in22"; break;
       default: return;
     }
+    if(ev.target.innerText == "" || ev.target.innerText == "　" ){
+      if(      document.getElementById(x).value != "" ) ev.target.innerText=document.getElementById(x).value;
+      else if( document.getElementById(y).value != "" ) ev.target.innerText=document.getElementById(y).value;
+      else ev.target.innerText="　";
+    }else if( ev.target.innerText == document.getElementById(x).value && document.getElementById(y).value != "" && document.getElementById(y).value != ev.target.innerText ){
+      ev.target.innerText=document.getElementById(y).value;
+    }else ev.target.innerText="　";
     calc_ttl();
   }
   document.body.addEventListener( "click", selectCB );
@@ -194,13 +202,13 @@ document.body.onload=function(olev){
 <!--<![endif]-->
 <span id="IEDT"><input type="number" id="in06" size=2 length=2 />年<input type="number" id="in07" size=2 length=2 />月<input type="number" id="in08" size=2 length=2 />日</span>
 の累積名声値は<input type="number" id="in09" size=5 length=5 /><br>
-1日で貯める名声値<input type="number" id="in10" size=4 length=4 value=1100 />(デイリー)<br>
-1日で貯める名声値<input type="number" id="in11" size=2 length=2 value=4000 />(マンスリー)<br>
-1日で貯める名声値<input type="number" id="in12" size=2 length=2 value=800  />(イベント)
+1日で貯める名声値<input type="number" id="in10" size=4 length=4 value=1100 /><input type="number" id="in20" size=4 length=4 value=800 />(デイリー)<br>
+1日で貯める名声値<input type="number" id="in11" size=4 length=4 value=4000 /><input type="number" id="in21" size=4 length=4 />(マンスリー)<br>
+1日で貯める名声値<input type="number" id="in12" size=4 length=4 value=800  /><input type="number" id="in22" size=4 length=4 />(イベント)
 </div>
 <br>
 <div>
-水色枠のマスをクリックでOn/Off切り替え
+水色枠のマスをクリックで、1つ目の値→2つ目の値→Off 切り替え(循環)
 </div>
 <table id="cal">
 <tr><th id="M"></th><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>
