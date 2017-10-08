@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE HTML>
 <html lang="ja"><head>
+ <META http-equiv="X-UA-Compatible" content="IE=EmulateIE9">
  <META http-equiv="Content-Type" content="text/html;"  charset="UTF-8">
  <META http-equiv="Content-Script-Type" content="text/javascript">
  <META http-equiv="Content-Style-Type" content="text/css">
@@ -22,125 +23,138 @@ td div.of                    {border:solid 1px gray;    padding: 2px; margin:4px
 
 <script>
 document.body.onload=function(olev){
+  var last_dt=new Date();
+
+  function getM(){
+    var in06=document.getElementById("in06").value/1; //yyyy
+    var in07=document.getElementById("in07").value/1; //mm
+    var in08=document.getElementById("in08").value/1; //dd
+    var dt=new Date( in06,in07-1,1 );
+    var i=dt.getDay();
+    if( document.getElementById("in09").value == "" ) return dt;
+    if(( i <  4 && i+in08 <= 4 ) || (i >= 5 && i+in08 <= 11 )) dt.setMonth(in07-2);
+    return dt;
+  }
   function calc_ttl(){
-    var y,x,i,nm;
+    var y,x,i,j,nm;
     var in08=document.getElementById("in08").value/1;
     var in09=document.getElementById("in09").value;
     var in10=document.getElementById("in10").value/1;
     var in11=document.getElementById("in11").value/1;
     var in12=document.getElementById("in12").value/1;
-    i=0;
+    i=j=0;
+    if( document.getElementById("in07").value/1 != getM().getMonth()+1 )j=-1;
     if( in08 < 1 || in08 > 31 || in09 == "" ) in08=-1;
-    for( y=0 ; y<5; y++ ) for( x=0 ; x<7 ; x++ ){
-      nm=document.getElementById("nm"+y+""+x).innerText;
-      if( nm == "" ){
-        document.getElementById("tt"+y+""+x).innerText="　";
-        document.getElementById("nm"+y+""+x).className="nm";
-        document.getElementById("dt"+y+""+x).className="";
-        document.getElementById("mn"+y+""+x).className="";
-        document.getElementById("ev"+y+""+x).className="";
-        document.getElementById("tt"+y+""+x).className="tt";
-        document.getElementById("dt"+y+""+x).style["visibility"]="visible";
-        document.getElementById("mn"+y+""+x).style["visibility"]="visible";
-        document.getElementById("ev"+y+""+x).style["visibility"]="visible";
-      }else if( nm < in08 ){
-        document.getElementById("tt"+y+""+x).innerText="　";
-        document.getElementById("nm"+y+""+x).className="nm";
-        document.getElementById("dt"+y+""+x).className="of";
-        document.getElementById("mn"+y+""+x).className="of";
-        document.getElementById("ev"+y+""+x).className="of";
-        document.getElementById("tt"+y+""+x).className="tt";
-        document.getElementById("dt"+y+""+x).style["visibility"]="hidden";
-        document.getElementById("mn"+y+""+x).style["visibility"]="hidden";
-        document.getElementById("ev"+y+""+x).style["visibility"]="hidden";
-      }else if( nm == in08 ){
-        document.getElementById("tt"+y+""+x).innerText=i=in09/1;
-        document.getElementById("nm"+y+""+x).className="nm";
-        document.getElementById("dt"+y+""+x).className="of";
-        document.getElementById("mn"+y+""+x).className="of";
-        document.getElementById("ev"+y+""+x).className="of";
-        document.getElementById("tt"+y+""+x).className="tt";
-        document.getElementById("dt"+y+""+x).style["visibility"]="hidden";
-        document.getElementById("mn"+y+""+x).style["visibility"]="hidden";
-        document.getElementById("ev"+y+""+x).style["visibility"]="hidden";
+    for( y=0 ; y<6; y++ ) for( x=0 ; x<7 ; x++ ){
+      nm=document.getElementById(  "nm"+y+""+x).innerText;
+      if( nm.length >= 3 || (in08 >= 0 && j < 1 ) ){
+        document.getElementById(   "nm"+y+""+x).className="nm";
+        document.getElementById   ("dt"+y+""+x).className="of";
+        document.getElementById(   "mn"+y+""+x).className="of";
+        document.getElementById(   "ev"+y+""+x).className="of";
+        document.getElementById(   "tt"+y+""+x).className="tt";
+        document.getElementById(   "dt"+y+""+x).style["visibility"]="hidden";
+        document.getElementById(   "mn"+y+""+x).style["visibility"]="hidden";
+        document.getElementById(   "ev"+y+""+x).style["visibility"]="hidden";
+        if( nm == in08 ) j=(y>2)?1:(j+1);
+        if( j > 0 && nm.length < 3 ){
+          document.getElementById( "tt"+y+""+x).innerText=i=in09/1;
+        }else{
+          document.getElementById( "tt"+y+""+x).innerText="　";
+        }
       }else{
+        document.getElementById(   "nm"+y+""+x).className="nm";
+        document.getElementById(   "dt"+y+""+x).className="dt";
+        document.getElementById(   "mn"+y+""+x).className="mn";
+        document.getElementById(   "ev"+y+""+x).className="ev";
+        document.getElementById(   "tt"+y+""+x).className="tt";
+        document.getElementById(   "dt"+y+""+x).style["visibility"]="visible";
+        document.getElementById(   "mn"+y+""+x).style["visibility"]="visible";
+        document.getElementById(   "ev"+y+""+x).style["visibility"]="visible";
         i+=document.getElementById("dt"+y+""+x).innerText/1
-         +document.getElementById("mn"+y+""+x).innerText/1
-         +document.getElementById("ev"+y+""+x).innerText/1;
+         + document.getElementById("mn"+y+""+x).innerText/1
+         + document.getElementById("ev"+y+""+x).innerText/1;
         if( i > 35000 ) i=35000;
-        document.getElementById("tt"+y+""+x).innerText=i;
-        document.getElementById("nm"+y+""+x).className="nm";
-        document.getElementById("dt"+y+""+x).className="dt";
-        document.getElementById("mn"+y+""+x).className="mn";
-        document.getElementById("ev"+y+""+x).className="ev";
-        document.getElementById("tt"+y+""+x).className="tt";
-        document.getElementById("dt"+y+""+x).style["visibility"]="visible";
-        document.getElementById("mn"+y+""+x).style["visibility"]="visible";
-        document.getElementById("ev"+y+""+x).style["visibility"]="visible";
+        document.getElementById(   "tt"+y+""+x).innerText=i;
       }
     }
   };
 
-  (function(){
-    var dt=new Date();
-    var m=dt.getMonth();
-    var i,y,x;
+  function make_cal(){
+    var dt,i,y,x,m;
+    var in08=document.getElementById("in08").value/1;
     var in10=document.getElementById("in10").value/1;
     var in11=document.getElementById("in11").value/1;
     var in12=document.getElementById("in12").value/1;
-
-    dt.setDate(1);
+    dt=getM();
+    m=dt.getMonth();
+    last_dt.setFullYear( dt.getFullYear() );
+    last_dt.setMonth( dt.getMonth() );
+    last_dt.setDate( dt.getDate() );
+    document.getElementById("M").innerText=""+last_dt.getFullYear()+"/"+(last_dt.getMonth()+1);
     x=dt.getDay();
-    for( i=0 ; i<x ; i++ ){
-      document.getElementById("nm0"+i).innerText="";
-      document.getElementById("dt0"+i).innerText="";
-    }
-    y=0;
-    while( dt.getMonth() == m ){
-      document.getElementById("nm"+y+""+x).innerText=dt.getDate();
-      document.getElementById("dt"+y+""+x).innerText=in10;
-      document.getElementById("mn"+y+""+x).innerText="　";
-      document.getElementById("ev"+y+""+x).innerText=(x==4)?in12:"　";
-      document.getElementById("tt"+y+""+x).innerText="　";
-      if( x >= 6 ){ y++; }
+    dt.setDate(1-x);
+    i=0;
+    for( y=0 ; y<6; y++ ) for( x=0 ; x<7 ; x++ ){
+      if( i == 0 && dt.getMonth() == m         ) i=1;
+      if( i == 1 && x == 4                     ) i=2;/*O*/
+      if( i == 2 && dt.getMonth() != m && x==4 ) i=3;/*O*/
+      if( i == 3 && x != 4                     ) i=4;
+      if( i == 2 || i == 3  ){
+        document.getElementById("nm"+y+""+x).innerText=dt.getDate();
+        document.getElementById("dt"+y+""+x).innerText=in10;
+        document.getElementById("mn"+y+""+x).innerText="　";
+        document.getElementById("ev"+y+""+x).innerText=(x==4)?in12:"　";
+        document.getElementById("tt"+y+""+x).innerText="　";
+      }else{
+        document.getElementById("nm"+y+""+x).innerText="【"+dt.getDate()+"】";
+        document.getElementById("dt"+y+""+x).innerText="　";
+        document.getElementById("mn"+y+""+x).innerText="　";
+        document.getElementById("ev"+y+""+x).innerText="　";
+        document.getElementById("tt"+y+""+x).innerText="　";
+      }
       dt.setDate(dt.getDate()+1);
-      x=dt.getDay();
     }
-    for( ; x<7 ; x++ ){
-      document.getElementById("nm"+y+""+x).innerText="";
-      document.getElementById("dt"+y+""+x).innerText="";
-    }
-    for( ++y ; y<5; y++ ) for( x=0 ; x<7 ; x++ ){
-      document.getElementById("nm"+y+""+x).innerText="";
-      document.getElementById("dt"+y+""+x).innerText="";
+  }
+  if( document.getElementById("in05") ){
+    document.getElementById("in05").valueAsDate = new Date();
+    document.getElementById("IEDT").style["display"] = "none";
+  }
+  document.getElementById("in06").value = (new Date()).getFullYear();
+  document.getElementById("in07").value = (new Date()).getMonth()+1;
+  document.getElementById("in08").value = (new Date()).getDate();
+  
+  make_cal();
+  calc_ttl();
+  document.body.addEventListener( "click", function(ev){
+    if( ! ev.target.id ) return;
+    switch( ev.target.className ){
+      case "dt": ev.target.innerText=(ev.target.innerText/1)?"　":document.getElementById("in10").value; break;
+      case "mn": ev.target.innerText=(ev.target.innerText/1)?"　":document.getElementById("in11").value; break;
+      case "ev": ev.target.innerText=(ev.target.innerText/1)?"　":document.getElementById("in12").value; break;
+      default: return;
     }
     calc_ttl();
-    document.body.addEventListener( "click", function(ev){
-      var y,x,i
-      if( ! ev.target.id ) return;
-      switch( ev.target.className ){
-        case "dt":
-          i=ev.target.innerText/1;
-          ev.target.innerText=i?"　":document.getElementById("in10").value;
-          calc_ttl();
-          break;
-        case "mn":
-          i=ev.target.innerText/1;
-          ev.target.innerText=i?"　":document.getElementById("in11").value;
-          calc_ttl();
-          break;
-        case "ev":
-          i=ev.target.innerText/1;
-          ev.target.innerText=i?"　":document.getElementById("in12").value;
-          calc_ttl();
-          break;
-      }
-    });
-  })();
-  document.body.addEventListener( "change", function(ev){ calc_ttl(); });
-
-
-
+  });
+  document.body.addEventListener( "change", function(ev){
+    switch( ev.target.id ){
+      case "in05":
+        if( document.getElementById("in06").value != ev.target.valueAsDate.getFullYear() ) document.getElementById("in06").value = ev.target.valueAsDate.getFullYear();
+        if( document.getElementById("in07").value != ev.target.valueAsDate.getMonth()+1  ) document.getElementById("in07").value = ev.target.valueAsDate.getMonth()+1;
+        if( document.getElementById("in08").value != ev.target.valueAsDate.getDate()     ) document.getElementById("in08").value = ev.target.valueAsDate.getDate();
+        break;
+      case "in06": break;
+      case "in07": break;
+      case "in08": break;
+      case "in09": calc_ttl(); return;
+      case "in10": calc_ttl(); return;
+      case "in11": calc_ttl(); return;
+      case "in12": calc_ttl(); return;
+      default: return;
+    }
+    if( getM().getMonth() != last_dt.getMonth() ) make_cal();
+    calc_ttl();
+  });
 }
 
 </script>
@@ -148,19 +162,23 @@ document.body.onload=function(olev){
 <div><b>千年戦争アイギス　名声値カレンダー</b>　　　　　　<a href="ikusei.html">...育成試算表</a></div>
 <br>
 <div >
-<input type="number" id="in08" size=2 length=2 />日の累積名声値は<input type="number" id="in09" size=5 length=5 /><br>
+<!--[if !IE]><!-->
+<input type="date" id="in05"  />
+<!--<![endif]-->
+<span id="IEDT"><input type="number" id="in06" size=2 length=2 />年<input type="number" id="in07" size=2 length=2 />月<input type="number" id="in08" size=2 length=2 />日</span>
+の累積名声値は<input type="number" id="in09" size=5 length=5 /><br>
 1日で貯める名声値<input type="number" id="in10" size=4 length=4 value=1100 />(デイリー)<br>
 1日で貯める名声値<input type="number" id="in11" size=2 length=2 value=4000 />(マンスリー)<br>
 1日で貯める名声値<input type="number" id="in12" size=2 length=2 value=800  />(イベント)
 </div>
 <br>
 <div>
-水色マスをクリックでOn/Off切り替え
+水色枠のマスをクリックでOn/Off切り替え
 </div>
 <table id="cal">
-<tr><th></th><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>
+<tr><th id="M"></th><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>
 <tr>
-<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div><div></th>
+<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div></th>
 <td><div id="nm00"></div><div id="dt00"></div><div id="mn00"></div><div id="ev00"></div><div id="tt00"></div></td>
 <td><div id="nm01"></div><div id="dt01"></div><div id="mn01"></div><div id="ev01"></div><div id="tt01"></div></td>
 <td><div id="nm02"></div><div id="dt02"></div><div id="mn02"></div><div id="ev02"></div><div id="tt02"></div></td>
@@ -170,7 +188,7 @@ document.body.onload=function(olev){
 <td><div id="nm06"></div><div id="dt06"></div><div id="mn06"></div><div id="ev06"></div><div id="tt06"></div></td>
 </tr>
 <tr>
-<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div><div></th>
+<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div></th>
 <td><div id="nm10"></div><div id="dt10"></div><div id="mn10"></div><div id="ev10"></div><div id="tt10"></div></td>
 <td><div id="nm11"></div><div id="dt11"></div><div id="mn11"></div><div id="ev11"></div><div id="tt11"></div></td>
 <td><div id="nm12"></div><div id="dt12"></div><div id="mn12"></div><div id="ev12"></div><div id="tt12"></div></td>
@@ -178,9 +196,9 @@ document.body.onload=function(olev){
 <td><div id="nm14"></div><div id="dt14"></div><div id="mn14"></div><div id="ev14"></div><div id="tt14"></div></td>
 <td><div id="nm15"></div><div id="dt15"></div><div id="mn15"></div><div id="ev15"></div><div id="tt15"></div></td>
 <td><div id="nm16"></div><div id="dt16"></div><div id="mn16"></div><div id="ev16"></div><div id="tt16"></div></td>
-</td>
+</tr>
 <tr>
-<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div><div></th>
+<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div></th>
 <td><div id="nm20"></div><div id="dt20"></div><div id="mn20"></div><div id="ev20"></div><div id="tt20"></div></td>
 <td><div id="nm21"></div><div id="dt21"></div><div id="mn21"></div><div id="ev21"></div><div id="tt21"></div></td>
 <td><div id="nm22"></div><div id="dt22"></div><div id="mn22"></div><div id="ev22"></div><div id="tt22"></div></td>
@@ -188,9 +206,9 @@ document.body.onload=function(olev){
 <td><div id="nm24"></div><div id="dt24"></div><div id="mn24"></div><div id="ev24"></div><div id="tt24"></div></td>
 <td><div id="nm25"></div><div id="dt25"></div><div id="mn25"></div><div id="ev25"></div><div id="tt25"></div></td>
 <td><div id="nm26"></div><div id="dt26"></div><div id="mn26"></div><div id="ev26"></div><div id="tt26"></div></td>
-</td>
+</tr>
 <tr>
-<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div><div></th>
+<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div></th>
 <td><div id="nm30"></div><div id="dt30"></div><div id="mn30"></div><div id="ev30"></div><div id="tt30"></div></td>
 <td><div id="nm31"></div><div id="dt31"></div><div id="mn31"></div><div id="ev31"></div><div id="tt31"></div></td>
 <td><div id="nm32"></div><div id="dt32"></div><div id="mn32"></div><div id="ev32"></div><div id="tt32"></div></td>
@@ -198,9 +216,9 @@ document.body.onload=function(olev){
 <td><div id="nm34"></div><div id="dt34"></div><div id="mn34"></div><div id="ev34"></div><div id="tt34"></div></td>
 <td><div id="nm35"></div><div id="dt35"></div><div id="mn35"></div><div id="ev35"></div><div id="tt35"></div></td>
 <td><div id="nm36"></div><div id="dt36"></div><div id="mn36"></div><div id="ev36"></div><div id="tt36"></div></td>
-</td>
+</tr>
 <tr>
-<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div><div></th>
+<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div></th>
 <td><div id="nm40"></div><div id="dt40"></div><div id="mn40"></div><div id="ev40"></div><div id="tt40"></div></td>
 <td><div id="nm41"></div><div id="dt41"></div><div id="mn41"></div><div id="ev41"></div><div id="tt41"></div></td>
 <td><div id="nm42"></div><div id="dt42"></div><div id="mn42"></div><div id="ev42"></div><div id="tt42"></div></td>
@@ -208,7 +226,17 @@ document.body.onload=function(olev){
 <td><div id="nm44"></div><div id="dt44"></div><div id="mn44"></div><div id="ev44"></div><div id="tt44"></div></td>
 <td><div id="nm45"></div><div id="dt45"></div><div id="mn45"></div><div id="ev45"></div><div id="tt45"></div></td>
 <td><div id="nm46"></div><div id="dt46"></div><div id="mn46"></div><div id="ev46"></div><div id="tt46"></div></td>
-</td>
-
-<table>
+</tr>
+<tr>
+<th><div class="nm">日付</div><div class="dt">デイリー</div><div class="mn">マンスリー</div><div class="en">イベント</div><div class="tt">累積名声値</div></th>
+<td><div id="nm50"></div><div id="dt50"></div><div id="mn50"></div><div id="ev50"></div><div id="tt50"></div></td>
+<td><div id="nm51"></div><div id="dt51"></div><div id="mn51"></div><div id="ev51"></div><div id="tt51"></div></td>
+<td><div id="nm52"></div><div id="dt52"></div><div id="mn52"></div><div id="ev52"></div><div id="tt52"></div></td>
+<td><div id="nm53"></div><div id="dt53"></div><div id="mn53"></div><div id="ev53"></div><div id="tt53"></div></td>
+<td><div id="nm54"></div><div id="dt54"></div><div id="mn54"></div><div id="ev54"></div><div id="tt54"></div></td>
+<td><div id="nm55"></div><div id="dt55"></div><div id="mn55"></div><div id="ev55"></div><div id="tt55"></div></td>
+<td><div id="nm56"></div><div id="dt56"></div><div id="mn56"></div><div id="ev56"></div><div id="tt56"></div></td>
+</tr>
+</table>
 </body>
+</html>
