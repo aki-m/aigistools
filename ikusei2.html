@@ -411,7 +411,7 @@ document.body.onload=function(olev){
     if(getV(inobj[16]) == w.syoku[0]) i+=w.drop[0]; /*職ボのドロユニ数*/
     if(getV(inobj[16]) == w.syoku[1]) i+=w.drop[1]; /*職ボのドロユニ数*/
     i=(i*30+(w.eexp+30)*(w.drop[0]+w.drop[1]+w.drop[2]))*s0;   /*ドロップ100%時の1周EXP */
-    i=i/(w.drop[0]+w.drop[1]+w.drop[2]);                           /*合成１体当たりのEXP*/
+    i=i/(w.drop[0]+w.drop[1]+w.drop[2]);                       /*合成１体当たりのEXP*/
 
     for( g5=j=0 ; i*j+ex < ex5 ; ){
       if(      i*(j+4)+ex <= ex5 ){ g5+=(getLv(rea,i*j+ex)*40+160)*4; j=j+4; }
@@ -437,8 +437,7 @@ document.body.onload=function(olev){
     setV(outobj[34], j=Math.ceil( (getV(outobj[35])+getV(outobj[43]))/((w.drop[0]+w.drop[1]+w.drop[2])*getV(inobj[15])/20.0)));     /*周回数*/
     setV(outobj[36], Math.ceil((w.drop[0]+w.drop[1]+w.drop[2])*j*getV(inobj[15])/20.0));         /*ドロップの総数*/
     setV(outobj[39], g9=j*Math.floor(Math.floor( abi *w.g)*1.5*shopG )); /*G*/
-    setV(outobj[40], j*w.charisma);
-
+    setV(outobj[40], Math.floor(0.5+j*w.charisma/(( getV(inobj[21]) == 1 )?2:1)));
 
     /*精霊救出*/
     setV(outobj[19], i=Math.ceil( (getV(outobj[3]) + getV(outobj[12]) +getV(outobj[17]))*20/getV(inobj[9])));    /*回*/
@@ -563,7 +562,7 @@ document.body.onload=function(olev){
  /* initialize */
  (function(){
     var i,j;
-    for(i=0;i<=19;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
+    for(i=0;i<=21;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
     for(i=0;i<=45;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
     for(i=0;i<99;i++){ /* 育成元レベル */
       var obj=document.createElement("OPTION");
@@ -633,6 +632,7 @@ document.body.onload=function(olev){
     setV(inobj[16],0);   /*クラス*/
     setV(inobj[17],1);   /* Lv */
     setV(inobj[18],exptable[getV(inobj[ 0])][getV(inobj[17])]); /* あと */
+    setV(inobj[21],0);   /*ストミ消費 半分？*/
     setV(outobj[ 8],0);   /*皇帝8倍回数*/
     setV(outobj[14],0);   /*白バケツ8倍回数*/
 
@@ -664,6 +664,10 @@ document.body.onload=function(olev){
   <span>ショップ 獲得G up<span class="x-b" id="in03" type="radio">
     <input type="button" num=0 value="未発動" />
     <input type="button" num=1 value="発動中" />
+  </span></span>
+  <span>ストミ消費<span class="x-b" id="in21" type="radio">
+    <input type="button" num=0 value="通常" />
+    <input type="button" num=1 value="半分" />
   </span></span>
 </div>
 <table>
