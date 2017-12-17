@@ -1,0 +1,820 @@
+﻿<html lang="ja"><head>
+ <META http-equiv="Content-Type" content="text/html;"  charset="UTF-8">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title>千年戦争アイギス　バフ計算機</title>
+ <style>
+td{ padding: 3px 0px 2px 0px; }
+select,div>span{ font-size:18px; height:100%; margin:0px; }
+select{ background-color: yellow; }
+.x-b input { font-size:16px;}
+table td[is="x-d"] { text-align:center; }
+span{ padding:5px 2px 2px 2px; }
+
+table td.a{ border:solid 1px red; background-color:rebeccapurple; color:white; text-align:center; font-size:22px; }
+#t{
+ border:solid 1px blue;
+ border-collapse: collapse;
+ margin:0px 0px 0px 0px; 
+ user-select:none;
+ -webkit-user-select:none;
+ -moz-user-select:none;
+ -ms-user-select:none;
+ -o-user-select:none;
+ cursor:default;
+}
+#t td, span{ border: solid 1px #00f;  }
+#t th.bufftype,#t th.csw{ border-top:solid 1px #00f;}
+#t tr td{ background:#eff; color:#888; }
+#t tr td.on{ background:#bef; color:black; }
+
+#t th{ background-color: steelblue; color:white; }
+#t tr.f th,#t tr.f td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
+#t tr.t th{ background-color:#fd6; color:#632; }
+#t tr.t td{ background-color:#fed; color:black; }
+
+#t .hed1{ background-color: cornflowerblue; }
+
+input[type="number"] {  text-align:center;  }
+input[type="button"] {
+ background-color: #e8ffff;
+ border: solid 1px #999;
+ border-radius: 5px;
+ padding: 0px 6px;
+ margin:0px ;
+ cursor: pointer;
+ user-select: none;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ -o-user-select: none;
+}
+input.bon { background-color: #ff4; }
+input.chk { display:inline; background-color:#90ffcf; }
+.x-b[type="radio"] input{ margin: 2px 1px; }
+
+
+ </style>
+</head>
+<body>
+
+<script> 
+document.body.onload=function(olev){
+  var typs=["アビ","アビ２","スキル","スキルCC","スキル覚醒","称号"]; /*<= 未使用*/
+  var slv={
+  };
+  var buf={
+    "編成バフ(全体)":{
+      "全員の最大ＨＰアップ【中】":{   on:0 ,v:[10,0,0,0,0] ,cn:["アデル"         ] },
+      "全員の最大ＨＰアップ【大】":{   on:0 ,v:[14,0,0,0,0] ,cn:["アイシャ"       ] },
+      "全員の攻撃力アップ【小】":{     on:0 ,v:[0, 2,0,0,0] ,cn:["アリア"         ] },
+      "全員の攻撃力アップ【中】":{     on:0 ,v:[0, 5,0,0,0] ,cn:["ウズメ","レオラ"] },
+      "全員の攻撃力アップ【大】":{     on:0 ,v:[0, 7,0,0,0] ,cn:["キキョウ"       ] },
+      "全員の防御力アップ【小】":{     on:0 ,v:[0,0, 2,0,0] ,cn:["ケイティ"       ] },
+      "全員の防御力アップ【中】":{     on:0 ,v:[0,0, 5,0,0] ,cn:["レン"           ] },
+      "全員の防御力アップ【大】":{     on:0 ,v:[0,0, 7,0,0] ,cn:["イリス"         ] },
+      "難攻不落の要塞":{               on:0 ,v:[0,0,17,0,0] ,cn:["ルイーズ"       ] },
+      "舞巫女の守護霊":{               on:0 ,v:[0,0,0, 5,0] ,cn:["ミヤビ"         ] }
+    },
+    "編成バフ(近接系ユニ限定)":{
+      "打ち出の小槌":{                 on:0 ,v:[0, 5,0,0,0] ,cn:["カグラ"         ] ,chkf:["X0XXXXXXX"] },
+      "剣聖武芸指南":{                 on:0 ,v:[0,10,0,0,0] ,cn:["ジークリンデ"   ] ,chkf:["X0XXXXXXX"] },
+      "六丈銭の赤備え":{               on:0 ,v:[ 5,5,5,0,0] ,cn:["マツリ"         ] ,chkf:["X0XXXXXXX"] },
+      "魔法防壁":{                     on:0 ,v:[0,0,0,10,0] ,cn:["グレース"       ] ,chkf:["X0XXXXXXX"] }
+    },
+    "編成バフ(女性近接限定)":{
+      "鍛冶神の祝福＋マスタースミス":{ on:0 ,v:[0, 5,5,0,0] ,cn:["ティニー"       ] ,chkf:["X00XXXXXX"] }
+    },
+    "編成バフ(ソルジャー系限定)":{
+      "撤退支援":{                     on:0 ,v:[20,0,0,0,0] ,cn:["アルティア"     ] ,chkf:["XXXXX1  X"] }
+    },
+    "編成バフ(ブロンズ・アイアン限定)":{
+      "夏祭りの思い出":{               on:0 ,v:[20,0,20,0,0] ,cn:["浴衣の兵長フィリス"] ,chkf:["0XXXXXXXX","1XXXXXXXX"]}
+    },
+    "編成バフ(ライダー系限定)":{
+      "英雄の守り手":{                 on:0, v:[15, 0,0,0,0] ,cn:["レシア"        ] ,chkf:["XXXXX3  X","XXXXX10 X","XXXXX21 X"]}
+    },
+    "配置バフ(全体)":{
+      "戦意高揚":{                     on:0 ,v:[0,20,20,0,0] ,cn:["王子(アイギス神器)","王子(ケラウノス神器)"] },
+      "戦意高揚【砂漠】":{             on:0 ,v:[0,20,20,0,0] ,cn:["王子(砂漠)"    ] },
+      "戦意高揚【小】":{               on:0 ,v:[0,10,10,0,0] ,cn:["王子【幼少】"  ] },
+      "幸せの記憶":{                   on:0 ,v:[0, 5, 5,0,0] ,cn:["レーヴ"        ] },
+      "魔眼の加護":{                   on:0 ,v:[0, 0, 5,5,0] ,cn:["バロウス"      ] },
+      "聖銀竜の加護":{                 on:0 ,v:[0, 0, 5,5,0] ,cn:["ティファ"      ] },
+      "職：コマンダー":{               on:0 ,v:[0, 3, 3,"+3",0] ,cn:["アルティア","ジェローム","ケイティ","浴衣の兵長フィリス"] }
+    },
+    "配置バフ(女性限定)":{
+      "酒池肉林":{                     on:0 ,v:[0,10, 0,0,0] ,cn:["堕姫"          ] ,chkf:["XX0XXXXXX"] }
+    },
+    "配置バフ(男性限定)":{
+      "酒池肉林":{                     on:0 ,v:[0,-10,0,0,0] ,cn:["堕姫"          ] ,chkf:["XX1XXXXXX"] }
+    },
+    "配置バフ(近接限定)":{
+      "超鎧狩り":{                     on:0 ,v:[0,10, 0,0,0] ,cn:["アマンダ"      ] ,chkf:["X0XXXXXXX"] },
+      "スピリットブーストⅡ":{         on:0 ,v:[0,13,13,0,0] ,cn:["シンシア"      ] ,chkf:["X0XXXXXXX"] }
+    },
+    "配置バフ(女性近接限定)":{
+      "鍛冶神の祝福＋マスタースミス":{ on:0 ,v:[0,15,15,0,0] ,cn:["ティニー"       ] ,chkf:["X00XXXXXX"] }
+    },
+    "配置バフ(自己・確立)":{
+      "必殺の一撃":{                   on:0 ,v:[0,15,15,0,0] ,cn:["ユリアン"       ] ,chkf:["301001  1"]}
+    },
+    "スキルバフ(自己)":{
+      "英雄の片鱗":{           on:0 ,skill:1,v:[300,300,300,0,0],cn:["王子【幼少】"        ] ,setf:"601000  1" ,chkf:["601000  1"] },
+      "アイギスの神器":{       on:0 ,skill:1 ,v:[0,200,200,0,0] ,cn:["王子(アイギス神器)"  ] ,setf:"601000  1" ,chkf:["601000  1"] },
+      "ケラウノスの神器":{     on:0 ,skill:1 ,v:[0,200,  0,0,0] ,cn:["王子(ケラウノス神器)"] ,setf:"601000  1" ,chkf:["601000  1"] },
+      "獅子刀スルフィカール":{ on:0 ,skill:1 ,v:[0,150,  0,0,0] ,cn:["王子(砂漠)"          ] ,setf:"601000  1" ,chkf:["601000  1"] },
+      "怪力爆砕鉄球":{         on:0 ,skill:5 ,v:[0,200,200,0,0] ,cn:["ディーナ"            ] ,setf:"600002  1" ,chkf:["600002  1"] },
+      "大震撃":{               on:0 ,skill:5 ,v:[  0,0,140,0,0] ,cn:["ディーネ"            ] ,setf:"600002  1" ,chkf:["600002  1"] },
+      "聖女の叫び声":{         on:0 ,skill:5 ,v:[0,200,200,0,0] ,cn:["ゼノビア"            ] ,setf:"500001  1" ,chkf:["500001  1"] },
+      "援軍要請・攻防":{       on:0 ,skill:5 ,v:[0,150,150,0,0] ,cn:["リーゼロッテ"        ] ,setf:"500001  1" ,chkf:["500001  1"] },
+      "不可侵の神盾":{         on:0 ,skill:5 ,v:[0,0,200,200,0] ,cn:["ジェイク"            ] ,setf:"501001  1" ,chkf:["501001  1"] },
+      "聖女の結界":{           on:0 ,skill:5 ,v:[0,140,  0,0,0] ,cn:["イリス"              ] ,setf:"600001031" ,chkf:["600001031"] }
+/*
+    "ベルナ":[             "死の旋風"              ],
+    "シビラ":[             "魔剣覚醒"              ,
+                           "魔剣アンサラー"        ],
+    "オリヴィエ":[         "妖精姫の祝福"          ,
+                           "聖剣アルタキエラ"      ],
+    "アンジェリーネ":[     "隠された神器の後継者"  ,
+                           "金剛鎌ハルパー"        ],
+    "シルヴィア":[         "吸血剣フルンティング"  ],
+    "純白の花嫁カルマ":[   "神剣ティルフィング"    ],
+    "ミサ":[               "死剣ミュルグレス"      ],
+    "アマンダ":[           "大山賊時代"            ],
+    "アイシャ":[           "超天落岩の計"          ],
+    "アデル":[             "攻撃力強化Ⅳ"          ],
+    "マツリ":[             "疾風迅雷"              ],
+    "グレース":[           "リミッターカット" ]
+*/
+
+
+    },
+    "スキルバフ(射程内)":{
+      "士気高揚":{                     on:0 ,v:[0,112,112,0,0] ,cn:["王子"        ] },
+      "士気高揚＋英雄の末裔":{         on:0 ,v:[0,115,115,0,0] ,cn:["王子"        ] },
+      "士気高揚＋勇者":{               on:0 ,v:[0,117,117,0,0] ,cn:["王子"        ] },
+      "士気高揚＋救世主":{             on:0 ,v:[0,119,119,0,0] ,cn:["王子"        ] },
+      "士気高揚＋大英雄":{             on:0 ,v:[0,121,121,0,0] ,cn:["王子"        ] },
+      "デモニックフィールド":{         on:0 ,v:[0,150,  0,0,0] ,cn:["ラピス"      ] },
+      "聖女の結界":{                   on:0 ,v:[0,  0,250,0,0] ,cn:["イリス"      ] }
+    },
+    "スキルバフ(全体)":{
+      "英雄の片鱗":{                   on:0 ,v:[0,120,120,0,0] ,cn:["王子【幼少】"] },
+      "烈火の陣":{                     on:0 ,v:[0,120,  0,0,0] ,cn:["ウズメ"      ] },
+      "猛火の陣(1回目)":{              on:0 ,v:[0,120,  0,0,0] ,cn:["ウズメ"      ] },
+      "鉄壁の陣":{                     on:0 ,v:[0,  0,120,0,0] ,cn:["レン"        ] },
+      "金城の陣(1回目)":{              on:0 ,v:[0,  0,120,0,0] ,cn:["レン"        ] }
+    },
+    "スキルバフ(系統)":{
+      "大山賊時代":{                   on:0 ,v:[200,  0,0,0,0] ,cn:["アマンダ"    ] ,chkf:["XXXXX6  X"] }
+    },
+    "スキルバフ(レア指定)":{
+      "ダモクレスの剣":{               on:0 ,v:[0,120,120,0,0] ,cn:["ロゼット"    ] }
+    },
+    "ステ加算値バフ(ダンサー)":{
+      "魅惑の舞":{                     on:0 ,v:[0, 700, 700,0,0],cn:["ミヤビ"      ] },
+      "不可侵の神事舞":{               on:0 ,v:[0,1200,1200,0,0],cn:["ミヤビ"      ] },
+      "ラストダンス":{                 on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"    ] },
+      "アンコールダンス":{             on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"    ] },
+      "オートステップ":{               on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"    ] },
+      "パッションステップ":{           on:0 ,v:[0,1000,1000,0,0],cn:["ワルツ"      ] },
+      "エンドレスワルツ":{             on:0 ,v:[0, 300, 300,0,0],cn:["ワルツ"      ] },
+      "癒しの舞":{                     on:0 ,v:[0,1000,1000,0,0],cn:["ハナ"        ] },
+      "ソウルステップ":{               on:0 ,v:[0,1000,1000,0,0],cn:["ハナ","マーニー"] },
+      "エスカレートステップ(1回目)":{  on:0 ,v:[0,1000,1000,0,0],cn:["マーニー"    ] },
+      "エスカレートステップ(2回目)":{  on:0 ,v:[0,1200,1200,0,0],cn:["マーニー"    ] },
+      "エスカレートステップ(最終)":{   on:0 ,v:[0,1300,1300,0,0],cn:["マーニー"    ] }
+    },
+    "ステ加算値バフ(政務官)":{
+      "全力サポート":{                 on:0 ,v:[0,1000,1000,0,0],cn:["アンナ","アンナ(支給服)","アンナ(軍服)"]},
+      "究極サポート":{                 on:0 ,v:[0,1200,1200,0,0],cn:["アンナ(水着)"] },
+    }
+  };
+  var inobj=[null];
+  var outobj=[null];
+  var t=document.getElementById("t");
+  var saveword={
+    charmap:"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.",
+    addS:function(n,v,l){
+      n[0]=n[0]+(v<<n[1]);
+      n[1]=n[1]+l;
+      while( n[1] >= 6 ){
+        n[2] += saveword.charmap.substr(n[0]&63,1);
+        n[0] >>= 6;
+        n[1] -= 6;
+      }
+    },
+    getS:function(n,l){
+      var r;
+      while( n[1] < l && n[2].length > 0 ){
+        n[0] += saveword.charmap.indexOf(n[2].substr(0,1)) << n[1];
+        n[1] +=6;
+        n[2] = n[2].substr(1,n[2].length-1);
+      }
+      r=n[0]&((1<<l)-1);
+      n[0] >>= l;
+      n[1] -= l;
+      return r;
+    },
+    backupstr:function(){
+      var w=[0,0,""];
+      var i,j;
+      saveword.addS(w, getV(inobj[  0]) ,3); /*3bit:レア*/
+      if( w[1] > 0 ) w[2] += saveword.charmap.substr( w[0]&63,1 );
+      for(i=j=0 ; i<w[2].length ; i++ ) j=j^saveword.charmap.indexOf(w[2].substr(i,1));
+      w[2] += saveword.charmap.substr( j,1 );
+      return w[2];
+    },
+    restorestr:function(s){
+      var w=[0,0,s];
+      setV(inobj[  0] , saveword.getS(w, 3));
+
+
+    },
+    checkstr:function(str){
+      var i,j;
+      for(i=j=0 ; i+1 < str.length ; i++ ){
+        j=j^saveword.charmap.indexOf(str.substr(i,1));
+      }
+      return ( j == saveword.charmap.indexOf(str.substr(i,1)) );
+    }
+ }
+ function getChr( i,j ){
+  var k;
+  if( ! buf[i] || !buf[i][j] || ! buf[i][j].cn || ! chr[buf[i][j].cn] ) return;
+  for( k=chr[buf[i][j].cn].length; --k >= 0 ; ) if( chr[buf[i][j].cn][k].typ == buf[i][j].typ ) return chr[buf[i][j].cn][k];
+  return null;
+ }
+ function cnvN(v){
+    if( (""+v).length <= 3 ) return v;
+    if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
+    return cnvN((""+v).substr(0,(""+v).length-3))+","+(""+v).substr((""+v).length-3,3);
+ }
+ function getV(o){
+    if( o.getAttribute("is") == "x-d" ) return o.getAttribute("value")/1;
+    switch( o.className ){
+      case "x-b":
+      case "x-l":
+      case "x-d": return o.getAttribute("value")/1; break;
+      default: return o.value; break;
+    }
+  }
+  function setV(o,n){
+    if( o.getAttribute("is") == "x-d" ){
+          o.setAttribute("value",n);
+          o.innerHTML=(o.getAttribute("pre")?o.getAttribute("pre"):"")+cnvN(n)+(o.getAttribute("sur")?o.getAttribute("sur"):"");
+          return;
+    }
+    switch( o.className ){
+      case "x-b":
+          var l=o.children.length;
+          if( n >= 2 ) n %= l;
+          o.setAttribute("value",n);
+          if( l <= 1 ){
+            o.children[0].className=(n?"bon":"");
+          }else
+          if( o.getAttribute("type") != "radio" ){
+            o.children[0].value=l[n%l];
+          }else{
+            var i;
+            for( i=0 ; i<l ; i++ ){
+              o.children[i].className=(i==(n%l))?"bon":"";
+            }
+          }
+          break;
+      case "x-l":
+          o.setAttribute("value",n);
+          o.innerText=cnvN(n);
+          break;
+      case "x-d":
+          o.setAttribute("value",n);
+          o.innerHTML=(o.pre?o.pre:"")+cnvN(n)+(o.sur?o.sur:"");
+          break;
+      default: o.value=n; break;
+    }
+  }
+
+ function openGroup(n){
+   var i,j,grp;
+   for( i=0 ; i<t.rows.length ; i++ ){
+     grp= t.rows[i].getAttribute("grp");
+     if( n != grp ) continue;
+     if( t.rows[i].cells[0].className == "csw" ){
+       t.rows[i].cells[0].innerText = "－";
+     }else{
+       t.rows[i].style["display"]="table-row";
+     }
+   }
+ }
+ function closeGroup(n){
+   var i,j,grp;
+   for( i=0 ; i<t.rows.length ; i++ ){
+     grp= t.rows[i].getAttribute("grp");
+     if( n != grp ) continue;
+     if( t.rows[i].cells[0].className == "csw" ){
+       t.rows[i].cells[0].innerText = "＋";
+     }else{
+       t.rows[i].style["display"]="none";
+     }
+   }
+ }
+
+ function getFlgStr(){
+  return (getV( inobj[ 7] )+" "  ).substr(0,1)
+       + (getV( inobj[ 8] )+" "  ).substr(0,1)
+       + (getV( inobj[ 9] )+" "  ).substr(0,1)
+       + (getV( inobj[10] )+" "  ).substr(0,1)
+       + (getV( inobj[11] )+" "  ).substr(0,1)
+       + (getV( inobj[ 5] )+"   ").substr(0,3)
+       + (getV( inobj[ 6] )+" "  ).substr(0,1);
+ }
+ function setFlg( str ){
+   var l;
+   l=str.substr(0,1); if( l != "X"   ) setV( inobj[ 7] , l   );
+   l=str.substr(1,1); if( l != "X"   ) setV( inobj[ 8] , l   );
+   l=str.substr(2,1); if( l != "X"   ) setV( inobj[ 9] , l   );
+   l=str.substr(3,1); if( l != "X"   ) setV( inobj[10] , l/1 );
+   l=str.substr(4,1); if( l != "X"   ) setV( inobj[11] , l/1 );
+   l=str.substr(5,3); if( l != "XXX" ) setV( inobj[ 5] , l/1 );
+   l=str.substr(8,1); if( l != "X"   ) setV( inobj[ 6] , l   );
+ }
+ function chkFlgStr( stat , checker ){
+   var i,l;
+   for( i=0 ; i < checker.length ; i++ ){
+     l=checker[i].substr(0,1); if( l != "X"   && stat.substr(0,1) != l     ) continue;
+     l=checker[i].substr(1,1); if( l != "X"   && stat.substr(1,1) != l     ) continue;
+     l=checker[i].substr(2,1); if( l != "X"   && stat.substr(2,1) != l     ) continue;
+     l=checker[i].substr(3,1); if( l != "X"   && stat.substr(3,1)/1 != l/1 ) continue;
+     l=checker[i].substr(4,1); if( l != "X"   && stat.substr(4,1)/1 != l/1 ) continue;
+     l=checker[i].substr(5,3); if( l != "XXX" && stat.substr(5,3)/1 != l/1 ) continue;
+     l=checker[i].substr(8,1); if( l != "X"   && stat.substr(8,1) != l     ) continue;
+     return true;
+   }
+   return false;
+ }
+
+ function onoff(i,j,k){
+   var l,m;
+   if( ! buf[i] || ! buf[i][j] ) return;
+   if( k ){
+     /* "称号が違うものはOFF" */
+     if(/^王子/.test(buf[i][j].cn[0])) for( l in buf ) for ( m in buf[l] ){ 
+       if( /^王子/.test(buf[l][m].cn[0]) ){
+         if( /^士気高揚/.test(j) ) buf[l][m].on=0;
+         else
+         if( buf[i][j].cn[0] != buf[l][m].cn[0]
+          &&(buf[i][j].length <= 1 || buf[i][j].cn[1] != buf[l][m].cn[0] )
+          &&(buf[l][m].length <= 1 || buf[i][j].cn[0] != buf[l][m].cn[1] ) )
+            buf[l][m].on=0;
+       }
+     }
+     switch( i ){ 
+       case "スキルバフ(自己)":
+         if( buf[i][j].cn.length == 1 ) for( l in buf ) if( /^編成バフ/.test(l) || /^配置バフ/.test(l) ) for( m  in buf[l] )
+           if( buf[i][j].cn[0] == buf[l][m].cn[0] || (buf[l][m].length > 1 && buf[i][j].cn[0] == buf[l][m].cn[1] ) )
+              buf[l][m].on=1; /* <="自己バフから、そのユニの編成・配置バフがあればそちらもON" */
+       case "ステ加算値バフ(政務官)":
+       case "ステ加算値バフ(ダンサー)":
+         /* "１つのみ" */
+         for( l in buf[i] ) buf[i][l].on=0;
+         break;
+       default:
+     }
+   }
+   buf[i][j].on = k?1:0;
+   if( buf[i][j].setf ) setFlg( buf[i][j].setf );
+   doDraw(null);
+ }
+
+
+ function doDraw(ev){
+   var i,j,k,l,m,n;
+   var v,d,a; /*値、ダンサーステ、アンナステ*/
+   var wv,wd,wa;
+   var flg=getFlgStr();
+   n=-1;
+   for( m=0 ; m<5 ; m++ ){
+     v=d=a=0;
+     wv=[0,0,0,0,0,0,0,0];/*"編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己"*/
+     wd=[0,0,0,0,0,0,0,0];/*"編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己、ステ加算"*/
+     wa=[0,0,0,0,0,0,0,0];/*"編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己、ステ加算"*/
+     for( i=t.rows.length ; --i >= 0 ; ){ /* <="表示位置を憶えていないのでループは画面で行う" */
+       k=t.rows[i].getAttribute("grp");
+       if( ! k || ! buf[k] ) continue;
+       if( t.rows[i].className == "bufftype" ){
+         if( /^編成バフ/.test(k) ){
+           if( v == d && v == a ) t.rows[i].cells[2+m].innerText= v?("＋"+v+"％"):"";
+           else                   t.rows[i].cells[2+m].innerText= "＋"+v+","+d+","+a+"％";
+           wv[0] += v;
+           wd[0] += d;
+           wa[0] += a;
+         }
+         if( /^配置バフ/.test(k) ){
+           if( v == d && v == a ) t.rows[i].cells[2+m].innerText= v?("＋"+v+"％"):"";
+           else                   t.rows[i].cells[2+m].innerText= "＋"+v+","+d+","+a+"％";
+           wv[1] += v;
+           wd[1] += d;
+           wa[1] += a;
+         }
+         if( /^スキルバフ/.test(k)                      ){
+           if( v == d && v == a ) t.rows[i].cells[2+m].innerText= v?("×"+(v/100.0)):"";
+           else                   t.rows[i].cells[2+m].innerText= "×"+(v/100.0)+","+(d/100.0)+","+(a/100.0);
+           switch(k){
+             case "スキルバフ(自己)":
+               if( wv[2] < v ) wv[2] = v;
+               if( wd[2] < d ) wd[2] = d;
+               if( wa[2] < a ) wa[2] = a;
+               break;
+             case "スキルバフ(射程内)":
+               if( wv[3] < v ) wv[3] = v;
+               if( wd[3] < d ) wd[3] = d;
+               if( wa[3] < a ) wa[3] = a;
+               break;
+             case "スキルバフ(全体)":
+               if( wv[4] < v ) wv[4] = v;
+               if( wd[4] < d ) wd[4] = d;
+               if( wa[4] < a ) wa[4] = a;
+               break;
+             case "スキルバフ(系統)":
+               if( wv[5] < v ) wv[5] = v;
+               if( wd[5] < d ) wd[5] = d;
+               if( wa[5] < a ) wa[5] = a;
+               break;
+             case "スキルバフ(レア指定)":
+               if( wv[6] < v ) wv[6] = v;
+               if( wd[6] < d ) wd[6] = d;
+               if( wa[6] < a ) wa[6] = a;
+               break;
+             default:
+           }
+         }
+         if( "ステ加算値バフ(ダンサー)" == k && wd[7] < d ) wd[7] = d;
+         if( "ステ加算値バフ(政務官)"   == k && wd[7] < a ) wa[7] = a;
+         v=d=a=0;
+         continue;
+       }
+       l=t.rows[i].cells[2].innerText; /*バフ名*/
+       if( buf[k][l] && buf[k][l].on ){
+         t.rows[i].cells[m+3].className="on";
+         if( m == 0 ){
+           t.rows[i].cells[1].className="on";
+           t.rows[i].cells[2].className="on";
+         }
+         l=buf[k][t.rows[i].cells[2].innerText]; 
+         j=l.v[m]; /*"画面の値は装飾されて使えないので配列から取得" */
+         if( l.chkf ){
+           if( chkFlgStr( flg , l.chkf ) ){ /*"対象ユニ"*/
+             if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) v += l.v[m];
+             if( /^スキルバフ/.test(k) && v < l.v[m]        ) v =  l.v[m];
+           }
+           if( chkFlgStr( "510001151" , l.chkf ) ){ /*"ダンサー"*/
+             if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) d += l.v[m];
+             if( /^スキルバフ/.test(k) && v < l.v[m]        ) d =  l.v[m];
+           }
+           if( chkFlgStr( "610001001" , l.chkf ) ){ /*"アンナ"*/
+             if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) a += l.v[m];
+             if( /^スキルバフ/.test(k) && v < l.v[m]        ) a =  l.v[m];
+           }
+         }else{
+           if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ){ v += l.v[m]; d += l.v[m]; a += l.v[m]; }
+           if((/^スキルバフ/.test(k) || /^ステ加算値バフ/.test(k) ) && v < l.v[m] ){ v = l.v[m]; d = l.v[m]; a = l.v[m]; }
+         }
+       }else{
+         t.rows[i].cells[m+3].className="";
+         if( m == 0 ){
+           t.rows[i].cells[1].className="";
+           t.rows[i].cells[2].className="";
+         }
+       }
+     }
+
+     if( m == 1 || m == 2 ){
+       j=getV(inobj[m+11])/1; /*"ダンサー"*/
+       if(wd[0]) j = Math.floor(j*(1.0 + wd[0]/100.0) ); /*"編成"*/
+       if(wd[1]) j = Math.floor(j*(1.0 + wd[1]/100.0) ); /*"配置"*/
+       /* "スキルバフ(自己)"は加算しない */
+       if(wd[3]) j *= wd[3]/100.0; /*"スキルバフ(射程内)"*/
+       if(wd[4]) j *= wd[4]/100.0; /*"スキルバフ(全体)"*/
+       if(wd[5]) j *= wd[5]/100.0; /*"スキルバフ(特性)"*/
+       if(wd[6]) j *= wd[6]/100.0; /*"スキルバフ(レア指定)"*/
+       if(wd[7]) j *= wd[7]/100.0; /*"ダンサースキル"*/
+       j = Math.floor(j/10);
+       setV( outobj[m+4], j ); /*5,6*/
+       if( chkFlgStr( flg , ["601000  1"] ) ){
+         k=getV(inobj[m+13])/1; /*"アンナ"*/
+         if(wa[0]) k = Math.floor(k*(1.0 + wa[0]/100.0) ); /*"編成"*/
+         if(wa[1]) k = Math.floor(k*(1.0 + wa[1]/100.0) ); /*"配置"*/
+         /* "スキルバフ(自己)"は加算しない */
+         if(wa[3]) k *= wa[3]/100.0; /*"スキルバフ(射程内)"*/
+         if(wa[4]) k *= wa[4]/100.0; /*"スキルバフ(全体)"*/
+         if(wa[5]) k *= wa[5]/100.0; /*"スキルバフ(特性)"*/
+         if(wa[6]) k *= wa[6]/100.0; /*"スキルバフ(レア指定)"*/
+         if(wa[7]) k *= wa[7]/100.0; /*"アンナスキル"*/
+         k= Math.floor(k/10);
+       }else{
+         k=0;
+       }
+       setV( outobj[m+6], k ); /*7,8*/
+     }else{
+       j=k=0.0;
+     }
+     i=getV(inobj[m])/1; /*0,1,2,3,4*/
+     if(wv[0]) i = Math.floor(i*(1.0 + wv[0]/100.0) ); /*"編成"*/
+     if(wv[1]) i = Math.floor(i*(1.0 + wv[1]/100.0) ); /*"配置"*/
+     if(wv[2]) i *= wv[2]/100.0; /*"スキルバフ(自己)"*/
+     if(wv[3]) i *= wv[3]/100.0; /*"スキルバフ(射程内)"*/
+     if(wv[4]) i *= wv[4]/100.0; /*"スキルバフ(全体)"*/
+     if(wv[5]) i *= wv[5]/100.0; /*"スキルバフ(特性)"*/
+     if(wv[6]) i *= wv[6]/100.0; /*"スキルバフ(レア指定)"*/
+     setV( outobj[m], i ); /*0,1,2,3,4*/
+     setV( outobj[10+m], Math.floor(i+j+k) ); /*10,11,12,13,14*/
+   }
+ }
+
+
+
+ /* initialize */
+ (function(){
+    var i,j,k,l,m;
+    for(i=0;i<=15;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
+    for(i=0;i<=14;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
+    for( i in buf ) {
+      k = t.insertRow(-1); k.className="bufftype";  k.setAttribute("grp",i)
+      l = k.insertCell(0); l.outerHTML="<th nowrap class='csw'>－</th>";
+      l = k.insertCell(1); l.outerHTML="<th nowrap colspan=2 class='bufftype' id='h01'>"+i+"</th>";
+      l = k.insertCell(2); l.outerHTML="<th nowrap class='csw'></th>";
+      l = k.insertCell(3); l.outerHTML="<th nowrap class='csw'></th>";
+      l = k.insertCell(4); l.outerHTML="<th nowrap class='csw'></th>";
+      l = k.insertCell(5); l.outerHTML="<th nowrap class='csw'></th>";
+      l = k.insertCell(6); l.outerHTML="<th nowrap class='csw'></th>";
+
+      for( j in buf[i] ){
+        k = t.insertRow(-1); k.classname="buff"; k.setAttribute("grp",i);
+        l = k.insertCell(0); l.outerHTML="<th></th>"; 
+        l = k.insertCell(1); for( m=0 ; m< buf[i][j].cn.length ; m++){
+          if( m ) l.innerHTML += "<br>";
+          l.innerText += buf[i][j].cn[m];
+        }
+        l = k.insertCell(2); l.innerText = j;
+        l = k.insertCell(3); l.style["textAlign"]="center";if( buf[i][j].v[0] >= 101 /*<-加算と乗算の敷居*/ ) l.innerText = "×"+(buf[i][j].v[0]/100.0); else if( buf[i][j].v[0] ) l.innerText = "＋"+buf[i][j].v[0]+"％"; 
+        l = k.insertCell(4); l.style["textAlign"]="center";if( buf[i][j].v[1] >= 101 /*<-加算と乗算の敷居*/ ) l.innerText = "×"+(buf[i][j].v[1]/100.0); else if( buf[i][j].v[1] ) l.innerText = "＋"+buf[i][j].v[1]+"％";
+        l = k.insertCell(5); l.style["textAlign"]="center";if( buf[i][j].v[2] >= 101 /*<-加算と乗算の敷居*/ ) l.innerText = "×"+(buf[i][j].v[2]/100.0); else if( buf[i][j].v[2] ) l.innerText = "＋"+buf[i][j].v[2]+"％";
+        l = k.insertCell(6); l.style["textAlign"]="center";if( buf[i][j].v[3] >= 101 /*<-加算と乗算の敷居*/ ) l.innerText = "×"+(buf[i][j].v[3]/100.0); else if( buf[i][j].v[3] ) l.innerText = "＋"+buf[i][j].v[3]+"％";
+        l = k.insertCell(7); l.style["textAlign"]="center";if( buf[i][j].v[4] >= 101 /*<-加算と乗算の敷居*/ ) l.innerText = "×"+(buf[i][j].v[4]/100.0); else if( buf[i][j].v[4] ) l.innerText = "＋"+buf[i][j].v[4]+"％";
+      }
+    }
+    setV(inobj[ 0],2600); /* HP */
+    setV(inobj[ 1],540);  /* atk */
+    setV(inobj[ 2],700);  /* def */
+    setV(inobj[ 3], 20);  /* mgt */
+    setV(inobj[ 4],  0);  /* range */
+    setV(inobj[12],444);  /* d-atk */
+    setV(inobj[13],444);  /* d-def */
+    setV(inobj[14],294);  /* a-atk */
+    setV(inobj[15],197);  /* a-def */
+    onoff("スキルバフ(自己)","アイギスの神器",1);
+ })();
+
+ document.body.addEventListener( "change", function(ev){
+   if( ev.target.id != "in19" ) doDraw(ev);
+ });
+
+  document.body.addEventListener( "click", function(ev){
+    switch( ev.target.parentNode.tagName.toUpperCase() ){
+      case "TR":
+        if( ev.target.className=="csw" && ev.target.innerText=="－" ){
+          closeGroup( ev.target.parentNode.getAttribute("grp") );
+        }else
+        if( ev.target.className=="csw" && ev.target.innerText=="＋" ){
+          openGroup( ev.target.parentNode.getAttribute("grp") );
+        }else{
+          var i=ev.target.parentNode.getAttribute("grp");
+          if( ev.target.parentNode.className != "bufftype" && i ){
+            var j=ev.target.parentNode.cells[2].innerText;
+            if( buf[i] && buf[i][j] ) onoff(i,j,1-buf[i][j].on );
+          }
+        }
+        break;
+      case "SPAN":
+        if( ev.target.parentNode.className == "x-b" ){
+          if( ev.target.parentNode.getAttribute("type") == "radio" ){
+            setV(ev.target.parentNode, ev.target.getAttribute("num")/1);
+          }else{
+            setV(ev.target.parentNode , getV(ev.target.parentNode)+1);
+          }
+          doDraw(ev);
+          break;
+        }
+        if( ev.target.id == "restoreB" ){
+          if( getV(inobj[19]).length >= 2 && saveword.checkstr(getV(inobj[19])) ){
+            location.href="?"+getV(inobj[19]);
+          }else{
+            alert("その呪文は正しくないようだ");
+          }
+        }
+        break;
+      default:
+    }
+  });
+
+ doDraw(olev);
+
+}
+
+</script>
+
+<div><b>千年戦争アイギス　バフ計算機　　　</b>
+<span>復活の呪文はまだ動かない<!-- input type="text" size=32 style="font-family:monospace;" id="in19"/ --><input type="button" id="restoreB" value="復活" id="in20"/></span>
+<div style="display:inline-block; font-size:13px;"><a href="meisei.html">...名声値カレンダー</a><br><a href="ikusei2.html">...育成試算表</a></div></div>
+
+
+<table  id="t">
+<tr>
+  <th nowrap > </th>
+  <th nowrap >キャラ･クラス</th>
+  <th nowrap >アビ・スキル</th>
+  <th nowrap >HP</th>
+  <th nowrap >攻撃</th>
+  <th nowrap >防御</th>
+  <th nowrap >魔耐</th>
+  <th nowrap >射程</th>
+</tr>
+
+<tr class="f" >
+  <th nowrap colspan=2 rowspan=3>計算対象ユニ</th>
+  <td colspan=9>
+
+    <select id="in05">
+     <option value=0  >王子・皇帝</option>
+     <option value=1  >ソルジャー</option>
+     <option value=2  >アーマー</option>
+     <option value=3  >ワルキューレ</option>
+     <option value=4  >ローグ</option>
+     <option value=5  >プリンセス</option>
+     <option value=6  >バンデッド</option>
+     <option value=7  >竜兵・竜戦士</option>
+     <option value=8  >サムライ</option>
+     <option value=9  >忍者</option>
+     <option value=10 >ペガサス</option>
+     <option value=11 >パラディン</option>
+     <option value=12 >モンク</option>
+     <option value=13 >前衛軍師</option>
+     <option value=14 >魔法剣士</option>
+     <option value=15 >堕天使</option>
+     <option value=16 >くぐつ使い</option>
+     <option value=17 >セーラー</option>
+     <option value=18 >天孤</option>
+     <option value=19 >神官戦士</option>
+     <option value=20 >メイジアーマー</option>
+     <option value=21 >竜騎士</option>
+     <option value=22 >ボウライダー</option>
+     <option value=23 >メイド</option>
+     <option value=24 >ヴァンパイアロード</option>
+     <option value=25 >ソードマスター</option>
+     <option value=26 >ロイヤルガード</option>
+     <option value=27 >仙人・仙猿</option>
+     <option value=28 >魔人</option>
+     <option value=29 >戦の精霊</option>
+     <option value=30 >ダークストーカー</option>
+     <option value=31 >ぬらりひょん</option>
+     <option value=32 >キャノンアーマー</option>
+     <option value=33 >鬼</option>
+     <option value=34 >ロイヤルナイト</option>
+     <option value=35 >天狗</option>
+     <option value=36 >鍛冶師</option>
+     <option value=37 >剣闘士</option>
+     <option value=38 >キョンシー</option>
+     <option value=39 >雷神</option>
+     <option value=40 >モンスターブレーカー</option>
+     <option value=100>政務官</option>
+     <option value=101>アーチャー</option>
+     <option value=102>メイジ</option>
+     <option value=103>ヒーラー</option>
+     <option value=104>ウィッチ</option>
+     <option value=105>パイレーツ</option>
+     <option value=106>ドラゴンシャーマン</option>
+     <option value=107>ヴァンパイアハンター</option>
+     <option value=108>シャーマン</option>
+     <option value=109>ビショップ</option>
+     <option value=110>後衛軍師</option>
+     <option value=111>陰陽師</option>
+     <option value=112>召喚士</option>
+     <option value=113>風水士</option>
+     <option value=114>砲術士</option>
+     <option value=115>ダンサー</option>
+     <option value=116>ネクロマンサー</option>
+     <option value=117>クロノウィッチ</option>
+     <option value=118>ドルイド</option>
+     <option value=119>アルケミスト</option>
+     <option value=120>レンジャー</option>
+     <option value=121>シーフ</option>
+     <option value=122>呪術師</option>
+     <option value=123>魔物使い</option>
+     <option value=124>ダークプリースト</option>
+     <option value=125>エンチャンター</option>
+     <option value=126>マーチャント</option>
+     <option value=127>フェンリルシャーマン</option>
+     <option value=128>モンスターハンター</option>
+     <option value=130>デモンサモナー</option>
+     <option value=131>エレメンタラー</option>
+     <option value=132>猫又</option>
+     <option value=133>道化師</option>
+    </select>
+
+    <select id="in06">
+      <option value=0 >属性なし</option>
+      <option value=1 >人間</option>
+      <option value=2 >竜人</option>
+      <option value=3 >エルフ</option>
+      <option value=4 >ドワーフ</option>
+      <option value=5 >妖怪</option>
+      <option value=6 >魔人</option>
+      <option value=7 >吸血鬼</option>
+      <option value=8 >オーク</option>
+      <option value=9 >ゴブリン</option>
+    </select>
+
+    <span class="x-b" id="in07" type="radio">
+      <input type="button" num=0 value="鉄" />
+      <input type="button" num=1 value="銅" />
+      <input type="button" num=2 value="銀" />
+      <input type="button" num=3 value="金" />
+      <input type="button" num=4 value="青" />
+      <input type="button" num=5 value="白" />
+      <input type="button" num=6 value="黒" />
+    </span>
+
+  </td>
+</tr>
+
+<tr class="f" >
+  <th rowspan=2>
+    <span class="x-b" id="in08" type="radio">
+      <input type="button" num=0 value="近接" />
+      <input type="button" num=1 value="遠距離" />
+    </span>
+    <span class="x-b" id="in10" >
+      <input type="button" num=1 value="竜族" />
+    </span>
+<br>
+    <span class="x-b" id="in09" type="radio">
+      <input type="button" num=0 value="女性" />
+      <input type="button" num=1 value="男性" />
+    </span>
+    <span class="x-b" id="in11" >
+      <input type="button" num=1 value="帝国" />
+    </span>
+
+  </th>
+
+  <td ><input type="number" id="in00" min=0 max=9999 size=4 /></td>
+  <td ><input type="number" id="in01" min=0 max=9999 size=4 /></td>
+  <td ><input type="number" id="in02" min=0 max=9999 size=4 /></td>
+  <td ><input type="number" id="in03" min=0 max=9999 size=4 /></td>
+  <td ><input type="number" id="in04" min=0 max=9999 size=4 /></td>
+</tr>
+
+<tr class="f" >
+
+  <td is="x-d" id="out00"></td>
+  <td is="x-d" id="out01"></td>
+  <td is="x-d" id="out02"></td>
+  <td is="x-d" id="out03"></td>
+  <td is="x-d" id="out04"></td>
+</tr>
+
+<tr class="f" >
+  <th colspan=3 rowspan=2> ダンサー</th>
+  <td rowspan=2></td>
+  <td ><input type="number" id="in12" min=0 max=9999 size=4 /></td>
+  <td ><input type="number" id="in13" min=0 max=9999 size=4 /></td>
+  <td rowspan=2></td>
+  <td rowspan=2></td>
+</tr>
+<tr class="f" >
+  <td is="x-d" id="out05"></td>
+  <td is="x-d" id="out06"></td>
+</tr>
+<tr class="f" >
+  <th colspan=3 rowspan=2>アンナ</th>
+  <td rowspan=2></td>
+  <td ><input type="number" id="in14" min=0 max=9999 size=4 /></td>
+  <td ><input type="number" id="in15" min=0 max=9999 size=4 /></td>
+  <td rowspan=2></td>
+  <td rowspan=2></td>
+</tr>
+<tr class="f" >
+  <td is="x-d" id="out07"></td>
+  <td is="x-d" id="out08"></td>
+</tr>
+<tr class="t">
+  <th nowrap colspan=3>バフ後</th>
+  <td is="x-d" id="out10"></td>
+  <td is="x-d" id="out11"></td>
+  <td is="x-d" id="out12"></td>
+  <td is="x-d" id="out13"></td>
+  <td is="x-d" id="out14"></td>
+</tr>
+</table>
+</body>
