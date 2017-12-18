@@ -3,15 +3,40 @@
  <META http-equiv="Content-Script-Type" content="text/javascript">
  <META http-equiv="Content-Style-Type" content="text/css">
  <title>千年戦争アイギス　バフ計算機</title>
+<!--
+　　　　 r＝、､　　　　　　　　 , '⌒ヽ 
+　　　　((::::::..ヽヽ　_＿＿　 　{ i:::::::l |　
+　　　 　 ﾞ ､::::::l |´　＼＼ ｀ヽj !::::://　
+　　　　／　〉:::l |　　　|::::| 　//:::://　
+　　 ／匕 ＞(：：)二二二二(：：)く ＼　
+　　 {ゞ|／　／　 , 　　j　　i　 ; ヽ ヽ ﾉ 
+　 　У　／i　　!/|⌒/| 　 lﾘ⌒j　Y´ 
+　　 人/ lr'| 　 仡示ﾉ !__/ r示ﾐ　| 
+　 く;;_;;| ,ﾊ_| 　i|弋ソ　　 　弋ｿ.{　!　 まだできてないです
+　　/::::| l ! .!,　|ﾄ"" 　　__ 　 "''从j 　 それでも使うです？
+　 ,'.::::人ﾄ(从ｲ!心、_　｀´ _ ｡彳)/ 
+　 |:::::!　|::::|_人(ｧ 个｀Y〔ｰ､ 　ノ 
+　 |:::::|　|:r'ﾞ!.|　｀ .く__,小._,ハ
+TIPS
+・グループの左端の＋－はクリックで折りたためる
+・自己バフONに選択すると対象キャラにあわせるようにユニ条件を自動で反映
+・スキルバフONに選択すると対象のキャラがもつ編成･配置バフもON
+・選択や数字を変更すると、そのときの呪文が復活の呪文に表示される(予定)
+・メモっておいた呪文を入力して[復活]で復元できる
+・[復活]はURLを更新しているので、それを保存してもよい。
+・というわけで、変更→[復活]→ブクマ とすればメモる必要はない
+・このツールのアップデートに対し呪文の互換性がない
+・通信していないので、PCにページを保存して、それを使えばOK
+
+・性別バフはトークンのときはかからない。ニエルは女性扱い
+-->
  <style>
 td{ padding: 3px 0px 2px 0px; }
 select,div>span{ font-size:18px; height:100%; margin:0px; }
-select{ background-color: yellow; }
+select{ background-color: yellow; padding:0px 0px 4px 04px; }
 .x-b input { font-size:16px;}
 table td[is="x-d"] { text-align:center; }
-span{ padding:5px 2px 2px 2px; }
-
-table td.a{ border:solid 1px red; background-color:rebeccapurple; color:white; text-align:center; font-size:22px; }
+span{ padding:3px 2px 2px 2px; }
 #t{
  border:solid 1px blue;
  border-collapse: collapse;
@@ -27,21 +52,17 @@ table td.a{ border:solid 1px red; background-color:rebeccapurple; color:white; t
 #t th.bufftype,#t th.csw{ border-top:solid 1px #00f;}
 #t tr td{ background:#eff; color:#888; }
 #t tr td.on{ background:#bef; color:black; }
-
 #t th{ background-color: steelblue; color:white; }
 #t tr.f th,#t tr.f td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
 #t tr.t th{ background-color:#fd6; color:#632; }
 #t tr.t td{ background-color:#fed; color:black; }
-
-#t .hed1{ background-color: cornflowerblue; }
-
 input[type="number"] {  text-align:center;  }
 input[type="button"] {
  background-color: #e8ffff;
  border: solid 1px #999;
  border-radius: 5px;
- padding: 0px 6px;
- margin:0px ;
+ padding: 0px 8px;
+ margin:1px 3px;
  cursor: pointer;
  user-select: none;
  -webkit-user-select: none;
@@ -51,8 +72,6 @@ input[type="button"] {
 }
 input.bon { background-color: #ff4; }
 input.chk { display:inline; background-color:#90ffcf; }
-.x-b[type="radio"] input{ margin: 2px 1px; }
-
 
  </style>
 </head>
@@ -61,8 +80,6 @@ input.chk { display:inline; background-color:#90ffcf; }
 <script> 
 document.body.onload=function(olev){
   var typs=["アビ","アビ２","スキル","スキルCC","スキル覚醒","称号"]; /*<= 未使用*/
-  var slv={
-  };
   var buf={
     "編成バフ(全体)":{
       "全員の最大ＨＰアップ【中】":{   on:0 ,v:[10,0,0,0,0] ,cn:["アデル"         ] },
@@ -76,24 +93,35 @@ document.body.onload=function(olev){
       "難攻不落の要塞":{               on:0 ,v:[0,0,17,0,0] ,cn:["ルイーズ"       ] },
       "舞巫女の守護霊":{               on:0 ,v:[0,0,0, 5,0] ,cn:["ミヤビ"         ] }
     },
-    "編成バフ(近接系ユニ限定)":{
+    "編成バフ(近・遠,性別限定)":{
       "打ち出の小槌":{                 on:0 ,v:[0, 5,0,0,0] ,cn:["カグラ"         ] ,chkf:["X0XXXXXXX"] },
       "剣聖武芸指南":{                 on:0 ,v:[0,10,0,0,0] ,cn:["ジークリンデ"   ] ,chkf:["X0XXXXXXX"] },
       "六丈銭の赤備え":{               on:0 ,v:[ 5,5,5,0,0] ,cn:["マツリ"         ] ,chkf:["X0XXXXXXX"] },
-      "魔法防壁":{                     on:0 ,v:[0,0,0,10,0] ,cn:["グレース"       ] ,chkf:["X0XXXXXXX"] }
+      "魔法防壁":{                     on:0 ,v:[0,0,0,10,0] ,cn:["グレース"       ] ,chkf:["X0XXXXXXX"] },
+      "トレジャーハント【魔水晶】":{   on:0 ,v:[0, 0,0,5,0] ,cn:["モニカ"         ] ,chkf:["X1XXXXXXX"] },
+      "鍛冶神の祝福＋マスタースミス":{ on:0 ,v:[0, 5,5,0,0] ,cn:["ティニー"       ] ,chkf:["X00XXXXXX"] },
+      "武具職人【男専用】":{           on:0 ,v:[0, 5,5,0,0] ,cn:["ゴルドー"       ] ,chkf:["X01XXXXXX"] },
+      "防御力魔法耐性アップ【男】":{   on:0 ,v:[ 0,0,5,5,0] ,cn:["オスカー"       ] ,chkf:["XX1XXXXXX"] },
+      "トレジャーハント【酒】":{       on:0 ,v:[15,0,0,0,0] ,cn:["ロベルト"       ] ,chkf:["XX1XXXXXX"] }
     },
-    "編成バフ(女性近接限定)":{
-      "鍛冶神の祝福＋マスタースミス":{ on:0 ,v:[0, 5,5,0,0] ,cn:["ティニー"       ] ,chkf:["X00XXXXXX"] }
+    "編成バフ(レアリティ限定)":{
+      "夏祭りの思い出":{               on:0 ,v:[20,0,20,0,0] ,cn:["浴衣の兵長フィリス"] ,chkf:["0XXXXXXXX","1XXXXXXXX"]},
+      "シルバーフルチャージ":{         on:0 ,v:[ 5,0, 0,0,0] ,cn:["ロゼット"          ] ,chkf:["2XXXXXXXX"] },
+      "騎士姫の導き":{                 on:0 ,v:[ 5,5, 5,0,0] ,cn:["シェリー"          ] ,chkf:["2XXXXXXXX"] }
     },
-    "編成バフ(ソルジャー系限定)":{
-      "撤退支援":{                     on:0 ,v:[20,0,0,0,0] ,cn:["アルティア"     ] ,chkf:["XXXXX1  X"] }
+    "編成バフ(属性限定)":{
+      "戦意高揚【砂漠】":{             on:0 ,v:[0,10,0,0,0] ,cn:["王子(砂漠)"     ] },
     },
-    "編成バフ(ブロンズ・アイアン限定)":{
-      "夏祭りの思い出":{               on:0 ,v:[20,0,20,0,0] ,cn:["浴衣の兵長フィリス"] ,chkf:["0XXXXXXXX","1XXXXXXXX"]}
+    "編成バフ(種族限定)":{
+      "":{             on:0 ,v:[0,10,0,0,0] ,cn:["オリヴィエ"     ] },
+      "":{             on:0 ,v:[0,10,0,0,0] ,cn:["リーナ"     ] },
+      "":{             on:0 ,v:[0,10,0,0,0] ,cn:["ププル"     ] },
     },
-    "編成バフ(ライダー系限定)":{
-      "英雄の守り手":{                 on:0, v:[15, 0,0,0,0] ,cn:["レシア"        ] ,chkf:["XXXXX3  X","XXXXX10 X","XXXXX21 X"]}
+    "編成バフ(職種限定)":{
+      "撤退支援":{                     on:0 ,v:[20,0,0,0,0] ,cn:["アルティア"     ] ,chkf:["XXXXX1  X"] },
+      "英雄の守り手":{                 on:0, v:[15, 0,0,0,0] ,cn:["レシア"        ] ,chkf:["XXXXX3  X","XXXXX10 X","XXXXX22 X"]}
     },
+
     "配置バフ(全体)":{
       "戦意高揚":{                     on:0 ,v:[0,20,20,0,0] ,cn:["王子(アイギス神器)","王子(ケラウノス神器)"] },
       "戦意高揚【砂漠】":{             on:0 ,v:[0,20,20,0,0] ,cn:["王子(砂漠)"    ] },
@@ -117,7 +145,8 @@ document.body.onload=function(olev){
       "鍛冶神の祝福＋マスタースミス":{ on:0 ,v:[0,15,15,0,0] ,cn:["ティニー"       ] ,chkf:["X00XXXXXX"] }
     },
     "配置バフ(自己・確立)":{
-      "必殺の一撃":{                   on:0 ,v:[0,15,15,0,0] ,cn:["ユリアン"       ] ,chkf:["301001  1"]}
+      "大鑑巨砲":{                     on:0 ,v:[0,90, 0,0,0] ,cn:["イブキ"         ] ,setf:"6000018 1" ,chkf:["6000018 1"] },
+      "必殺の一撃":{                   on:0 ,v:[0,15,15,0,0] ,cn:["ユリアン"       ] ,setf:"301001  1" ,chkf:["301001  1"]}
     },
     "スキルバフ(自己)":{
       "英雄の片鱗":{           on:0 ,skill:1,v:[300,300,300,0,0],cn:["王子【幼少】"        ] ,setf:"601000  1" ,chkf:["601000  1"] },
@@ -126,10 +155,13 @@ document.body.onload=function(olev){
       "獅子刀スルフィカール":{ on:0 ,skill:1 ,v:[0,150,  0,0,0] ,cn:["王子(砂漠)"          ] ,setf:"601000  1" ,chkf:["601000  1"] },
       "怪力爆砕鉄球":{         on:0 ,skill:5 ,v:[0,200,200,0,0] ,cn:["ディーナ"            ] ,setf:"600002  1" ,chkf:["600002  1"] },
       "大震撃":{               on:0 ,skill:5 ,v:[  0,0,140,0,0] ,cn:["ディーネ"            ] ,setf:"600002  1" ,chkf:["600002  1"] },
+      "一斉射撃":{             on:0 ,skill:5 ,v:[0,170,  0,0,0] ,cn:["イブキ"              ] ,setf:"6000018 1" ,chkf:["6000018 1"] },
+      "聖女の結界":{           on:0 ,skill:5 ,v:[0,140,  0,0,0] ,cn:["イリス"              ] ,setf:"600001031" ,chkf:["600001031"] },
       "聖女の叫び声":{         on:0 ,skill:5 ,v:[0,200,200,0,0] ,cn:["ゼノビア"            ] ,setf:"500001  1" ,chkf:["500001  1"] },
       "援軍要請・攻防":{       on:0 ,skill:5 ,v:[0,150,150,0,0] ,cn:["リーゼロッテ"        ] ,setf:"500001  1" ,chkf:["500001  1"] },
       "不可侵の神盾":{         on:0 ,skill:5 ,v:[0,0,200,200,0] ,cn:["ジェイク"            ] ,setf:"501001  1" ,chkf:["501001  1"] },
-      "聖女の結界":{           on:0 ,skill:5 ,v:[0,140,  0,0,0] ,cn:["イリス"              ] ,setf:"600001031" ,chkf:["600001031"] }
+      "クイックショットⅡ":{   on:0 ,skill:5 ,v:[0,190,  0,0,0] ,cn:["オスカー","ほか"     ]  }
+      
 /*
     "ベルナ":[             "死の旋風"              ],
     "シビラ":[             "魔剣覚醒"              ,
@@ -151,23 +183,70 @@ document.body.onload=function(olev){
 
     },
     "スキルバフ(射程内)":{
-      "士気高揚":{                     on:0 ,v:[0,112,112,0,0] ,cn:["王子"        ] },
-      "士気高揚＋英雄の末裔":{         on:0 ,v:[0,115,115,0,0] ,cn:["王子"        ] },
-      "士気高揚＋勇者":{               on:0 ,v:[0,117,117,0,0] ,cn:["王子"        ] },
-      "士気高揚＋救世主":{             on:0 ,v:[0,119,119,0,0] ,cn:["王子"        ] },
-      "士気高揚＋大英雄":{             on:0 ,v:[0,121,121,0,0] ,cn:["王子"        ] },
-      "デモニックフィールド":{         on:0 ,v:[0,150,  0,0,0] ,cn:["ラピス"      ] },
-      "聖女の結界":{                   on:0 ,v:[0,  0,250,0,0] ,cn:["イリス"      ] }
+      "士気高揚":{                     on:0 ,v:[0,112,112,0,0] ,cn:["王子"          ] },
+      "士気高揚＋英雄の末裔":{         on:0 ,v:[0,115,115,0,0] ,cn:["王子"          ] },
+      "士気高揚＋勇者":{               on:0 ,v:[0,117,117,0,0] ,cn:["王子"          ] },
+      "士気高揚＋救世主":{             on:0 ,v:[0,119,119,0,0] ,cn:["王子"          ] },
+      "士気高揚＋大英雄":{             on:0 ,v:[0,121,121,0,0] ,cn:["王子"          ] },
+      "死霊強化":{                     on:0 ,v:[0,300,300,0,0] ,cn:["メメント"      ] },/*対トークン*/
+      "アンデッドマーチ":{             on:0 ,v:[0,300,300,0,0] ,cn:["メメント"      ] },/*対トークン*/
+      "ウォークライ":{                 on:0 ,v:[0,120,  0,0,0] ,cn:["ブランシュ"    ] },
+      "デモニックフィールド":{         on:0 ,v:[0,150,  0,0,0] ,cn:["ラピス"        ] },
+      "デモニックテリトリー":{         on:0 ,v:[0,150,  0,0,0] ,cn:["ラピス"        ] },
+      "破魔聖樹の輝光":{               on:0 ,v:[0,140,  0,0,0] ,cn:["破魔の聖樹	"   ] },
+      "バトルプロテクション":{         on:0 ,v:[0,  0,150,0,0] ,cn:["エクス"        ] },
+      "ゴッドプロテクション":{         on:0 ,v:[0,  0,200,0,0] ,cn:["エクス"        ] },
+      "プロテクションI":{              on:0 ,v:[0,  0,150,0,0] ,cn:["イリス"        ] },
+      "プロテクションII":{             on:0 ,v:[0,  0,200,0,0] ,cn:["イリス"        ] },
+      "聖女の結界":{                   on:0 ,v:[0,  0,250,0,0] ,cn:["イリス"        ] },
+      "ダークプロテクション":{         on:0 ,v:[0,  0,170,0,0] ,cn:["ベルディナート"] },
+      "隊商防御陣":{                   on:0 ,v:[0,  0,120,0,0] ,cn:["ディエーラ"    ] },
+      "守護聖樹の輝光":{               on:0 ,v:[0,  0,200,0,0] ,cn:["守護の聖樹"    ] },
     },
     "スキルバフ(全体)":{
       "英雄の片鱗":{                   on:0 ,v:[0,120,120,0,0] ,cn:["王子【幼少】"] },
-      "烈火の陣":{                     on:0 ,v:[0,120,  0,0,0] ,cn:["ウズメ"      ] },
+      "火竜の炎陣":{                   on:0 ,v:[0,120,  0,0,0] ,cn:["イグニス"    ] },
+      "烈火の陣":{                     on:0 ,v:[0,120,  0,0,0] ,cn:["ウズメ","イグニス"] },
       "猛火の陣(1回目)":{              on:0 ,v:[0,120,  0,0,0] ,cn:["ウズメ"      ] },
+      "猛火の陣(2回目)":{              on:0 ,v:[0,125,  0,0,0] ,cn:["ウズメ"      ] },
+      "猛火の陣(最終)":{               on:0 ,v:[0,130,  0,0,0] ,cn:["ウズメ"      ] },
+      "猛将の鼓舞":{                   on:0 ,v:[0,110,  0,0,0] ,cn:["シュウカ"    ] },
+      "ブリッツクリーク":{             on:0 ,v:[0,115,115,0,0] ,cn:["レオラ"      ] },
+      "シュツルムアングリフ":{         on:0 ,v:[0,125,125,0,0] ,cn:["レオラ"      ] },
       "鉄壁の陣":{                     on:0 ,v:[0,  0,120,0,0] ,cn:["レン"        ] },
-      "金城の陣(1回目)":{              on:0 ,v:[0,  0,120,0,0] ,cn:["レン"        ] }
+      "金城の陣(1回目)":{              on:0 ,v:[0,  0,120,0,0] ,cn:["レン"        ] },
+      "金城の陣(2回目)":{              on:0 ,v:[0,  0,125,0,0] ,cn:["レン"        ] },
+      "金城の陣(最終)":{               on:0 ,v:[0,  0,130,0,0] ,cn:["レン"        ] },
+      "性質変換の秘術":{               on:0 ,v:[0,  0,125,0,0] ,cn:["シャルル"    ] },
     },
     "スキルバフ(系統)":{
-      "大山賊時代":{                   on:0 ,v:[200,  0,0,0,0] ,cn:["アマンダ"    ] ,chkf:["XXXXX6  X"] }
+      "大山賊時代":{                   on:0 ,v:[200,  0,0,0,0] ,cn:["アマンダ"    ] ,chkf:["XXXXX6  X"] },
+      "基本戦術・陣地防御":{           on:0 ,v:[0,  0,120,0,0] ,cn:["ヘレナ"        ] },
+      "基本戦術・反転攻勢":{           on:0 ,v:[0,120,  0,0,0] ,cn:["ヘレナ"        ] },
+      "応用戦術・堅守強攻(対近接)":{   on:0 ,v:[0,  0,125,0,0] ,cn:["ヘレナ"        ] }, /*近接*/
+      "応用戦術・堅守強攻(対遠距離)":{ on:0 ,v:[0,125,  0,0,0] ,cn:["ヘレナ"        ] }, /*遠距離*/
+      "一斉射撃":{                     on:0 ,v:[0,130,  0,0,0] ,cn:["イブキ"        ] }, /*遠距離*/
+      "妖魔のおもてなし":{             on:0 ,v:[0,140,140,0,0] ,cn:["リーナ"        ] }, /*エルフ・ドワーフ/ゴブリン/オーク/獣人*/
+      "宮廷槍斧術・守の型":{           on:0 ,v:[0,  0,180,0,0] ,cn:["セーラ"        ] }, /*王子/皇帝/全プリンセス系*/
+      "宮廷槍斧術・攻守の型":{         on:0 ,v:[0,150,150,0,0] ,cn:["セーラ"        ] }, /*王子/皇帝/全プリンセス系*/
+      "槍連撃(熱砂の連携戦術)":{       on:0 ,v:[0,115,115,0,0] ,cn:["ネフティ"      ] }, /*砂漠*/
+      "太陽の槍撃(熱砂の連携戦術)":{   on:0 ,v:[0,115,115,0,0] ,cn:["ネフティ"      ] }, /*砂漠*/
+      "闇の進撃":{                     on:0 ,v:[0,  0,150,0,0] ,cn:["メフィスト"    ] }, /*デーモン/オーク/ゴブリン*/
+      "総大将の長ドス・影打":{         on:0 ,v:[0,130,130,0,0] ,cn:["カスミ"        ] }, /*妖怪*/
+      "不滅の妖怪仁義":{               on:0 ,v:[0,110,110,0,0] ,cn:["カスミ"        ] }, /*妖怪*/
+      "アダマスの神器(帝国の勇者)":{   on:0 ,v:[0,125,125,0,0] ,cn:["白の皇帝"      ] }, /*帝国*/
+      "武具鍛錬(男)":{                 on:0 ,v:[0,120,120,0,0] ,cn:["ゴルドー"      ] ,chkf:["X01XXXXXX"] },
+      "武具鍛錬・極致":{               on:0 ,v:[130,120,120,0,0],cn:["ゴルドー"     ] ,chkf:["X01XXXXXX"] },
+      "武具鍛錬(女)":{                 on:0 ,v:[0,120,120,0,0] ,cn:["サンディー"    ] }, /*ソードスミス*/
+      "ヴァルカンの鎚":{               on:0 ,v:[0,120,120,0,0] ,cn:["サンディー"    ] }, /*ソードスミス＝ソル、サムライ、ダークファイター、前軍師、ソードマスター、インペ、王子*/
+      "フォージ・アーマー":{           on:0 ,v:[0,120,130,0,0] ,cn:["ティニー"      ] }, /*武具女*/
+      "フォージ・ウェポン":{           on:0 ,v:[0,130,120,0,0] ,cn:["ティニー"      ] }, /*武具女*/
+      "堅鱗の癒やし":{                 on:0 ,v:[0,  0,140,0,0] ,cn:["エキドナ"      ] }, /*竜族*/
+      "鋭牙の火炎":{                   on:0 ,v:[0,140,  0,0,0] ,cn:["ルビナス"      ] }, /*竜族*/
+      "木々の目覚め":{                 on:0 ,v:[0,140,  0,0,0] ,cn:["ローリエ"      ] }, /*自身・ドルイドトークン*/
+      "樹林繁栄の唄":{                 on:0 ,v:[0,140,  0,0,0] ,cn:["フィオレ"      ] }, /*自身・ドルイドトークン*/
+      "魔獣炎操":{                     on:0 ,v:[0,200,  0,0,0] ,cn:["モルテナ"      ] }, /*自身・魔物トークン*/
+      "魔獣獄炎操":{                   on:0 ,v:[0,150,  0,0,0] ,cn:["モルテナ"      ] }, /*自身・魔物トークン*/
     },
     "スキルバフ(レア指定)":{
       "ダモクレスの剣":{               on:0 ,v:[0,120,120,0,0] ,cn:["ロゼット"    ] }
@@ -229,8 +308,6 @@ document.body.onload=function(olev){
     restorestr:function(s){
       var w=[0,0,s];
       setV(inobj[  0] , saveword.getS(w, 3));
-
-
     },
     checkstr:function(str){
       var i,j;
@@ -240,12 +317,14 @@ document.body.onload=function(olev){
       return ( j == saveword.charmap.indexOf(str.substr(i,1)) );
     }
  }
+
  function getChr( i,j ){
   var k;
   if( ! buf[i] || !buf[i][j] || ! buf[i][j].cn || ! chr[buf[i][j].cn] ) return;
   for( k=chr[buf[i][j].cn].length; --k >= 0 ; ) if( chr[buf[i][j].cn][k].typ == buf[i][j].typ ) return chr[buf[i][j].cn][k];
   return null;
  }
+
  function cnvN(v){
     if( (""+v).length <= 3 ) return v;
     if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
@@ -387,71 +466,36 @@ document.body.onload=function(olev){
    doDraw(null);
  }
 
-
  function doDraw(ev){
    var i,j,k,l,m,n;
-   var v,d,a; /*値、ダンサーステ、アンナステ*/
-   var wv,wd,wa;
-   var flg=getFlgStr();
+   var v=[0,0,0]; /*値、ダンサーステ、アンナステ*/
+   var w;
+   var flg = [getFlgStr() ,"510001151" ,"610001001" ];
    n=-1;
    for( m=0 ; m<5 ; m++ ){
-     v=d=a=0;
-     wv=[0,0,0,0,0,0,0,0];/*"編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己"*/
-     wd=[0,0,0,0,0,0,0,0];/*"編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己、ステ加算"*/
-     wa=[0,0,0,0,0,0,0,0];/*"編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己、ステ加算"*/
+     v[0]=v[1]=v[2]=0;
+     w= [ [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]];/*"i-dacer-anna:編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己、ステ加算"*/
      for( i=t.rows.length ; --i >= 0 ; ){ /* <="表示位置を憶えていないのでループは画面で行う" */
        k=t.rows[i].getAttribute("grp");
        if( ! k || ! buf[k] ) continue;
        if( t.rows[i].className == "bufftype" ){
-         if( /^編成バフ/.test(k) ){
-           if( v == d && v == a ) t.rows[i].cells[2+m].innerText= v?("＋"+v+"％"):"";
-           else                   t.rows[i].cells[2+m].innerText= "＋"+v+","+d+","+a+"％";
-           wv[0] += v;
-           wd[0] += d;
-           wa[0] += a;
-         }
-         if( /^配置バフ/.test(k) ){
-           if( v == d && v == a ) t.rows[i].cells[2+m].innerText= v?("＋"+v+"％"):"";
-           else                   t.rows[i].cells[2+m].innerText= "＋"+v+","+d+","+a+"％";
-           wv[1] += v;
-           wd[1] += d;
-           wa[1] += a;
-         }
-         if( /^スキルバフ/.test(k)                      ){
-           if( v == d && v == a ) t.rows[i].cells[2+m].innerText= v?("×"+(v/100.0)):"";
-           else                   t.rows[i].cells[2+m].innerText= "×"+(v/100.0)+","+(d/100.0)+","+(a/100.0);
+         if( /^編成バフ|^配置バフ/.test(k) )
+           t.rows[i].cells[2+m].innerText= (v[0] != v[1] || v[0] != v[2])?("＋"+v[0]+","+v[1]+","+v[2]+"％"):v[0]?("＋"+v[0]+"％"):"";
+         if( /^編成バフ/.test(k) ) for(o=0;o<3;o++) w[o][0] += v[o];
+         if( /^配置バフ/.test(k) ) for(o=0;o<3;o++) w[o][1] += v[o];
+         if( /^スキルバフ/.test(k) ){
+           t.rows[i].cells[2+m].innerText= (v[0] != v[1] || v[0] != v[2])?("×"+(v[0]/100.0)+","+(v[1]/100.0)+","+(v[2]/100.0)):v?("×"+(v[0]/100.0)):"";
            switch(k){
-             case "スキルバフ(自己)":
-               if( wv[2] < v ) wv[2] = v;
-               if( wd[2] < d ) wd[2] = d;
-               if( wa[2] < a ) wa[2] = a;
-               break;
-             case "スキルバフ(射程内)":
-               if( wv[3] < v ) wv[3] = v;
-               if( wd[3] < d ) wd[3] = d;
-               if( wa[3] < a ) wa[3] = a;
-               break;
-             case "スキルバフ(全体)":
-               if( wv[4] < v ) wv[4] = v;
-               if( wd[4] < d ) wd[4] = d;
-               if( wa[4] < a ) wa[4] = a;
-               break;
-             case "スキルバフ(系統)":
-               if( wv[5] < v ) wv[5] = v;
-               if( wd[5] < d ) wd[5] = d;
-               if( wa[5] < a ) wa[5] = a;
-               break;
-             case "スキルバフ(レア指定)":
-               if( wv[6] < v ) wv[6] = v;
-               if( wd[6] < d ) wd[6] = d;
-               if( wa[6] < a ) wa[6] = a;
-               break;
-             default:
+             case "スキルバフ(自己)":     for(o=0;o<3;o++) if( w[o][2] < v[o] ) w[o][2] = v[o];  break;
+             case "スキルバフ(射程内)":   for(o=0;o<3;o++) if( w[o][3] < v[o] ) w[o][3] = v[o];  break;
+             case "スキルバフ(全体)":     for(o=0;o<3;o++) if( w[o][4] < v[o] ) w[o][4] = v[o];  break;
+             case "スキルバフ(系統)":     for(o=0;o<3;o++) if( w[o][5] < v[o] ) w[o][5] = v[o];  break;
+             case "スキルバフ(レア指定)": for(o=0;o<3;o++) if( w[o][6] < v[o] ) w[o][6] = v[o];  break;
            }
          }
-         if( "ステ加算値バフ(ダンサー)" == k && wd[7] < d ) wd[7] = d;
-         if( "ステ加算値バフ(政務官)"   == k && wd[7] < a ) wa[7] = a;
-         v=d=a=0;
+         if( "ステ加算値バフ(ダンサー)" == k && w[1][7] < v[1] ) w[1][7] = v[1];
+         if( "ステ加算値バフ(政務官)"   == k && w[2][7] < v[2] ) w[2][7] = v[2];
+         v[0]=v[1]=v[2]=0;
          continue;
        }
        l=t.rows[i].cells[2].innerText; /*バフ名*/
@@ -463,22 +507,13 @@ document.body.onload=function(olev){
          }
          l=buf[k][t.rows[i].cells[2].innerText]; 
          j=l.v[m]; /*"画面の値は装飾されて使えないので配列から取得" */
-         if( l.chkf ){
-           if( chkFlgStr( flg , l.chkf ) ){ /*"対象ユニ"*/
-             if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) v += l.v[m];
-             if( /^スキルバフ/.test(k) && v < l.v[m]        ) v =  l.v[m];
-           }
-           if( chkFlgStr( "510001151" , l.chkf ) ){ /*"ダンサー"*/
-             if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) d += l.v[m];
-             if( /^スキルバフ/.test(k) && v < l.v[m]        ) d =  l.v[m];
-           }
-           if( chkFlgStr( "610001001" , l.chkf ) ){ /*"アンナ"*/
-             if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) a += l.v[m];
-             if( /^スキルバフ/.test(k) && v < l.v[m]        ) a =  l.v[m];
-           }
-         }else{
-           if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ){ v += l.v[m]; d += l.v[m]; a += l.v[m]; }
-           if((/^スキルバフ/.test(k) || /^ステ加算値バフ/.test(k) ) && v < l.v[m] ){ v = l.v[m]; d = l.v[m]; a = l.v[m]; }
+         if( ! l.chkf ){
+           if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) for(o=0;o<3;o++) v[o] += l.v[m];
+           if((/^スキルバフ/.test(k) || /^ステ加算値バフ/.test(k) ) && v[0] < l.v[m] ) for(o=0;o<3;o++) v[0] = l.v[m];
+         }else for( o=0 ; o<3 ; o++ ){
+           if( ! chkFlgStr( flg[o] , l.chkf ) ) continue;
+           if( /^編成バフ/.test(k) || /^配置バフ/.test(k) ) v[o] += l.v[m];
+           if( /^スキルバフ/.test(k) && v < l.v[m]        ) v[o] =  l.v[m];
          }
        }else{
          t.rows[i].cells[m+3].className="";
@@ -488,67 +523,48 @@ document.body.onload=function(olev){
          }
        }
      }
-
-     if( m == 1 || m == 2 ){
-       j=getV(inobj[m+11])/1; /*"ダンサー"*/
-       if(wd[0]) j = Math.floor(j*(1.0 + wd[0]/100.0) ); /*"編成"*/
-       if(wd[1]) j = Math.floor(j*(1.0 + wd[1]/100.0) ); /*"配置"*/
-       /* "スキルバフ(自己)"は加算しない */
-       if(wd[3]) j *= wd[3]/100.0; /*"スキルバフ(射程内)"*/
-       if(wd[4]) j *= wd[4]/100.0; /*"スキルバフ(全体)"*/
-       if(wd[5]) j *= wd[5]/100.0; /*"スキルバフ(特性)"*/
-       if(wd[6]) j *= wd[6]/100.0; /*"スキルバフ(レア指定)"*/
-       if(wd[7]) j *= wd[7]/100.0; /*"ダンサースキル"*/
-       j = Math.floor(j/10);
-       setV( outobj[m+4], j ); /*5,6*/
-       if( chkFlgStr( flg , ["601000  1"] ) ){
-         k=getV(inobj[m+13])/1; /*"アンナ"*/
-         if(wa[0]) k = Math.floor(k*(1.0 + wa[0]/100.0) ); /*"編成"*/
-         if(wa[1]) k = Math.floor(k*(1.0 + wa[1]/100.0) ); /*"配置"*/
-         /* "スキルバフ(自己)"は加算しない */
-         if(wa[3]) k *= wa[3]/100.0; /*"スキルバフ(射程内)"*/
-         if(wa[4]) k *= wa[4]/100.0; /*"スキルバフ(全体)"*/
-         if(wa[5]) k *= wa[5]/100.0; /*"スキルバフ(特性)"*/
-         if(wa[6]) k *= wa[6]/100.0; /*"スキルバフ(レア指定)"*/
-         if(wa[7]) k *= wa[7]/100.0; /*"アンナスキル"*/
-         k= Math.floor(k/10);
-       }else{
-         k=0;
-       }
-       setV( outobj[m+6], k ); /*7,8*/
-     }else{
-       j=k=0.0;
+     for(o=0;o<3;o++){
+       if( m != 1 && m != 2 && o != 0  ) continue; 
+       v[o]=getV(inobj[ [m,m+11,m+13][o] ])/1;
+       if(w[o][0]) v[o] = Math.floor(v[o]*(1.0 + w[o][0]/100.0) ); /*"編成"*/
+       if(w[o][1]) v[o] = Math.floor(v[o]*(1.0 + w[o][1]/100.0) ); /*"配置"*/
+       if(w[o][3] && o == 0) v[o] *= w[o][2]/100.0; /* "スキルバフ(自己)"は加算しない */
+       if(w[o][3]) v[o] *= w[o][3]/100.0; /*"スキルバフ(射程内)"*/
+       if(w[o][4]) v[o] *= w[o][4]/100.0; /*"スキルバフ(全体)"*/
+       if(w[o][5]) v[o] *= w[o][5]/100.0; /*"スキルバフ(特性)"*/
+       if(w[o][6]) v[o] *= w[o][6]/100.0; /*"スキルバフ(レア指定)"*/
+       if( o && w[o][7]) v[o] *= w[o][7]/100.0; /*"ダンサースキル"*/
+       if( o ) v[o] = Math.floor(v[o]/10);
+       setV( outobj[ [m,m+4,m+6][o]   ], v[o] ); /*0,1,2,3,4*/
      }
-     i=getV(inobj[m])/1; /*0,1,2,3,4*/
-     if(wv[0]) i = Math.floor(i*(1.0 + wv[0]/100.0) ); /*"編成"*/
-     if(wv[1]) i = Math.floor(i*(1.0 + wv[1]/100.0) ); /*"配置"*/
-     if(wv[2]) i *= wv[2]/100.0; /*"スキルバフ(自己)"*/
-     if(wv[3]) i *= wv[3]/100.0; /*"スキルバフ(射程内)"*/
-     if(wv[4]) i *= wv[4]/100.0; /*"スキルバフ(全体)"*/
-     if(wv[5]) i *= wv[5]/100.0; /*"スキルバフ(特性)"*/
-     if(wv[6]) i *= wv[6]/100.0; /*"スキルバフ(レア指定)"*/
-     setV( outobj[m], i ); /*0,1,2,3,4*/
-     setV( outobj[10+m], Math.floor(i+j+k) ); /*10,11,12,13,14*/
+     setV( outobj[10+m], Math.floor(v[0]+v[1]+v[2]) ); /*10,11,12,13,14*/
    }
  }
 
-
-
- /* initialize */
- (function(){
-    var i,j,k,l,m;
+ (function(){  /* initialize */
+    var i,j,k,l,m,n;
     for(i=0;i<=15;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
     for(i=0;i<=14;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
+    m=[ [ ["王子・皇帝","ソルジャー","バトルアーマー","ワルキューレ","ローグ","プリンセス系","バンデッド","竜兵・竜戦士","サムライ","忍者","ペガサスナイト","パラディン","アベンジャー","モンク","前衛軍師","魔法剣士","堕天使","くぐつ使い","セーラー","天孤","神官戦士","メイジアーマー","竜騎士","ボウライダー","メイド","ヴァンパイアロード","ソードマスター","ロイヤルガード","仙人・仙猿","魔人","戦の精霊","ダークストーカー","ぬらりひょん","キャノンアーマー","鬼","ロイヤルナイト","天狗","鍛冶師","剣闘士","キョンシー","雷神","モンスターブレーカー"]
+         ,["政務官","アーチャー","メイジ","ヒーラー","ウィッチ","パイレーツ","ドラゴンシャーマン","ヴァンパイアハンター","シャーマン","ビショップ","後衛軍師","陰陽師","召喚士","風水士","砲術士","ダンサー","ネクロマンサー","クロノウィッチ","ドルイド","アルケミスト","レンジャー","シーフ","呪術師","魔物使い","ダークプリースト","エンチャンター","マーチャント","フェンリルシャーマン","モンスターハンター","デモンサモナー","エレメンタラー","猫又","道化師"]
+         ,["骨トークン","式鬼","魔獣トークン","インプ・デーモン","ゴーレム","スチームタンク","化け猫","大ガマ","ケットシー","ジャック Ｏ ランタン","霧分身","火エレメント","土エレメント","風エレメント","水エレメント","闇エレメント","トラバサミ","ミミック","砲撃ポイント"]
+         ,[ "生命の木","避禍予見の鏡影","プリズムミラー","芸術家の逸品"] ]
+       ,[ ["属性なし","人間","竜人","エルフ","ドワーフ","獣人","妖怪","デーモン","吸血鬼","オーク","ゴブリン"] ]
+       ,[ ["鉄","銅","銀","金","青","白","黒"] ] ];
+    for( i=0 ; i< m.length ; i++ ) for( j=0 ; j<m[i].length ; j++ ) for( k=0 ; k<m[i][j].length ; k++ ){
+      n=document.createElement( ["OPTION","OPTION","INPUT"][i] );
+      n.value=( i == 2 )?m[i][j][k]:(k+j*100);
+      if( i == 2 ){ n.setAttribute("num",k); n.type="button"; inobj[5+i].append(n); }else{ n.innerText=m[i][j][k]; inobj[5+i].add(n); }
+    }
     for( i in buf ) {
       k = t.insertRow(-1); k.className="bufftype";  k.setAttribute("grp",i)
-      l = k.insertCell(0); l.outerHTML="<th nowrap class='csw'>－</th>";
-      l = k.insertCell(1); l.outerHTML="<th nowrap colspan=2 class='bufftype' id='h01'>"+i+"</th>";
-      l = k.insertCell(2); l.outerHTML="<th nowrap class='csw'></th>";
-      l = k.insertCell(3); l.outerHTML="<th nowrap class='csw'></th>";
-      l = k.insertCell(4); l.outerHTML="<th nowrap class='csw'></th>";
-      l = k.insertCell(5); l.outerHTML="<th nowrap class='csw'></th>";
-      l = k.insertCell(6); l.outerHTML="<th nowrap class='csw'></th>";
-
+      l = k.insertCell(0); l.outerHTML="<th class='csw'>－</th>";
+      l = k.insertCell(1); l.outerHTML="<th colspan=2 class='bufftype' id='h01'>"+i+"</th>";
+      l = k.insertCell(2); l.outerHTML="<th></th>";
+      l = k.insertCell(3); l.outerHTML="<th></th>";
+      l = k.insertCell(4); l.outerHTML="<th></th>";
+      l = k.insertCell(5); l.outerHTML="<th></th>";
+      l = k.insertCell(6); l.outerHTML="<th></th>";
       for( j in buf[i] ){
         k = t.insertRow(-1); k.classname="buff"; k.setAttribute("grp",i);
         l = k.insertCell(0); l.outerHTML="<th></th>"; 
@@ -576,9 +592,9 @@ document.body.onload=function(olev){
     onoff("スキルバフ(自己)","アイギスの神器",1);
  })();
 
- document.body.addEventListener( "change", function(ev){
-   if( ev.target.id != "in19" ) doDraw(ev);
- });
+  document.body.addEventListener( "change", function(ev){
+    if( ev.target.id != "in19" ) doDraw(ev);
+  });
 
   document.body.addEventListener( "click", function(ev){
     switch( ev.target.parentNode.tagName.toUpperCase() ){
@@ -617,204 +633,36 @@ document.body.onload=function(olev){
       default:
     }
   });
-
- doDraw(olev);
-
+  doDraw(olev);
 }
-
 </script>
-
 <div><b>千年戦争アイギス　バフ計算機　　　</b>
 <span>復活の呪文はまだ動かない<!-- input type="text" size=32 style="font-family:monospace;" id="in19"/ --><input type="button" id="restoreB" value="復活" id="in20"/></span>
 <div style="display:inline-block; font-size:13px;"><a href="meisei.html">...名声値カレンダー</a><br><a href="ikusei2.html">...育成試算表</a></div></div>
-
-
 <table  id="t">
-<tr>
-  <th nowrap > </th>
-  <th nowrap >キャラ･クラス</th>
-  <th nowrap >アビ・スキル</th>
-  <th nowrap >HP</th>
-  <th nowrap >攻撃</th>
-  <th nowrap >防御</th>
-  <th nowrap >魔耐</th>
-  <th nowrap >射程</th>
-</tr>
-
-<tr class="f" >
-  <th nowrap colspan=2 rowspan=3>計算対象ユニ</th>
-  <td colspan=9>
-
-    <select id="in05">
-     <option value=0  >王子・皇帝</option>
-     <option value=1  >ソルジャー</option>
-     <option value=2  >アーマー</option>
-     <option value=3  >ワルキューレ</option>
-     <option value=4  >ローグ</option>
-     <option value=5  >プリンセス</option>
-     <option value=6  >バンデッド</option>
-     <option value=7  >竜兵・竜戦士</option>
-     <option value=8  >サムライ</option>
-     <option value=9  >忍者</option>
-     <option value=10 >ペガサス</option>
-     <option value=11 >パラディン</option>
-     <option value=12 >モンク</option>
-     <option value=13 >前衛軍師</option>
-     <option value=14 >魔法剣士</option>
-     <option value=15 >堕天使</option>
-     <option value=16 >くぐつ使い</option>
-     <option value=17 >セーラー</option>
-     <option value=18 >天孤</option>
-     <option value=19 >神官戦士</option>
-     <option value=20 >メイジアーマー</option>
-     <option value=21 >竜騎士</option>
-     <option value=22 >ボウライダー</option>
-     <option value=23 >メイド</option>
-     <option value=24 >ヴァンパイアロード</option>
-     <option value=25 >ソードマスター</option>
-     <option value=26 >ロイヤルガード</option>
-     <option value=27 >仙人・仙猿</option>
-     <option value=28 >魔人</option>
-     <option value=29 >戦の精霊</option>
-     <option value=30 >ダークストーカー</option>
-     <option value=31 >ぬらりひょん</option>
-     <option value=32 >キャノンアーマー</option>
-     <option value=33 >鬼</option>
-     <option value=34 >ロイヤルナイト</option>
-     <option value=35 >天狗</option>
-     <option value=36 >鍛冶師</option>
-     <option value=37 >剣闘士</option>
-     <option value=38 >キョンシー</option>
-     <option value=39 >雷神</option>
-     <option value=40 >モンスターブレーカー</option>
-     <option value=100>政務官</option>
-     <option value=101>アーチャー</option>
-     <option value=102>メイジ</option>
-     <option value=103>ヒーラー</option>
-     <option value=104>ウィッチ</option>
-     <option value=105>パイレーツ</option>
-     <option value=106>ドラゴンシャーマン</option>
-     <option value=107>ヴァンパイアハンター</option>
-     <option value=108>シャーマン</option>
-     <option value=109>ビショップ</option>
-     <option value=110>後衛軍師</option>
-     <option value=111>陰陽師</option>
-     <option value=112>召喚士</option>
-     <option value=113>風水士</option>
-     <option value=114>砲術士</option>
-     <option value=115>ダンサー</option>
-     <option value=116>ネクロマンサー</option>
-     <option value=117>クロノウィッチ</option>
-     <option value=118>ドルイド</option>
-     <option value=119>アルケミスト</option>
-     <option value=120>レンジャー</option>
-     <option value=121>シーフ</option>
-     <option value=122>呪術師</option>
-     <option value=123>魔物使い</option>
-     <option value=124>ダークプリースト</option>
-     <option value=125>エンチャンター</option>
-     <option value=126>マーチャント</option>
-     <option value=127>フェンリルシャーマン</option>
-     <option value=128>モンスターハンター</option>
-     <option value=130>デモンサモナー</option>
-     <option value=131>エレメンタラー</option>
-     <option value=132>猫又</option>
-     <option value=133>道化師</option>
-    </select>
-
-    <select id="in06">
-      <option value=0 >属性なし</option>
-      <option value=1 >人間</option>
-      <option value=2 >竜人</option>
-      <option value=3 >エルフ</option>
-      <option value=4 >ドワーフ</option>
-      <option value=5 >妖怪</option>
-      <option value=6 >魔人</option>
-      <option value=7 >吸血鬼</option>
-      <option value=8 >オーク</option>
-      <option value=9 >ゴブリン</option>
-    </select>
-
-    <span class="x-b" id="in07" type="radio">
-      <input type="button" num=0 value="鉄" />
-      <input type="button" num=1 value="銅" />
-      <input type="button" num=2 value="銀" />
-      <input type="button" num=3 value="金" />
-      <input type="button" num=4 value="青" />
-      <input type="button" num=5 value="白" />
-      <input type="button" num=6 value="黒" />
-    </span>
-
-  </td>
-</tr>
-
+<tr><th></th><th nowrap >キャラ･クラス</th><th nowrap >アビ・スキル</th><th nowrap >HP</th><th nowrap >攻撃</th><th nowrap >防御</th><th nowrap >魔耐</th><th nowrap >射程</th></tr>
+<tr class="f" ><th nowrap colspan=2 rowspan=3>計算対象ユニ</th><td colspan=9><select id="in05"></select><select id="in06"></select><span class="x-b" id="in07" type="radio"></span>
+</td></tr>
 <tr class="f" >
   <th rowspan=2>
-    <span class="x-b" id="in08" type="radio">
-      <input type="button" num=0 value="近接" />
-      <input type="button" num=1 value="遠距離" />
-    </span>
-    <span class="x-b" id="in10" >
-      <input type="button" num=1 value="竜族" />
-    </span>
+    <span class="x-b" id="in08" type="radio"><input type="button" num=0 value="近" /><input type="button" num=1 value="遠" /></span>
+    <span class="x-b" id="in09" type="radio"><input type="button" num=0 value="女性" /><input type="button" num=1 value="男性" /></span>
 <br>
-    <span class="x-b" id="in09" type="radio">
-      <input type="button" num=0 value="女性" />
-      <input type="button" num=1 value="男性" />
-    </span>
-    <span class="x-b" id="in11" >
-      <input type="button" num=1 value="帝国" />
-    </span>
-
+    <span class="x-b" id="in10" ><input type="button" num=1 value="竜族" /></span>
+    <span class="x-b" id="in11" ><input type="button" num=1 value="帝国" /></span>
+    <span class="x-b" id="ina1" ><input type="button" num=1 value="砂漠" /></span>
   </th>
-
   <td ><input type="number" id="in00" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in01" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in02" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in03" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in04" min=0 max=9999 size=4 /></td>
 </tr>
-
-<tr class="f" >
-
-  <td is="x-d" id="out00"></td>
-  <td is="x-d" id="out01"></td>
-  <td is="x-d" id="out02"></td>
-  <td is="x-d" id="out03"></td>
-  <td is="x-d" id="out04"></td>
-</tr>
-
-<tr class="f" >
-  <th colspan=3 rowspan=2> ダンサー</th>
-  <td rowspan=2></td>
-  <td ><input type="number" id="in12" min=0 max=9999 size=4 /></td>
-  <td ><input type="number" id="in13" min=0 max=9999 size=4 /></td>
-  <td rowspan=2></td>
-  <td rowspan=2></td>
-</tr>
-<tr class="f" >
-  <td is="x-d" id="out05"></td>
-  <td is="x-d" id="out06"></td>
-</tr>
-<tr class="f" >
-  <th colspan=3 rowspan=2>アンナ</th>
-  <td rowspan=2></td>
-  <td ><input type="number" id="in14" min=0 max=9999 size=4 /></td>
-  <td ><input type="number" id="in15" min=0 max=9999 size=4 /></td>
-  <td rowspan=2></td>
-  <td rowspan=2></td>
-</tr>
-<tr class="f" >
-  <td is="x-d" id="out07"></td>
-  <td is="x-d" id="out08"></td>
-</tr>
-<tr class="t">
-  <th nowrap colspan=3>バフ後</th>
-  <td is="x-d" id="out10"></td>
-  <td is="x-d" id="out11"></td>
-  <td is="x-d" id="out12"></td>
-  <td is="x-d" id="out13"></td>
-  <td is="x-d" id="out14"></td>
-</tr>
+<tr class="f" ><td is="x-d" id="out00"></td><td is="x-d" id="out01"></td><td is="x-d" id="out02"></td><td is="x-d" id="out03"></td><td is="x-d" id="out04"></td></tr>
+<tr class="f" ><th colspan=3 rowspan=2> ダンサー</th><td rowspan=2></td><td ><input type="number" id="in12" min=0 max=9999 size=4 /></td><td ><input type="number" id="in13" min=0 max=9999 size=4 /></td><td rowspan=2></td><td rowspan=2></td></tr>
+<tr class="f" ><td is="x-d" id="out05"></td><td is="x-d" id="out06"></td></tr>
+<tr class="f" ><th colspan=3 rowspan=2>アンナ</th><td rowspan=2></td><td ><input type="number" id="in14" min=0 max=9999 size=4 /></td><td ><input type="number" id="in15" min=0 max=9999 size=4 /></td><td rowspan=2></td><td rowspan=2></td></tr>
+<tr class="f" ><td is="x-d" id="out07"></td><td is="x-d" id="out08"></td></tr>
+<tr class="t"><th nowrap colspan=3>バフ後</th><td is="x-d" id="out10"></td><td is="x-d" id="out11"></td><td is="x-d" id="out12"></td><td is="x-d" id="out13"></td><td is="x-d" id="out14"></td></tr>
 </table>
 </body>
