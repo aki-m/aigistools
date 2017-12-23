@@ -668,14 +668,12 @@ document.body.onload=function(olev){
       k.setAttribute("grp",i);
       for( j in buf[i] ){
         k = t.insertRow(-1); k.classname="buff"; k.setAttribute("grp",i);
-        l = k.insertCell(0); l.outerHTML="<th nowrap></th>"; 
-        l="<td nowrap>"
-        for( m=0 ; m< buf[i][j].cn.length ; m++){
+        l = k.insertCell(0); l.outerHTML="<th nowrap></th>";
+        for( l="<td nowrap>",m=0 ; m< buf[i][j].cn.length ; m++){
           if( m ) l += "<br>";
           l += buf[i][j].cn[m];
         }
-        l += "</td>";
-        k.insertCell(1).outerHTML=l ;
+        k.insertCell(1).outerHTML=l+"</td>" ;
         l = k.insertCell(2); l.outerHTML="<td nowrap>"+ j+"</td>";
         for( n=0 ; n<5 ; n++ ){
           l = k.insertCell(n+3);
