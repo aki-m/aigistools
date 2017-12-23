@@ -668,12 +668,15 @@ document.body.onload=function(olev){
       k.setAttribute("grp",i);
       for( j in buf[i] ){
         k = t.insertRow(-1); k.classname="buff"; k.setAttribute("grp",i);
-        l = k.insertCell(0); l.outerHTML="<th></th>"; 
-        l = k.insertCell(1); for( m=0 ; m< buf[i][j].cn.length ; m++){
-          if( m ) l.innerHTML += "<br>";
-          l.innerText += buf[i][j].cn[m];
+        l = k.insertCell(0); l.outerHTML="<th nowrap></th>"; 
+        l="<td nowrap>"
+        for( m=0 ; m< buf[i][j].cn.length ; m++){
+          if( m ) l += "<br>";
+          l += buf[i][j].cn[m];
         }
-        l = k.insertCell(2); l.innerText = j;
+        l += "</td>";
+        k.insertCell(1).outerHTML=l ;
+        l = k.insertCell(2); l.outerHTML="<td nowrap>"+ j+"</td>";
         for( n=0 ; n<5 ; n++ ){
           l = k.insertCell(n+3);
           l.style["textAlign"]="center";
@@ -758,9 +761,9 @@ document.body.onload=function(olev){
 <span>復活の呪文はまだ動かない<!-- input type="text" size=32 style="font-family:monospace;" id="in19"/ --><input type="button" id="restoreB" value="復活" id="in20"/></span>
 <div style="display:inline-block; font-size:13px;"><a href="meisei.html">...名声値カレンダー</a><br><a href="ikusei2.html">...育成試算表</a></div></div>
 <table  id="t">
-<tr><th></th><th nowrap >キャラ･クラス</th><th nowrap >アビ・スキル</th><th nowrap >HP</th><th nowrap >攻撃</th><th nowrap >防御</th><th nowrap >魔耐</th><th nowrap >射程</th><th nowrap >対象</th></tr>
+<tr><th></th><th>キャラ･クラス</th><th>アビ・スキル</th><th nowrap >HP</th><th>攻撃</th><th>防御</th><th>魔耐</th><th>射程</th><th>対象</th></tr>
 <tr class="f" >
-  <th nowrap colspan=2 rowspan=3>計算対象ユニ</th>
+  <th colspan=2 rowspan=3>計算対象ユニ</th>
   <td colspan=9>
    <span class="x-b" id="in05" type="radio"></span>
    <select id="in06"></select>
@@ -768,7 +771,7 @@ document.body.onload=function(olev){
   </td>
 </tr>
 <tr class="f" >
-  <th rowspan=2>
+  <th nowrap rowspan=2>
     <span class="x-b" id="in08" type="radio"></span>
     <span class="x-b" id="in09" type="radio"></span>
     <br>
