@@ -641,6 +641,41 @@ document.body.onload=function(olev){
    }
  }
 
+  function doSelect(e){
+    switch( e.target.parentNode.tagName.toUpperCase() ){
+      case "TR":
+        if( e.target.className=="csw" ){
+          openRotate( e.target.parentNode.getAttribute("grp") );
+        }else{
+          var i=e.target.parentNode.getAttribute("grp");
+          if( e.target.parentNode.className != "bufftype" && i ){
+            var j=e.target.parentNode.cells[2].innerText;
+            if( buf[i] && buf[i][j] ) onoff(i,j,1-buf[i][j].on );
+          }
+        }
+        break;
+      case "SPAN":
+        if( e.target.parentNode.className == "x-b" ){
+          if( e.target.parentNode.getAttribute("type") == "radio" ){
+            setV(e.target.parentNode, e.target.getAttribute("num")/1);
+          }else{
+            setV(e.target.parentNode , getV(e.target.parentNode)+1);
+          }
+          doDraw(e);
+          break;
+        }
+        if( e.target.id == "restoreB" ){
+          if( getV(inobj[19]).length >= 2 && saveword.checkstr(getV(inobj[19])) ){
+            location.href="?"+getV(inobj[19]);
+          }else{
+            alert("その呪文は正しくないようだ");
+          }
+        }
+        break;
+      default:
+    }
+  }
+
  (function(){  /* initialize */
     var i,j,k,l,m,n;
     for(i=0;i<=15;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
@@ -714,44 +749,15 @@ document.body.onload=function(olev){
     onoff("スキルバフ(自己)","アイギスの神器",1);
  })();
 
+
   document.body.addEventListener( "change", function(ev){
     if( ev.target.id != "in19" ) doDraw(ev);
   });
+  var touchObj=null;
+  document.body.addEventListener( "touchstart",function(ev){ touchObj=ev.target; } );
+  document.body.addEventListener( "touchend",function(ev){ if( touchObj==ev.target){ doSelect(ev);} touchObj=null; } );
+  document.body.addEventListener( "click",doSelect );
 
-  document.body.addEventListener( "click", function(ev){
-    switch( ev.target.parentNode.tagName.toUpperCase() ){
-      case "TR":
-        if( ev.target.className=="csw" ){
-          openRotate( ev.target.parentNode.getAttribute("grp") );
-        }else{
-          var i=ev.target.parentNode.getAttribute("grp");
-          if( ev.target.parentNode.className != "bufftype" && i ){
-            var j=ev.target.parentNode.cells[2].innerText;
-            if( buf[i] && buf[i][j] ) onoff(i,j,1-buf[i][j].on );
-          }
-        }
-        break;
-      case "SPAN":
-        if( ev.target.parentNode.className == "x-b" ){
-          if( ev.target.parentNode.getAttribute("type") == "radio" ){
-            setV(ev.target.parentNode, ev.target.getAttribute("num")/1);
-          }else{
-            setV(ev.target.parentNode , getV(ev.target.parentNode)+1);
-          }
-          doDraw(ev);
-          break;
-        }
-        if( ev.target.id == "restoreB" ){
-          if( getV(inobj[19]).length >= 2 && saveword.checkstr(getV(inobj[19])) ){
-            location.href="?"+getV(inobj[19]);
-          }else{
-            alert("その呪文は正しくないようだ");
-          }
-        }
-        break;
-      default:
-    }
-  });
   doDraw(olev);
 }
 </script>
