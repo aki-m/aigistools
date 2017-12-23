@@ -49,10 +49,10 @@ span{ padding:3px 2px 2px 2px; }
  cursor:default;
 }
 #t td, span{ border: solid 1px #00f;  }
-#t th.bufftype,#t th.csw{ border-top:solid 1px #00f;}
+#t tr.bufftype{ border-style:solid; border-color:#00f; border-width: 1px 1px 0px 1px;}
 #t tr td{ background:#eff; color:#888; }
 #t tr td.on{ background:#bef; color:black; }
-#t th{ background-color: steelblue; color:white; }
+#t th,#t tr.t th.csw{ background-color: steelblue; color:white; }
 #t tr.f th,#t tr.f td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
 #t tr.t th{ background-color:#fd6; color:#632; }
 #t tr.t td{ background-color:#fed; color:black; }
@@ -82,98 +82,141 @@ document.body.onload=function(olev){
   var typs=["アビ","アビ２","スキル","スキルCC","スキル覚醒","称号"]; /*<= 未使用*/
   var buf={
     "編成バフ(全体)":{
-      "全員の最大ＨＰアップ【中】":{   on:0 ,v:[10,0,0,0,0] ,cn:["アデル"         ] },
-      "全員の最大ＨＰアップ【大】":{   on:0 ,v:[14,0,0,0,0] ,cn:["アイシャ"       ] },
-      "全員の攻撃力アップ【小】":{     on:0 ,v:[0, 2,0,0,0] ,cn:["アリア"         ] },
-      "全員の攻撃力アップ【中】":{     on:0 ,v:[0, 5,0,0,0] ,cn:["ウズメ","レオラ"] },
-      "全員の攻撃力アップ【大】":{     on:0 ,v:[0, 7,0,0,0] ,cn:["キキョウ"       ] },
-      "全員の防御力アップ【小】":{     on:0 ,v:[0,0, 2,0,0] ,cn:["ケイティ"       ] },
-      "全員の防御力アップ【中】":{     on:0 ,v:[0,0, 5,0,0] ,cn:["レン"           ] },
-      "全員の防御力アップ【大】":{     on:0 ,v:[0,0, 7,0,0] ,cn:["イリス"         ] },
-      "難攻不落の要塞":{               on:0 ,v:[0,0,17,0,0] ,cn:["ルイーズ"       ] },
-      "舞巫女の守護霊":{               on:0 ,v:[0,0,0, 5,0] ,cn:["ミヤビ"         ] }
+      "全員の最大ＨＰアップ【中】":{   on:0 ,v:[10, 0, 0,0, 0] ,cn:["アデル"         ] },
+      "全員の最大ＨＰアップ【大】":{   on:0 ,v:[14, 0, 0,0, 0] ,cn:["アイシャ"       ] },
+      "全員の攻撃力アップ【小】":{     on:0 ,v:[ 0, 2, 0,0, 0] ,cn:["アリア"         ] },
+      "全員の攻撃力アップ【中】":{     on:0 ,v:[ 0, 5, 0,0, 0] ,cn:["ウズメ","レオラ"] },
+      "全員の攻撃力アップ【大】":{     on:0 ,v:[ 0, 7, 0,0, 0] ,cn:["キキョウ"       ] },
+      "全員の防御力アップ【小】":{     on:0 ,v:[ 0, 0, 2,0, 0] ,cn:["ケイティ"       ] },
+      "全員の防御力アップ【中】":{     on:0 ,v:[ 0, 0, 5,0, 0] ,cn:["レン"           ] },
+      "全員の防御力アップ【大】":{     on:0 ,v:[ 0, 0, 7,0, 0] ,cn:["イリス"         ] },
+      "難攻不落の要塞":{               on:0 ,v:[ 0, 0,17,0, 0] ,cn:["ルイーズ"       ] },
+      "舞巫女の守護霊":{               on:0 ,v:[ 0, 0, 0,5, 0] ,cn:["ミヤビ"         ] }
     },
     "編成バフ(近・遠,性別限定)":{
-      "打ち出の小槌":{                 on:0 ,v:[0, 5,0,0,0] ,cn:["カグラ"         ] ,chkf:["X0XXXXXXX"] },
-      "剣聖武芸指南":{                 on:0 ,v:[0,10,0,0,0] ,cn:["ジークリンデ"   ] ,chkf:["X0XXXXXXX"] },
-      "六丈銭の赤備え":{               on:0 ,v:[ 5,5,5,0,0] ,cn:["マツリ"         ] ,chkf:["X0XXXXXXX"] },
-      "魔法防壁":{                     on:0 ,v:[0,0,0,10,0] ,cn:["グレース"       ] ,chkf:["X0XXXXXXX"] },
-      "トレジャーハント【魔水晶】":{   on:0 ,v:[0, 0,0,5,0] ,cn:["モニカ"         ] ,chkf:["X1XXXXXXX"] },
-      "鍛冶神の祝福＋マスタースミス":{ on:0 ,v:[0, 5,5,0,0] ,cn:["ティニー"       ] ,chkf:["X00XXXXXX"] },
-      "武具職人【男専用】":{           on:0 ,v:[0, 5,5,0,0] ,cn:["ゴルドー"       ] ,chkf:["X01XXXXXX"] },
-      "防御力魔法耐性アップ【男】":{   on:0 ,v:[ 0,0,5,5,0] ,cn:["オスカー"       ] ,chkf:["XX1XXXXXX"] },
-      "トレジャーハント【酒】":{       on:0 ,v:[15,0,0,0,0] ,cn:["ロベルト"       ] ,chkf:["XX1XXXXXX"] }
+      "打ち出の小槌":{                 on:0 ,v:[ 0, 5, 0,0, 0] ,cn:["カグラ"      ] ,chkf:["XXXXXX0XX"] },
+      "剣聖武芸指南":{                 on:0 ,v:[ 0,10, 0,0, 0] ,cn:["ジークリンデ"] ,chkf:["XXXXXX0XX"] },
+      "六丈銭の赤備え":{               on:0 ,v:[ 5, 5, 5,0, 0] ,cn:["マツリ"      ] ,chkf:["XXXXXX0XX"] },
+      "魔法防壁":{                     on:0 ,v:[ 0, 0, 0,100000,0] ,cn:["グレース"] ,chkf:["XXXXXX0XX"] },
+      "トレジャーハント【魔水晶】":{   on:0 ,v:[ 0, 0, 0,5, 0] ,cn:["モニカ"      ] ,chkf:["XXXXXX1XX"] },
+      "マスタースミス＋武器職人【男専用】":{ on:0,v:[0,5,5,0,0] ,cn:["ゴルドー"   ] ,chkf:["XXXXXX01X"] },
+      "マスタースミス＋鍛冶神の祝福":{ on:0 ,v:[ 0, 5, 5,0, 0] ,cn:["ティニー"    ] ,chkf:["XXXXXX00X"] },
+      "武具職人【男専用】":{           on:0 ,v:[ 0, 5, 5,0, 0] ,cn:["ゴルドー"    ] ,chkf:["XXXXXX01X"] },
+      "防御力魔法耐性アップ【男】":{   on:0 ,v:[ 0, 0, 5,5, 0] ,cn:["オスカー"    ] ,chkf:["XXXXXXX1X"] },
+      "トレジャーハント【酒】":{       on:0 ,v:[15, 0, 0,0, 0] ,cn:["ロベルト"    ] ,chkf:["XXXXXXX1X"] }
     },
-    "編成バフ(レアリティ限定)":{
+    "編成バフ(職種,種族限定)":{
+      /* 職種 */
+      "撤退支援":{                     on:0 ,v:[20, 0, 0,0, 0] ,cn:["アルティア"  ] ,chkf:["X1  XXXXX"] },
+      "シールドブースト":{             on:0, v:[0,0,5,50000,0] ,cn:["リーゼロッテ"] ,chkf:["X1  XXXXX","X2  XXXXX"]},
+      "ヘビーアーマーの防御力アップ":{ on:0, v:[ 0, 0, 7,0, 0] ,cn:["ベルニス"    ] ,chkf:["X2  XXXXX"] },
+      "ヘビーアーマーの攻撃力アップ":{ on:0, v:[ 0, 7, 0,0, 0] ,cn:["ミランダ"    ] ,chkf:["X2  XXXXX"] },
+      "ワルキューレの攻撃力アップ":{   on:0, v:[ 0, 7, 0,0, 0] ,cn:["ダリア"      ] ,chkf:["X3  XXXXX"] },
+      "英雄の守り手":{                 on:0, v:[15, 0, 0,0, 0] ,cn:["レシア"      ] ,chkf:["X3  XXXXX","X10 XXXXX","X22 XXXXX"]},
+      "トレジャーハント【宝石】":{     on:0 ,v:[ 0,15, 0,0, 0] ,cn:["キュテリ"    ] ,chkf:["X4  XXXXX","X121XXXXX"] },
+      "山賊の攻撃力アップ":{           on:0, v:[ 0, 7, 0,0, 0] ,cn:["コンラッド"  ] ,chkf:["X6  XXXXX"] },
+      "山賊の最大ＨＰアップ":{         on:0, v:[15, 0, 0,0, 0] ,cn:["イメリア"    ] ,chkf:["X6  XXXXX"] },
+      "サムライの防御力アップ":{       on:0, v:[ 0, 0, 7,0, 0] ,cn:["コジュウロウ"] ,chkf:["X8  XXXXX"] },
+      "サムライ、忍者の攻撃力アップ":{ on:0, v:[ 0, 7, 0,0, 0] ,cn:["シズカ"      ] ,chkf:["X8  XXXXX","X9  XXXXX"] },
+      "ペガサスライダー攻撃力アップ":{ on:0, v:[ 0, 7, 0,0, 0] ,cn:["イザベル"    ] ,chkf:["X10 XXXXX"] },
+      "モンクの攻撃力アップ":{         on:0, v:[ 0, 7, 0,0, 0] ,cn:["リン"        ] ,chkf:["X13 XXXXX"] },
+      "魔法剣士の攻撃力アップ":{       on:0, v:[ 0, 7, 0,0, 0] ,cn:["サビーネ"    ] ,chkf:["X15 XXXXX"] },
+      "天使長の号令":{                 on:0, v:[ 0, 5, 0,0, 0] ,cn:["ミルノ"      ] ,chkf:["X16 XXXXX"] },
+      "戦う機甲技師":{                 on:0, v:[ 0, 5, 0,0, 0] ,cn:["ボリス"      ] ,chkf:["X17 XXXXX"] },
+      "ゴッドブレス":{                 on:0, v:[ 0, 0, 0,0,10] ,cn:["エクス"      ] ,chkf:["X20 XXXXX","X103XXXXX","X113XXXXX","X124XXXXX"] },
+      "強化魔導鎧":{                   on:0, v:[ 5, 5, 5,0, 0] ,cn:["パルフィ"    ] ,chkf:["X21 XXXXX"] },
+      "馬上弓術指南":{                 on:0, v:[ 0, 5, 0,0, 0] ,cn:["カティナ"    ] ,chkf:["X23 XXXXX"] },
+      "侍女の忠誠（術士）":{           on:0, v:[ 0, 7, 0,0, 0] ,cn:["シャーリー"  ] ,chkf:["X109XXXXX","X130XXXXX"] }, /*ビショップ、エレメンタラー*/
+      "侍女の献身(無法者)":{           on:0, v:[ 7, 0, 0,0, 0] ,cn:["アイリーン"  ] ,chkf:["X6  XXXXX"] }, /*山賊*/
+      "侍女の献身(無法者)":{           on:0, v:[ 0, 5, 0,0, 0] ,cn:["アイリーン"  ] ,chkf:["X105XXXXX"] }, /*海賊*/
+      "侍女の献身(王子・皇帝・姫)":{   on:0, v:[10,10,10,0, 0] ,cn:["セーラ"      ] ,chkf:["60  1 010","60  1 011","X5  XXXXX"] }, /*王子/皇帝/全プリンセス系*/
+      "勝利の槍":{                     on:0, v:[ 0, 5, 5,0, 0] ,cn:["アリシア"    ] ,chkf:["X27 XXXXX","X3  XXXXX","X10 XXXXX","X22 XXXXX"] }, /*ロイガ、ワル、ペガ、ドラゲ*/
+      "帝国騎士の鼓舞":{               on:0, v:[ 0, 7, 0,0, 0] ,cn:["アリーセ"    ] ,chkf:["X35 XXXXX"] }, /*インペ*/
+      "前衛軍師の最大HPアップ":{       on:0, v:[15, 0, 0,0, 0] ,cn:["シャオ"      ] ,chkf:["X14 XXXXX"] },
+      "アーチャーの攻撃力アップ":{     on:0, v:[ 0, 7, 0,0, 0] ,cn:["スピカ"      ] ,chkf:["X101XXXXX"] },
+      "神業の手ほどき":{               on:0, v:[ 0,10, 0,0, 0] ,cn:["アーシェラ"  ] ,chkf:["X101XXXXX","X120XXXXX","X23 XXXXX"] }, /*弓、レンジャイ、ボーライダ*/
+      "メイジの攻撃力アップ":{         on:0, v:[ 0, 7, 0,0, 0] ,cn:["ガラニア"    ] ,chkf:["X102XXXXX"] },
+      "魔力調律":{                     on:0, v:[ 0,10, 0,0, 0] ,cn:["エステル"    ] ,chkf:["X102XXXXX","X109XXXXX","X21 XXXXX"] },/*ﾒｲｼﾞ､ﾋﾞｼｮ､ﾒｲｼﾞｱｰﾏｰ*/
+      "ヒーラーの攻撃力アップ":{       on:0, v:[ 0, 7, 0,0, 0] ,cn:["ユーノ"      ] ,chkf:["X103XXXXX"] },
+      "ウィッチの攻撃力アップ":{       on:0, v:[ 0, 7, 0,0, 0] ,cn:["ベリンダ"    ] ,chkf:["X104XXXXX"] },
+      "海賊の攻撃力アップ":{           on:0, v:[ 0, 7, 0,0, 0] ,cn:["アネリア"    ] ,chkf:["X105XXXXX"] },
+      "海賊の火砲戦術":{               on:0, v:[ 0, 0, 0,0,10] ,cn:["ミネルバ"    ] ,chkf:["X105XXXXX","X114XXXXX","X126XXXXX"] }, /*海賊、砲術、商人*/
+      "聖矢の祝福":{                   on:0, v:[ 0, 7, 0,0, 0] ,cn:["ルマリア"    ] ,chkf:["X107XXXXX"] },
+      "祖霊の追い風":{                 on:0, v:[ 0, 0, 0,0,10] ,cn:["スー"        ] ,chkf:["X101XXXXX","X107XXXXX","X120XXXXX"] }, /*弓、VH、レンジャイ*/
+      "大地の気脈":{                   on:0, v:[ 0, 5, 0,0, 0] ,cn:["ピピン"      ] ,chkf:["X113XXXXX"] },
+      "大司教の威厳":{                 on:0, v:[ 0,13, 0,0, 0] ,cn:["ベルゼッタ"  ] ,chkf:["X103XXXXX","X124XXXXX"] },
+      "悪魔召喚士の秘儀":{             on:0, v:[ 0, 0, 0,5, 0] ,cn:["リヴル"      ] ,chkf:["X129XXXXX"] },
+      "マスタースミス＋ソードスミス":{ on:0 ,v:[ 0, 5, 5,0, 0] ,cn:["サンディー"  ] ,chkf:["X1  XXXXX","X8  XXXXX","X11 XXXXX","X14 XXXXX","X26 XXXXX","X35 XXXXX","60  1 010"] }, /*ソードスミス*/
+      /* 両方 */
+      "竜巫女の祝福":{                 on:0, v:[ 5, 0, 5,0, 0] ,cn:["エキドナ"    ] ,chkf:["XXXX2 XXX","X22 XXXXX"] }, /*竜族*/
+      "ドラゴンフォース":{             on:0, v:[ 0, 7, 0,0, 0] ,cn:["ルビナス"    ] ,chkf:["XXXX2 XXX","X22 XXXXX"] }, /*竜族*/
+      /* 種族 */
+      "妖精姫の祝福":{                 on:0 ,v:[15, 5, 0,0, 0] ,cn:["オリヴィエ"  ] ,chkf:["XXXX3 XXX","XXXX4 XXX"] }, /*エルフ、ドワーフ*/
+      "要請の堅陣":{                   on:0 ,v:[0,0,5,50000,0] ,cn:["ププル"      ] ,chkf:["XXXX3 XXX","XXXX4 XXX"] }, /*エルフ、ドワーフ*/
+      "侍女の忠誠（亜人）":{           on:0 ,v:[ 0,10, 0,0, 0] ,cn:["リーナ"      ] ,chkf:["XXXX3 XXX","XXXX4 XXX"] }, /*エルフ、ドワーフ*/
+      "侍女の忠誠（亜人）":{           on:0 ,v:[15, 0, 0,0, 0] ,cn:["リーナ"      ] ,chkf:["XXXX9 XXX"] }, /*オーク */
+      "白面金毛九尾の狐":{             on:0 ,v:[0,10,10,100000,0],cn:["カヨウ"    ] ,chkf:["XXXX6 XXX"] }, /*妖怪*/
+      "影の総大将":{                   on:0 ,v:[ 5, 5, 5,0, 0] ,cn:["カスミ"      ] ,chkf:["XXXX6 XXX"] }, /*妖怪*/
+      "ヒロイックオーク":{             on:0 ,v:[ 0,10,10,0, 0] ,cn:["アナトリア"  ] ,chkf:["XXXX9 XXX","XXXX10XXX"] }, /*オーク、ゴブリン*/
+      "屍体活性":{                     on:0 ,v:[ 5, 5, 5,0, 0] ,cn:["レイメイ"    ] ,chkf:["XXXX8 XXX"] }, /*不死者*/
+      "侍女の献身（カグヤ）":{         on:0 ,v:[ 0,10,10,0, 0] ,cn:["ヒカゲ"      ] ,chkf:["45  1 000"] }, /*カグヤ*/
+    },
+    "編成バフ(所属,レアリティ限定)":{
+      /* 所属 */
+      "隠された神器の後継者":{         on:0 ,v:[ 0,10, 0,0, 0],cn:["アンジェリーネ"],chkf:["XXXXXXXX1"] },
+      "帝国治癒士の務め":{             on:0 ,v:[ 5, 0, 0,50000,0],cn:["エリアス"  ] ,chkf:["XXXXXXXX1"] },
+      "帝国軍師の号令":{               on:0 ,v:[ 0, 0, 7,0, 0] ,cn:["レオナ"      ] ,chkf:["XXXXXXXX1"] },
+      "ヤシャスィーン":{               on:0 ,v:[ 0, 5, 5,0, 0] ,cn:["アルスラーン"] ,chkf:["XXXXXXXX2"] },
+      "戦意高揚【砂漠】":{             on:0 ,v:[ 0,10, 0,0, 0] ,cn:["王子(砂漠)"  ] ,chkf:["XXXXXXXX3"] },
+      /* レアリティ */
       "夏祭りの小さな思い出":{         on:0 ,v:[15,0,15,0,0] ,cn:["浴衣の兵長フィリス"] ,chkf:["0XXXXXXXX","1XXXXXXXX"]},
       "夏祭りの思い出":{               on:0 ,v:[20,0,20,0,0] ,cn:["浴衣の兵長フィリス"] ,chkf:["0XXXXXXXX","1XXXXXXXX"]},
       "シルバーフルチャージ":{         on:0 ,v:[ 5,0, 0,0,0] ,cn:["ロゼット"          ] ,chkf:["2XXXXXXXX"] },
       "騎士姫の導き":{                 on:0 ,v:[ 5,5, 5,0,0] ,cn:["シェリー"          ] ,chkf:["2XXXXXXXX"] }
     },
-    "編成バフ(属性限定)":{
-      "隠された神器の後継者":{         on:0 ,v:[0,10,0,0,0] ,cn:["アンジェリーネ" ] ,chkf:["XXXX1XXXX"] },
-      "戦意高揚【砂漠】":{             on:0 ,v:[0,10,0,0,0] ,cn:["王子(砂漠)"     ] },
-      "侍女の中世（亜人）":{           on:0 ,v:[0,10,0,0,0] ,cn:["リーナ"        ] ,chkf:["XXXXXXXXX","XXXXXXXXX"]}
-    },
-    "編成バフ(種族限定)":{
-      "妖精姫の祝福":{                 on:0 ,v:[15,5,0,0,0] ,cn:["オリヴィエ"    ] ,chkf:["XXXXXXXX3","XXXXXXXX4"] }, /*エルフ、ドワーフ*/
-      "侍女の中世（亜人）":{           on:0 ,v:[0,10,0,0,0] ,cn:["リーナ"        ] ,chkf:["XXXXXXXX3","XXXXXXXX4"]},
-      "要請の堅陣":{                   on:0 ,v:[0,0,5,50000,0] ,cn:["ププル"     ] ,chkf:["XXXXXXXX3","XXXXXXXX4"]}
-    },
-    "編成バフ(職種限定)":{
-      "撤退支援":{                     on:0 ,v:[20,0,0,0,0]    ,cn:["アルティア"  ] ,chkf:["XXXXX1  X"] },
-      "英雄の守り手":{                 on:0, v:[15,0,0,0,0]    ,cn:["レシア"      ] ,chkf:["XXXXX3  X","XXXXX10 X","XXXXX22 X"]},
-      "シールドブースト":{             on:0, v:[0,0,5,50000,0] ,cn:["リーゼロッテ"] ,chkf:["XXXXX1  X","XXXXX2  X"]},
-      "ヘビーアーマーの防御力アップ":{ on:0, v:[0,0, 7,0,0]    ,cn:["ベルニス"    ] ,chkf:["XXXXX2  X"]},
-      "ヘビーアーマーの攻撃力アップ":{ on:0, v:[0, 7,0,0,0]    ,cn:["ミランダ"    ] ,chkf:["XXXXX2  X"]},
-      "ワルキューレの攻撃力アップ":{   on:0, v:[0, 7,0,0,0]    ,cn:["ダリア"      ] ,chkf:["XXXXX3  X"]},
-      "山賊の攻撃力アップ":{           on:0, v:[0, 7,0,0,0]    ,cn:["コンラッド"  ] ,chkf:["XXXXX6  X"]},
-      "山賊の最大ＨＰアップ":{         on:0, v:[15,0,0,0,0]    ,cn:["イメリア"    ] ,chkf:["XXXXX6  X"]},
-      "サムライの防御力アップ":{       on:0, v:[0,0, 7,0,0]    ,cn:["コジュウロウ"] ,chkf:["XXXXX8  X"]},
-      "サムライ、忍者の攻撃力アップ":{ on:0, v:[0, 7,0,0,0]    ,cn:["シズカ"      ] ,chkf:["XXXXX8  X","XXXXX9  X"]},
-      "ペガサスライダー攻撃力アップ":{ on:0, v:[0, 7,0,0,0]    ,cn:["イザベル"    ] ,chkf:["XXXXX10 X"]},
-      "モンクの攻撃力アップ":{         on:0, v:[0, 7,0,0,0]    ,cn:["リン"        ] ,chkf:["XXXXX13 X"]},
-      "トレジャーハント【宝石】":{     on:0 ,v:[0,15,0,0,0]    ,cn:["キュテリ"    ] ,chkf:["XXXXX4  X","XXXXX121X"] }
-
-    },
 
     "配置バフ(全体)":{
       "戦意高揚":{                     on:0 ,v:[0,20,20,0,0] ,cn:["王子(アイギス神器)","王子(ケラウノス神器)"] },
-      "戦意高揚【砂漠】":{             on:0 ,v:[0,20,20,0,0] ,cn:["王子(砂漠)"    ] },
-      "戦意高揚【小】":{               on:0 ,v:[0,10,10,0,0] ,cn:["王子【幼少】"  ] },
-      "幸せの記憶":{                   on:0 ,v:[0, 5, 5,0,0] ,cn:["レーヴ"        ] },
-      "魔眼の加護":{                   on:0 ,v:[0, 0, 5,5,0] ,cn:["バロウス"      ] },
-      "聖銀竜の加護":{                 on:0 ,v:[0, 0, 5,5,0] ,cn:["ティファ"      ] },
+      "戦意高揚【砂漠】":{             on:0 ,v:[0,20,20,0,0] ,cn:["王子(砂漠)"        ] },
+      "戦意高揚【小】":{               on:0 ,v:[0,10,10,0,0] ,cn:["王子【幼少】"      ] },
+      "幸せの記憶":{                   on:0 ,v:[0, 5, 5,0,0] ,cn:["レーヴ"            ] },
+      "魔眼の加護":{                   on:0 ,v:[0, 0, 5,5,0] ,cn:["バロウス"          ] },
+      "聖銀竜の加護":{                 on:0 ,v:[0, 0, 5,5,0] ,cn:["ティファ"          ] },
       "職：コマンダー":{               on:0 ,v:[0, 3, 3,30000,0] ,cn:["アルティア","ジェローム","ケイティ","浴衣の兵長フィリス"] }
     },
     "配置バフ(近・遠,性別限定)":{
-      "酒池肉林":{                     on:0 ,v:[0,10, 0,0,0] ,cn:["堕姫"          ] ,chkf:["XX0XXXXXX"] },
-      "酒池肉林":{                     on:0 ,v:[0,-10,0,0,0] ,cn:["堕姫"          ] ,chkf:["XX1XXXXXX"] },
-      "超鎧狩り":{                     on:0 ,v:[0,10, 0,0,0] ,cn:["アマンダ"      ] ,chkf:["X0XXXXXXX"] },
-      "スピリットブーストⅡ":{         on:0 ,v:[0,13,13,0,0] ,cn:["シンシア"      ] ,chkf:["X0XXXXXXX"] },
-      "鍛冶神の祝福＋マスタースミス":{ on:0 ,v:[0,15,15,0,0] ,cn:["ティニー"      ] ,chkf:["X00XXXXXX"] }
+      "酒池肉林":{                     on:0 ,v:[0,10, 0,0,0] ,cn:["堕姫"              ] ,chkf:["XXXXXXX0X"] },
+      "酒池肉林":{                     on:0 ,v:[0,-10,0,0,0] ,cn:["堕姫"              ] ,chkf:["XXXXXXX1X"] },
+      "超鎧狩り":{                     on:0 ,v:[0,10, 0,0,0] ,cn:["アマンダ"          ] ,chkf:["XXXXXX0XX"] },
+      "スピリットブーストⅡ":{         on:0 ,v:[0,13,13,0,0] ,cn:["シンシア"          ] ,chkf:["XXXXXX0XX"] },
+      "マスタースミス＋武器職人【男専用】":{ on:0,v:[0,5,5,0,0] ,cn:["ゴルドー"       ] ,chkf:["XXXXXX01X"] },
+      "マスタースミス＋鍛冶神の祝福":{ on:0 ,v:[0,15,15,0,0] ,cn:["ティニー"          ] ,chkf:["XXXXXX00X"] }
     },
-    "配置バフ(種族限定)":{
-      "ドラゴンスケイル":{ on:0 ,v:[0,0,10,0,0] ,cn:["イグニス"       ] ,chkf:["XXXXXXXX2","XXXXX22 X"] },
-      "火力支援指揮":{                 on:0 ,v:[0,10,0,0,0]    ,cn:["ヘレナ"      ] ,chkf:["XXXXX114X","XXXXX105X","XXXXX126X"] }
+    "配置バフ(職種,種族限定)":{
+      /* 職種 */
+      "火力支援指揮":{                 on:0 ,v:[ 0,10, 0,0, 0] ,cn:["ヘレナ"      ] ,chkf:["X114XXXXX","X105XXXXX","X126XXXXX"] },
+      "マスタースミス＋ソードスミス":{ on:0 ,v:[ 0, 5, 5,0, 0] ,cn:["サンディー"  ] ,chkf:["X1  XXXXX","X8  XXXXX","X11 XXXXX","X14 XXXXX","X26 XXXXX","X35 XXXXX","60  1 010"] }, /*ソードスミス*/
+      /* 両方 */
+      "ドラゴンスケイル":{             on:0 ,v:[0,0,10,0, 0] ,cn:["イグニス"          ] ,chkf:["XXXX2 XXX","X22 XXXXX"] }
+      /* 種族 */
     },
     "配置バフ(自己・確立)":{
-      "大鑑巨砲":{                     on:0 ,v:[0,90, 0,0,0] ,cn:["イブキ"         ] ,setf:"6000018 1" ,chkf:["6000018 1"] },
-      "必殺の一撃":{                   on:0 ,v:[0,15,15,0,0] ,cn:["ユリアン"       ] ,setf:"301001  1" ,chkf:["301001  1"]}
+      "大鑑巨砲":{                     on:0 ,v:[0,90, 0,0,0] ,cn:["イブキ"            ] ,setf:"618 1 000" ,chkf:["618 1 000"] },
+      "必殺の一撃":{                   on:0 ,v:[0,15,15,0,0] ,cn:["ユリアン"          ] ,setf:"31  1 010" ,chkf:["31  1 000"]}
     },
-    "スキルバフ(自己)":{
-      "英雄の片鱗":{           on:0 ,skill:1,v:[300,300,300,0,0],cn:["王子【幼少】"        ] ,setf:"601000  1" ,chkf:["601000  1"] },
-      "アイギスの神器":{       on:0 ,skill:1 ,v:[0,200,200,0,0] ,cn:["王子(アイギス神器)"  ] ,setf:"601000  1" ,chkf:["601000  1"] },
-      "ケラウノスの神器":{     on:0 ,skill:1 ,v:[0,200,  0,0,0] ,cn:["王子(ケラウノス神器)"] ,setf:"601000  1" ,chkf:["601000  1"] },
-      "獅子刀スルフィカール":{ on:0 ,skill:1 ,v:[0,150,  0,0,0] ,cn:["王子(砂漠)"          ] ,setf:"601000  1" ,chkf:["601000  1"] },
-      "怪力爆砕鉄球":{         on:0 ,skill:5 ,v:[0,200,200,0,0] ,cn:["ディーナ"            ] ,setf:"600002  1" ,chkf:["600002  1"] },
-      "大震撃":{               on:0 ,skill:5 ,v:[  0,0,140,0,0] ,cn:["ディーネ"            ] ,setf:"600002  1" ,chkf:["600002  1"] },
-      "一斉射撃":{             on:0 ,skill:5 ,v:[0,170,  0,0,0] ,cn:["イブキ"              ] ,setf:"6000018 1" ,chkf:["6000018 1"] },
-      "聖女の結界":{           on:0 ,skill:5 ,v:[0,140,  0,0,0] ,cn:["イリス"              ] ,setf:"600001031" ,chkf:["600001031"] },
-      "聖女の叫び声":{         on:0 ,skill:5 ,v:[0,200,200,0,0] ,cn:["ゼノビア"            ] ,setf:"500001  1" ,chkf:["500001  1"] },
-      "援軍要請・攻防":{       on:0 ,skill:5 ,v:[0,150,150,0,0] ,cn:["リーゼロッテ"        ] ,setf:"500001  1" ,chkf:["500001  1"] },
-      "不可侵の神盾":{         on:0 ,skill:5 ,v:[0,0,200,200,0] ,cn:["ジェイク"            ] ,setf:"501001  1" ,chkf:["501001  1"] },
-      "クイックショットⅡ":{   on:0 ,skill:5 ,v:[0,190,  0,0,0] ,cn:["オスカー","ほか"     ]  }
+    "スキルバフ(自己)":{                                                                                              
+      "英雄の片鱗":{           on:0,skill:1,v:[300,300,300,0,0],cn:["王子【幼少】"       ] ,setf:"60  1 010" ,chkf:["60  1 010"] },
+      "アイギスの神器":{       on:0,skill:1,v:[0,200,200,0,0] ,cn:["王子(アイギス神器)"  ] ,setf:"60  1 010" ,chkf:["60  1 010"] },
+      "ケラウノスの神器":{     on:0,skill:1,v:[0,200,  0,0,0] ,cn:["王子(ケラウノス神器)"] ,setf:"60  1 010" ,chkf:["60  1 010"] },
+      "獅子刀スルフィカール":{ on:0,skill:1,v:[0,150,  0,0,0] ,cn:["王子(砂漠)"          ] ,setf:"60  1 010" ,chkf:["60  1 010"] },
+      "怪力爆砕鉄球":{         on:0,skill:5,v:[0,200,200,0,0] ,cn:["ディーナ"            ] ,setf:"62  1 000" ,chkf:["62  1 000"] },
+      "大震撃":{               on:0,skill:5,v:[  0,0,140,0,0] ,cn:["ディーネ"            ] ,setf:"62  1 000" ,chkf:["62  1 000"] },
+      "一斉射撃":{             on:0,skill:5,v:[0,170,  0,0,0] ,cn:["イブキ"              ] ,setf:"618 1 000" ,chkf:["618 1 000"] },
+      "聖女の結界":{           on:0,skill:5,v:[0,140,  0,0,0] ,cn:["イリス"              ] ,setf:"61031 100" ,chkf:["61031 100"] },
+      "聖女の叫び声":{         on:0,skill:5,v:[0,200,200,0,0] ,cn:["ゼノビア"            ] ,setf:"51  1 000" ,chkf:["51  1 000"] },
+      "援軍要請・攻防":{       on:0,skill:5,v:[0,150,150,0,0] ,cn:["リーゼロッテ"        ] ,setf:"51  1 000" ,chkf:["51  1 000"] },
+      "不可侵の神盾":{         on:0,skill:5,v:[0,0,200,200,0] ,cn:["ジェイク"            ] ,setf:"51  1 010" ,chkf:["51  1 010"] },
+      "クイックショットⅡ":{   on:0,skill:5,v:[0,190,  0,0,0] ,cn:["オスカー","ほか"     ] ,setf:"XXXXXX1XX" ,chkf:["XXXXXX1XX"] }
       
 /*
     "ベルナ":[             "死の旋風"              ],
@@ -204,7 +247,7 @@ document.body.onload=function(olev){
       "ウォークライ":{                 on:0 ,v:[0,120,  0,0,0] ,cn:["ブランシュ"    ] },
       "デモニックフィールド":{         on:0 ,v:[0,150,  0,0,0] ,cn:["ラピス"        ] },
       "デモニックテリトリー":{         on:0 ,v:[0,150,  0,0,0] ,cn:["ラピス"        ] },
-      "破魔聖樹の輝光":{               on:0 ,v:[0,140,  0,0,0] ,cn:["破魔の聖樹	"   ] },
+      "破魔聖樹の輝光":{               on:0 ,v:[0,140,  0,0,0] ,cn:["破魔の聖樹"    ] },
       "バトルプロテクション":{         on:0 ,v:[0,  0,150,0,0] ,cn:["エクス"        ] },
       "ゴッドプロテクション":{         on:0 ,v:[0,  0,200,0,0] ,cn:["エクス"        ] },
       "プロテクションI":{              on:0 ,v:[0,  0,150,0,0] ,cn:["イリス"        ] },
@@ -231,50 +274,50 @@ document.body.onload=function(olev){
       "性質変換の秘術":{               on:0 ,v:[0,  0,125,0,0] ,cn:["シャルル"    ] },
     },
     "スキルバフ(系統)":{
-      "大山賊時代":{                   on:0 ,v:[200,  0,0,0,0] ,cn:["アマンダ"    ] ,chkf:["XXXXX6  X"] },
+      "大山賊時代":{                   on:0 ,v:[200,  0,0,0,0] ,cn:["アマンダ"      ] ,chkf:["X6  XXXXX"] },
       "基本戦術・陣地防御":{           on:0 ,v:[0,  0,120,0,0] ,cn:["ヘレナ"        ] },
       "基本戦術・反転攻勢":{           on:0 ,v:[0,120,  0,0,0] ,cn:["ヘレナ"        ] },
-      "応用戦術・堅守強攻(対近接)":{   on:0 ,v:[0,  0,125,0,0] ,cn:["ヘレナ"        ] }, /*近接*/
-      "応用戦術・堅守強攻(対遠距離)":{ on:0 ,v:[0,125,  0,0,0] ,cn:["ヘレナ"        ] }, /*遠距離*/
-      "一斉射撃":{                     on:0 ,v:[0,130,  0,0,0] ,cn:["イブキ"        ] }, /*遠距離*/
-      "妖魔のおもてなし":{             on:0 ,v:[0,140,140,0,0] ,cn:["リーナ"        ] }, /*エルフ・ドワーフ/ゴブリン/オーク/獣人*/
-      "宮廷槍斧術・守の型":{           on:0 ,v:[0,  0,180,0,0] ,cn:["セーラ"        ] }, /*王子/皇帝/全プリンセス系*/
-      "宮廷槍斧術・攻守の型":{         on:0 ,v:[0,150,150,0,0] ,cn:["セーラ"        ] }, /*王子/皇帝/全プリンセス系*/
-      "槍連撃(熱砂の連携戦術)":{       on:0 ,v:[0,115,115,0,0] ,cn:["ネフティ"      ] }, /*砂漠*/
-      "太陽の槍撃(熱砂の連携戦術)":{   on:0 ,v:[0,115,115,0,0] ,cn:["ネフティ"      ] }, /*砂漠*/
-      "闇の進撃":{                     on:0 ,v:[0,  0,150,0,0] ,cn:["メフィスト"    ] }, /*デーモン/オーク/ゴブリン*/
-      "総大将の長ドス・影打":{         on:0 ,v:[0,130,130,0,0] ,cn:["カスミ"        ] }, /*妖怪*/
-      "不滅の妖怪仁義":{               on:0 ,v:[0,110,110,0,0] ,cn:["カスミ"        ] }, /*妖怪*/
-      "アダマスの神器(帝国の勇者)":{   on:0 ,v:[0,125,125,0,0] ,cn:["白の皇帝"      ] }, /*帝国*/
-      "武具鍛錬(男)":{                 on:0 ,v:[0,120,120,0,0] ,cn:["ゴルドー"      ] ,chkf:["X01XXXXXX"] },
-      "武具鍛錬・極致":{               on:0 ,v:[130,120,120,0,0],cn:["ゴルドー"     ] ,chkf:["X01XXXXXX"] },
-      "武具鍛錬(女)":{                 on:0 ,v:[0,120,120,0,0] ,cn:["サンディー"    ] }, /*ソードスミス*/
-      "ヴァルカンの鎚":{               on:0 ,v:[0,120,120,0,0] ,cn:["サンディー"    ] }, /*ソードスミス＝ソル、サムライ、ダークファイター、前軍師、ソードマスター、インペ、王子*/
-      "フォージ・アーマー":{           on:0 ,v:[0,120,130,0,0] ,cn:["ティニー"      ] }, /*武具女*/
-      "フォージ・ウェポン":{           on:0 ,v:[0,130,120,0,0] ,cn:["ティニー"      ] }, /*武具女*/
-      "堅鱗の癒やし":{                 on:0 ,v:[0,  0,140,0,0] ,cn:["エキドナ"      ] }, /*竜族*/
-      "鋭牙の火炎":{                   on:0 ,v:[0,140,  0,0,0] ,cn:["ルビナス"      ] }, /*竜族*/
+      "応用戦術・堅守強攻":{           on:0 ,v:[0,  0,125,0,0] ,cn:["ヘレナ"        ] ,chkf:["XXXXXX0XX"] }, /*近接*/
+      "応用戦術・堅守強攻":{           on:0 ,v:[0,125,  0,0,0] ,cn:["ヘレナ"        ] ,chkf:["XXXXXX1XX"] }, /*遠距離*/
+      "一斉射撃":{                     on:0 ,v:[0,130,  0,0,0] ,cn:["イブキ"        ] ,chkf:["XXXXXX1XX"] }, /*遠距離*/
+      "妖魔のおもてなし":{             on:0 ,v:[0,140,140,0,0] ,cn:["リーナ"        ] ,chkf:["XXXX3 XXX","XXXX4 XXX","XXXX5 XXX","XXXX9 XXX"] }, /*エルフ・ドワーフ/ゴブリン/オーク/獣人*/
+      "宮廷槍斧術・守の型":{           on:0 ,v:[0,  0,180,0,0] ,cn:["セーラ"        ] ,chkf:["60  1 01X","X5  XX00X"] }, /*王子/皇帝/全プリンセス系*/
+      "宮廷槍斧術・攻守の型":{         on:0 ,v:[0,150,150,0,0] ,cn:["セーラ"        ] ,chkf:["60  1 01X","X5  XX00X"] }, /*王子/皇帝/全プリンセス系*/
+      "槍連撃(熱砂の連携戦術)":{       on:0 ,v:[0,115,115,0,0] ,cn:["ネフティ"      ] ,chkf:["XXXXXXXX3"] }, /*砂漠*/
+      "太陽の槍撃(熱砂の連携戦術)":{   on:0 ,v:[0,115,115,0,0] ,cn:["ネフティ"      ] ,chkf:["XXXXXXXX3"] }, /*砂漠*/
+      "闇の進撃":{                     on:0 ,v:[0,  0,150,0,0] ,cn:["メフィスト"    ] ,chkf:["XXXX7 XXX","XXXX9 XXX","XXXX5 XXX","XXXX10XXX"] }, /*デーモン/オーク/ゴブリン*/
+      "総大将の長ドス・影打":{         on:0 ,v:[0,130,130,0,0] ,cn:["カスミ"        ] ,chkf:["XXXX6 XXX"] }, /*妖怪*/
+      "不滅の妖怪仁義":{               on:0 ,v:[0,110,110,0,0] ,cn:["カスミ"        ] ,chkf:["XXXX6 XXX"] }, /*妖怪*/
+      "アダマスの神器(帝国の勇者)":{   on:0 ,v:[0,125,125,0,0] ,cn:["白の皇帝"      ] ,chkf:["XXXXXXXX1"] }, /*帝国*/
+      "武具鍛錬＋武器職人【男専用】":{ on:0 ,v:[0,120,120,0,0] ,cn:["ゴルドー"      ] ,chkf:["XXXXXX01X"] },
+      "武具鍛錬・極致":{               on:0 ,v:[130,120,120,0,0],cn:["ゴルドー"     ] ,chkf:["XXXXXX01X"] },
+      "武具鍛錬＋ソードスミス":{       on:0 ,v:[0,120,120,0,0] ,cn:["サンディー"    ] ,chkf:["X1  XXXXX","X8  XXXXX","X11 XXXXX","X14 XXXXX","X26 XXXXX","X35 XXXXX","60  1 010"] }, /*ソードスミス*/
+      "ヴァルカンの鎚":{               on:0 ,v:[0,120,120,0,0] ,cn:["サンディー"    ] ,chkf:["X1  XXXXX","X8  XXXXX","X11 XXXXX","X14 XXXXX","X26 XXXXX","X35 XXXXX","60  1 010"] }, /*ソードスミス＝ソル、サムライ、ダークファイター、前軍師、ソードマスター、インペ、王子*/
+      "フォージ・アーマー":{           on:0 ,v:[0,120,130,0,0] ,cn:["ティニー"      ] ,chkf:["XXXXXX00X"] }, /*武具女*/
+      "フォージ・ウェポン":{           on:0 ,v:[0,130,120,0,0] ,cn:["ティニー"      ] ,chkf:["XXXXXX00X"] }, /*武具女*/
+      "堅鱗の癒やし":{                 on:0 ,v:[0,  0,140,0,0] ,cn:["エキドナ"      ] ,chkf:["XXXX2 XXX","X22 XXXXX"] }, /*竜族*/
+      "鋭牙の火炎":{                   on:0 ,v:[0,140,  0,0,0] ,cn:["ルビナス"      ] ,chkf:["XXXX2 XXX","X22 XXXXX"] }, /*竜族*/
       "木々の目覚め":{                 on:0 ,v:[0,140,  0,0,0] ,cn:["ローリエ"      ] }, /*自身・ドルイドトークン*/
       "樹林繁栄の唄":{                 on:0 ,v:[0,140,  0,0,0] ,cn:["フィオレ"      ] }, /*自身・ドルイドトークン*/
       "魔獣炎操":{                     on:0 ,v:[0,200,  0,0,0] ,cn:["モルテナ"      ] }, /*自身・魔物トークン*/
       "魔獣獄炎操":{                   on:0 ,v:[0,150,  0,0,0] ,cn:["モルテナ"      ] }, /*自身・魔物トークン*/
     },
     "スキルバフ(レア指定)":{
-      "ダモクレスの剣":{               on:0 ,v:[0,120,120,0,0] ,cn:["ロゼット"    ] }
+      "ダモクレスの剣":{               on:0 ,v:[0,120,120,0,0] ,cn:["ロゼット"        ] }
     },
     "ステ加算値バフ(ダンサー)":{
-      "魅惑の舞":{                     on:0 ,v:[0, 700, 700,0,0],cn:["ミヤビ"      ] },
-      "不可侵の神事舞":{               on:0 ,v:[0,1200,1200,0,0],cn:["ミヤビ"      ] },
-      "ラストダンス":{                 on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"    ] },
-      "アンコールダンス":{             on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"    ] },
-      "オートステップ":{               on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"    ] },
-      "パッションステップ":{           on:0 ,v:[0,1000,1000,0,0],cn:["ワルツ"      ] },
-      "エンドレスワルツ":{             on:0 ,v:[0, 300, 300,0,0],cn:["ワルツ"      ] },
-      "癒しの舞":{                     on:0 ,v:[0,1000,1000,0,0],cn:["ハナ"        ] },
+      "魅惑の舞":{                     on:0 ,v:[0, 700, 700,0,0],cn:["ミヤビ"         ] },
+      "不可侵の神事舞":{               on:0 ,v:[0,1200,1200,0,0],cn:["ミヤビ"         ] },
+      "ラストダンス":{                 on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"       ] },
+      "アンコールダンス":{             on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"       ] },
+      "オートステップ":{               on:0 ,v:[0,1000,1000,0,0],cn:["ビビアン"       ] },
+      "パッションステップ":{           on:0 ,v:[0,1000,1000,0,0],cn:["ワルツ"         ] },
+      "エンドレスワルツ":{             on:0 ,v:[0, 300, 300,0,0],cn:["ワルツ"         ] },
+      "癒しの舞":{                     on:0 ,v:[0,1000,1000,0,0],cn:["ハナ"           ] },
       "ソウルステップ":{               on:0 ,v:[0,1000,1000,0,0],cn:["ハナ","マーニー"] },
-      "エスカレートステップ(1回目)":{  on:0 ,v:[0,1000,1000,0,0],cn:["マーニー"    ] },
-      "エスカレートステップ(2回目)":{  on:0 ,v:[0,1200,1200,0,0],cn:["マーニー"    ] },
-      "エスカレートステップ(最終)":{   on:0 ,v:[0,1300,1300,0,0],cn:["マーニー"    ] }
+      "エスカレートステップ(1回目)":{  on:0 ,v:[0,1000,1000,0,0],cn:["マーニー"       ] },
+      "エスカレートステップ(2回目)":{  on:0 ,v:[0,1200,1200,0,0],cn:["マーニー"       ] },
+      "エスカレートステップ(最終)":{   on:0 ,v:[0,1300,1300,0,0],cn:["マーニー"       ] }
     },
     "ステ加算値バフ(政務官)":{
       "全力サポート":{                 on:0 ,v:[0,1000,1000,0,0],cn:["アンナ","アンナ(支給服)","アンナ(軍服)"]},
@@ -378,91 +421,92 @@ document.body.onload=function(olev){
     }
   }
 
- function Fixdec(i,j){
-  this.f = i; /* fraction */
-  this.e = j; /* exponent */
- }
- Fixdec.prototype.normalize=function(){
-  var w=(""+this.f).split(".");
-  if( w.length > 1 && w[1].length > 0 ){ this.e -= w[1].length; this.f = (w[0]+w[1])/1; }
-  while( (this.f%10) == 0 ){ this.f /= 10; this.e++; }
-  return this;
- }
- Fixdec.prototype.add=function( arg ){
-   var i,wf,we;
-   var mine = this.e;
-   for( i=0 ; i<arguments.length ; i++ ) if( mine > arguments[i].e ) mine=arguments[i].e;
-   while( this.e > mine ){ this.f *= 10 ; this.e--; }
-   for( i=0 ; i<arguments.length ; i++ ) {
-     we=arguments[i].e;
-     wf=arguments[i].f;
-     while( we > mine ){ wf *= 10; ew--; }
-     this.f += f;
-   }
-   return this;
- }
- Fixdec.prototype.mul=function( arg ){
-   for( var i=0 ; i<arguments.length ; i++ ) {
-     this.f *= arguments[i].f;
-     this.e += arguments[i].e;
-   }
-   return this;
- }
-
- function openGroup(n){
+ function openRotate(n){
    var i,j,grp;
-   for( i=0 ; i<t.rows.length ; i++ ){
+   var cnta0=0; // opened off cnt
+   var cnta1=0; // opened on cnt
+   var cntg0=0;
+   var cntg1=0;
+   var cntg2=0; //opened off
+   var cntg3=0; //opened on
+
+   for( i=t.rows.length ; --i >= 0 ; ){
      grp= t.rows[i].getAttribute("grp");
-     if( n != grp ) continue;
-     if( t.rows[i].cells[0].className == "csw" ){
-       t.rows[i].cells[0].innerText = "－";
+     if( ! grp || t.rows[i].cells[0].className == "csw"  /* <="明細行じゃない" */
+      || t.rows[i].style["display"] == "none" ) continue; // closed
+     if( buf[grp][t.rows[i].cells[2].innerText].on ){ // ON
+       cnta1++;
+       if( grp == n ) cntg1++;
      }else{
-       t.rows[i].style["display"]="table-row";
+       cnta0++;
+       if( grp == n ) cntg0++;
      }
    }
- }
- function closeGroup(n){
-   var i,j,grp;
-   for( i=0 ; i<t.rows.length ; i++ ){
+   for( i=t.rows.length ; --i >= 0 ; ){
      grp= t.rows[i].getAttribute("grp");
-     if( n != grp ) continue;
-     if( t.rows[i].cells[0].className == "csw" ){
-       t.rows[i].cells[0].innerText = "＋";
+     if( ! grp ) continue;
+     if( t.rows[i].cells[0].className == "csw" ){ /* <="グループ行" */
+       t.rows[i].cells[0].innerText = cntg2?"＋":(cntg3?"÷":"－");
+       cntg2=cntg3=0;
+       continue;
+     }
+     if( n ){ //指定
+       if( grp != n ) continue; //指定グループじゃない
+       if( cntg0 ){
+         if( buf[grp][t.rows[i].cells[2].innerText].on == 0 ){
+           if( t.rows[i].style["display"] != "none" ) t.rows[i].style["display"] = "none";
+         }else{
+           cntg3++;
+         }
+       }else if( cntg1 ){
+         if( t.rows[i].style["display"] != "none" ) t.rows[i].style["display"] = "none";
+       }else{
+         if( t.rows[i].style["display"] != "table-row" ) t.rows[i].style["display"] = "table-row";
+         if(buf[grp][t.rows[i].cells[2].innerText].on ) cntg3++; else cntg2++;
+       }
+       continue;
+     }
+     if( cnta0 ){
+       if( buf[grp][t.rows[i].cells[2].innerText].on == 0 ){
+         if( t.rows[i].style["display"] != "none" ) t.rows[i].style["display"] = "none";
+       }else{
+         cntg3++;
+       }
+     }else if( cnta1 ){
+       if( t.rows[i].style["display"] != "none" ) t.rows[i].style["display"] = "none";
      }else{
-       t.rows[i].style["display"]="none";
+       if( t.rows[i].style["display"] != "table-row" ) t.rows[i].style["display"] = "table-row";
+       if(buf[grp][t.rows[i].cells[2].innerText].on ) cntg3++; else cntg2++;
      }
    }
  }
 
  function getFlgStr(){
-  return (getV( inobj[ 7] )+" "  ).substr(0,1)
+  return (getV( inobj[ 5] )+" "  ).substr(0,1)
+       + (getV( inobj[ 6] )+"   ").substr(0,3)
+       + (getV( inobj[ 7] )+"  " ).substr(0,2)
        + (getV( inobj[ 8] )+" "  ).substr(0,1)
        + (getV( inobj[ 9] )+" "  ).substr(0,1)
-       + (getV( inobj[10] )+" "  ).substr(0,1)
-       + (getV( inobj[11] )+" "  ).substr(0,1)
-       + (getV( inobj[ 5] )+"   ").substr(0,3)
-       + (getV( inobj[ 6] )+" "  ).substr(0,1);
+       + (getV( inobj[10] )+" "  ).substr(0,1);
  }
  function setFlg( str ){
    var l;
-   l=str.substr(0,1); if( l != "X"   ) setV( inobj[ 7] , l   );
-   l=str.substr(1,1); if( l != "X"   ) setV( inobj[ 8] , l   );
-   l=str.substr(2,1); if( l != "X"   ) setV( inobj[ 9] , l   );
-   l=str.substr(3,1); if( l != "X"   ) setV( inobj[10] , l/1 );
-   l=str.substr(4,1); if( l != "X"   ) setV( inobj[11] , l/1 );
-   l=str.substr(5,3); if( l != "XXX" ) setV( inobj[ 5] , l/1 );
-   l=str.substr(8,1); if( l != "X"   ) setV( inobj[ 6] , l   );
+   l=str.substr(0,1); if( l != "X"   ) setV( inobj[ 5] , l   );
+   l=str.substr(1,3); if( l != "XXX" ) setV( inobj[ 6] , l/1 );
+   l=str.substr(4,2); if( l != "XX"  ) setV( inobj[ 7] , l/1 );
+   l=str.substr(6,1); if( l != "X"   ) setV( inobj[ 8] , l   );
+   l=str.substr(7,1); if( l != "X"   ) setV( inobj[ 9] , l   );
+   l=str.substr(8,1); if( l != "X"   ) setV( inobj[10] , l   );
  }
  function chkFlgStr( stat , checker ){
    var i,l;
    for( i=0 ; i < checker.length ; i++ ){
-     l=checker[i].substr(0,1); if( l != "X"   && stat.substr(0,1) != l     ) continue;
-     l=checker[i].substr(1,1); if( l != "X"   && stat.substr(1,1) != l     ) continue;
-     l=checker[i].substr(2,1); if( l != "X"   && stat.substr(2,1) != l     ) continue;
-     l=checker[i].substr(3,1); if( l != "X"   && stat.substr(3,1)/1 != l/1 ) continue;
-     l=checker[i].substr(4,1); if( l != "X"   && stat.substr(4,1)/1 != l/1 ) continue;
-     l=checker[i].substr(5,3); if( l != "XXX" && stat.substr(5,3)/1 != l/1 ) continue;
-     l=checker[i].substr(8,1); if( l != "X"   && stat.substr(8,1) != l     ) continue;
+     l=checker[i].substr(0,1); if( l != "X"   && stat.substr(0,1)   != l   ) continue;
+     l=checker[i].substr(1,3); if( l != "XXX" && stat.substr(1,3)/1 != l/1 ) continue;
+     l=checker[i].substr(4,2); if( l != "XX"  && stat.substr(4,2)   != l/1 ) continue;
+     l=checker[i].substr(6,1); if( l != "X"   && stat.substr(6,1)   != l   ) continue;
+     l=checker[i].substr(7,1); if( l != "X"   && stat.substr(7,1)   != l   ) continue;
+     l=checker[i].substr(8,1); if( l != "X"   && stat.substr(8,1)   != l   ) continue;
      return true;
    }
    return false;
@@ -505,7 +549,7 @@ document.body.onload=function(olev){
    var i,j,k,l,m,n;
    var v=[0,0,0]; /*値、ダンサーステ、アンナステ*/
    var w;
-   var flg = [getFlgStr() ,"510001151" ,"610001001" ];
+   var flg = [getFlgStr() ,"51151 100" ,"61001 100" ];
    n=-1;
    for( m=0 ; m<5 ; m++ ){
      v[0]=v[1]=v[2]=0;
@@ -530,7 +574,7 @@ document.body.onload=function(olev){
            }
          }
          else if( /^スキルバフ/.test(k) ){
-           t.rows[i].cells[2+m].innerText= (v[0] != v[1] || v[0] != v[2])?("×"+(v[0]/100.0)+","+(v[1]/100.0)+","+(v[2]/100.0)):v?("×"+(v[0]/100.0)):"";
+           t.rows[i].cells[2+m].innerText= (v[0] != v[1] || v[0] != v[2])?("×"+(v[0]?(v[0]/100.0):"-")+","+(v[1]?(v[1]/100.0):"-")+","+(v[2]?(v[2]/100.0):"-")):v[0]?("×"+(v[0]/100.0)):"";
            switch(k){
              case "スキルバフ(自己)":     for(o=0;o<3;o++) if( w[o][2] < v[o] ) w[o][2] = v[o];  break;
              case "スキルバフ(射程内)":   for(o=0;o<3;o++) if( w[o][3] < v[o] ) w[o][3] = v[o];  break;
@@ -550,6 +594,7 @@ document.body.onload=function(olev){
          if( m == 0 ){
            t.rows[i].cells[1].className="on";
            t.rows[i].cells[2].className="on";
+           t.rows[i].cells[8].className="on";
          }
          l=buf[k][t.rows[i].cells[2].innerText]; 
          j=l.v[m]; /*"画面の値は装飾されて使えないので配列から取得" */
@@ -566,24 +611,27 @@ document.body.onload=function(olev){
          if( m == 0 ){
            t.rows[i].cells[1].className="";
            t.rows[i].cells[2].className="";
+           t.rows[i].cells[8].className="";
          }
        }
      }
      v=[0,0,0,0,0,0];
      for(o=0;o<3;o++){
-       if( m != 1 && m != 2 && o != 0  ) continue; 
-       v[o]=getV(inobj[ [m,m+11,m+13][o] ]);
-       v[o+3]=0;
-       for( i=0 ;  i <= 7 ; i++ ){
-         if( (i==7 && o == 0 ) || ! w[o][i] ) continue;
-         if( i <=1 ){ 
-           v[o] = v[o] * (w[o][i]%10000) + v[o]*100 ;
-           v[o] = (v[o]-(v[o] % 100))/100;
-           if( w[o][i] >= 10000 ){
-             v[o] += ((w[o][i]-(w[o][i]%10000))/10000);
-           }
-         }else{ v[o] *= w[o][i]; v[o+3]+=2; }
-         while( v[o+3]>0 && v[o] >= 10 && (v[o]%10) == 0 ) { v[o] /= 10 ; v[o+3]--; }
+       if( m != 1 && m != 2 && o != 0 ) continue;
+       if( o != 2 || chkFlgStr( flg[0] , ["60  1 010"] ) ){
+         v[o]=getV(inobj[ [m,m+10,m+12][o] ]);
+         v[o+3]=0;
+         for( i=0 ;  i <= 7 ; i++ ){
+           if( (i==7 && o == 0 ) || ! w[o][i] ) continue;
+           if( i <=1 ){ 
+             v[o] = v[o] * (w[o][i]%10000) + v[o]*100 ;
+             v[o] = (v[o]-(v[o] % 100))/100;
+             if( w[o][i] >= 10000 ){
+               v[o] += ((w[o][i]-(w[o][i]%10000))/10000);
+             }
+           }else{ v[o] *= w[o][i]; v[o+3]+=2; }
+           while( v[o+3]>0 && v[o] >= 10 && (v[o]%10) == 0 ) { v[o] /= 10 ; v[o+3]--; }
+         }
        }
        if( o ) v[o+3]++;
        while( v[o+3] > 0 ) { v[o] = (v[o] - (v[o]%10)) /10 ; v[o+3]--; }
@@ -597,26 +645,27 @@ document.body.onload=function(olev){
     var i,j,k,l,m,n;
     for(i=0;i<=15;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
     for(i=0;i<=14;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
-    m=[ [ ["王子・皇帝","ソルジャー","ヘビーアーマー","ワルキューレ","ローグ","プリンセス系","バンデッド","竜兵・竜戦士","サムライ","忍者","ペガサスライダー","パラディン","アベンジャー","モンク","前衛軍師","魔法剣士","堕天使","くぐつ使い","セーラー","天孤","神官戦士","メイジアーマー","竜騎士","ボウライダー","メイド","ヴァンパイアロード","ソードマスター","ロイヤルガード","仙人・仙猿","魔人","戦の精霊","ダークストーカー","ぬらりひょん","キャノンアーマー","鬼","ロイヤルナイト","天狗","鍛冶師","剣闘士","キョンシー","雷神","モンスターブレーカー"]
+    var lbl=[
+        [ ["鉄","銅","銀","金","青","白","黒"] ]
+       ,[ ["王子・皇帝","ソルジャー","ヘビーアーマー","ワルキューレ","ローグ","プリンセス系","バンデッド","竜兵・竜戦士","侍","忍者","天馬騎士","ダークファイター","アベンジャー","モンク","前衛軍師","魔法剣士","堕天使","くぐつ使い","セーラー","天孤","神官戦士","メイジアーマー","竜騎士","ボウライダー","メイド","ヴァンパイアロード","ソードマスター","ロイヤルガード","仙人・仙猿","魔人","戦の精霊","ダークストーカー","ぬらりひょん","キャノンアーマー","鬼","インペリアルナイト","天狗","鍛冶師","剣闘士","キョンシー","雷神","モンスターブレーカー"]
          ,["政務官","アーチャー","メイジ","ヒーラー","ウィッチ","パイレーツ","ドラゴンシャーマン","ヴァンパイアハンター","シャーマン","ビショップ","後衛軍師","陰陽師","召喚士","風水士","砲術士","ダンサー","ネクロマンサー","クロノウィッチ","ドルイド","アルケミスト","レンジャー","シーフ","呪術師","魔物使い","ダークプリースト","エンチャンター","マーチャント","フェンリルシャーマン","モンスターハンター","デモンサモナー","エレメンタラー","猫又","道化師"]
          ,["スケルトン","式鬼","魔獣トークン","インプ・デーモン","ゴーレム","スチームタンク","化け猫","大ガマ","ケットシー","ジャック Ｏ ランタン","霧分身","火エレメント","土エレメント","風エレメント","水エレメント","闇エレメント","トラバサミ","ミミック","砲撃ポイント"]
          ,[ "生命の木","避禍予見の鏡影","プリズムミラー","芸術家の逸品"] ]
        ,[ ["属性なし","人間","竜人","エルフ","ドワーフ","獣人","妖怪","デーモン","アンデッド","オーク","ゴブリン"] ]
-       ,[ ["鉄","銅","銀","金","青","白","黒"] ] ];
-    for( i=0 ; i< m.length ; i++ ) for( j=0 ; j<m[i].length ; j++ ) for( k=0 ; k<m[i][j].length ; k++ ){
-      n=document.createElement( ["OPTION","OPTION","INPUT"][i] );
-      n.value=( i == 2 )?m[i][j][k]:(k+j*100);
-      if( i == 2 ){ n.setAttribute("num",k); n.type="button"; inobj[5+i].append(n); }else{ n.innerText=m[i][j][k]; inobj[5+i].add(n); }
+       ,[ ["近接","遠距離"] ]
+       ,[ ["女性","男性"] ]
+       ,[ ["他","帝国","パルス","砂漠"] ]
+      ];
+    for( i=0 ; i< lbl.length ; i++ ) for( j=0 ; j<lbl[i].length ; j++ ) for( k=0 ; k<lbl[i][j].length ; k++ ){
+      n=document.createElement( (i==1 || i==2 )?"OPTION":"INPUT" );
+      n.value=(i==1 || i==2)?(k+j*100):lbl[i][j][k];
+      if(i==1 || i==2){ n.innerText=lbl[i][j][k]; inobj[5+i].add(n); }else{ n.setAttribute("num",k); n.type="button"; inobj[5+i].append(n); }
     }
     for( i in buf ) {
-      k = t.insertRow(-1); k.className="bufftype";  k.setAttribute("grp",i)
-      l = k.insertCell(0); l.outerHTML="<th class='csw'>－</th>";
-      l = k.insertCell(1); l.outerHTML="<th colspan=2 class='bufftype' id='h01'>"+i+"</th>";
-      l = k.insertCell(2); l.outerHTML="<th></th>";
-      l = k.insertCell(3); l.outerHTML="<th></th>";
-      l = k.insertCell(4); l.outerHTML="<th></th>";
-      l = k.insertCell(5); l.outerHTML="<th></th>";
-      l = k.insertCell(6); l.outerHTML="<th></th>";
+      k = t.insertRow(-1);
+      k.innerHTML="<th class='csw'>－</th><th colspan=2 id='h01'>"+i+"</th><th></th><th></th><th></th><th></th><th></th><th></th>";
+      k.className="bufftype";
+      k.setAttribute("grp",i);
       for( j in buf[i] ){
         k = t.insertRow(-1); k.classname="buff"; k.setAttribute("grp",i);
         l = k.insertCell(0); l.outerHTML="<th></th>"; 
@@ -633,6 +682,23 @@ document.body.onload=function(olev){
           else if( buf[i][j].v[n] < 0 ) l.innerText = buf[i][j].v[n]+"％"; 
           else if( buf[i][j].v[n] ) l.innerText = "+"+buf[i][j].v[n]+"％"; 
         }
+        l = k.insertCell(n+3);
+       if( ! /.*自己/.test(i) )
+        for( k=0 ; buf[i][j].chkf && k <  buf[i][j].chkf.length ; k++ ){
+          n=buf[i][j].chkf[k];
+          if( k == 4 ) l.innerHTML += "<br>";
+          if( n == "60  1 010" ){ l.innerText += "[王子]"; continue; }
+          if( n == "60  1 011" ){ l.innerText += "[皇帝]"; continue; }
+          if( n == "45  1 000" ){ l.innerText += "[カグヤ]"; continue; }
+          if( n == "XXXXXX00X" ){ l.innerText += "[近接女性]"; continue; }
+          if( n == "XXXXXX01X" ){ l.innerText += "[近接男性]"; continue; }
+          m=n.substr(0,1); if( m != "X"   &&                                n.substr(1,8) == "XXXXXXXX" ){ l.innerText += "["+lbl[0][0][m/1]+"]"; continue; }
+          m=n.substr(1,3); if( m != "XXX" && n.substr(0,1) == "X"        && n.substr(4,5) == "XXXXX"    ){ l.innerText += "["+lbl[1][(m-(m%100))/100][m%100]+"]"; continue; }
+          m=n.substr(4,2); if( m != "XX"  && n.substr(0,4) == "XXXX"     && n.substr(6,3) == "XXX"      ){ l.innerText += "["+lbl[2][0][m/1]+"]"; continue; }
+          m=n.substr(6,1); if( m != "X"   && n.substr(0,6) == "XXXXXX"   && n.substr(7,2) == "XX"       ){ l.innerText += "["+lbl[3][0][m/1]+"]"; continue; }
+          m=n.substr(7,1); if( m != "X"   && n.substr(0,7) == "XXXXXXX"  && n.substr(8,1) == "X"        ){ l.innerText += "["+lbl[4][0][m/1]+"]"; continue; }
+          m=n.substr(8,1); if( m != "X"   && n.substr(0,8) == "XXXXXXXX"                                ){ l.innerText += "["+lbl[5][0][m/1]+"]"; continue; }
+        }
       }
     }
     setV(inobj[ 0],2600); /* HP */
@@ -640,10 +706,10 @@ document.body.onload=function(olev){
     setV(inobj[ 2],700);  /* def */
     setV(inobj[ 3], 20);  /* mgt */
     setV(inobj[ 4],  0);  /* range */
-    setV(inobj[12],444);  /* d-atk */
-    setV(inobj[13],444);  /* d-def */
-    setV(inobj[14],294);  /* a-atk */
-    setV(inobj[15],197);  /* a-def */
+    setV(inobj[11],444);  /* d-atk */
+    setV(inobj[12],444);  /* d-def */
+    setV(inobj[13],294);  /* a-atk */
+    setV(inobj[14],197);  /* a-def */
     onoff("スキルバフ(自己)","アイギスの神器",1);
  })();
 
@@ -654,11 +720,8 @@ document.body.onload=function(olev){
   document.body.addEventListener( "click", function(ev){
     switch( ev.target.parentNode.tagName.toUpperCase() ){
       case "TR":
-        if( ev.target.className=="csw" && ev.target.innerText=="－" ){
-          closeGroup( ev.target.parentNode.getAttribute("grp") );
-        }else
-        if( ev.target.className=="csw" && ev.target.innerText=="＋" ){
-          openGroup( ev.target.parentNode.getAttribute("grp") );
+        if( ev.target.className=="csw" ){
+          openRotate( ev.target.parentNode.getAttribute("grp") );
         }else{
           var i=ev.target.parentNode.getAttribute("grp");
           if( ev.target.parentNode.className != "bufftype" && i ){
@@ -691,37 +754,38 @@ document.body.onload=function(olev){
   doDraw(olev);
 }
 </script>
-<div><b>千年戦争アイギス　バフ計算機　　　</b>
+<div nowrap><b>千年戦争アイギス　バフ計算機　　　</b>
 <span>復活の呪文はまだ動かない<!-- input type="text" size=32 style="font-family:monospace;" id="in19"/ --><input type="button" id="restoreB" value="復活" id="in20"/></span>
 <div style="display:inline-block; font-size:13px;"><a href="meisei.html">...名声値カレンダー</a><br><a href="ikusei2.html">...育成試算表</a></div></div>
 <table  id="t">
-<tr><th></th><th nowrap >キャラ･クラス</th><th nowrap >アビ・スキル</th><th nowrap >HP</th><th nowrap >攻撃</th><th nowrap >防御</th><th nowrap >魔耐</th><th nowrap >射程</th></tr>
-<tr class="f" ><th nowrap colspan=2 rowspan=3>計算対象ユニ</th><td colspan=9><select id="in05"></select><select id="in06"></select><span class="x-b" id="in07" type="radio"></span>
-</td></tr>
+<tr><th></th><th nowrap >キャラ･クラス</th><th nowrap >アビ・スキル</th><th nowrap >HP</th><th nowrap >攻撃</th><th nowrap >防御</th><th nowrap >魔耐</th><th nowrap >射程</th><th nowrap >対象</th></tr>
+<tr class="f" >
+  <th nowrap colspan=2 rowspan=3>計算対象ユニ</th>
+  <td colspan=9>
+   <span class="x-b" id="in05" type="radio"></span>
+   <select id="in06"></select>
+   <select id="in07"></select>
+  </td>
+</tr>
 <tr class="f" >
   <th rowspan=2>
-    <span class="x-b" id="in08" type="radio"><input type="button" num=0 value="近接" /><input type="button" num=1 value="遠距離" /></span>
-    <span class="x-b" id="in09" type="radio"><input type="button" num=0 value="女性" /><input type="button" num=1 value="男性" /></span>
-    <span class="x-b" id="in10" style="display:none;"><input type="button" num=1 value="?" /></span >
-<br>
-    <span class="x-b" id="in11" type="radio">
-      <input type="button" num=0 value="他" />
-      <input type="button" num=1 value="帝国" />
-      <input type="button" num=2 value="パルス" />
-      <input type="button" num=3 value="砂漠" />
-    </span>
+    <span class="x-b" id="in08" type="radio"></span>
+    <span class="x-b" id="in09" type="radio"></span>
+    <br>
+    <span class="x-b" id="in10" type="radio"></span>
   </th>
   <td ><input type="number" id="in00" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in01" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in02" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in03" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in04" min=0 max=9999 size=4 /></td>
+  <td rowspan=2></td>
 </tr>
 <tr class="f" ><td is="x-d" id="out00"></td><td is="x-d" id="out01"></td><td is="x-d" id="out02"></td><td is="x-d" id="out03"></td><td is="x-d" id="out04"></td></tr>
-<tr class="f" ><th colspan=3 rowspan=2> ダンサー</th><td rowspan=2></td><td ><input type="number" id="in12" min=0 max=9999 size=4 /></td><td ><input type="number" id="in13" min=0 max=9999 size=4 /></td><td rowspan=2></td><td rowspan=2></td></tr>
+<tr class="f" ><th colspan=3 rowspan=2> ダンサー</th><td rowspan=2></td><td ><input type="number" id="in11" min=0 max=9999 size=4 /></td><td ><input type="number" id="in12" min=0 max=9999 size=4 /></td><td rowspan=2></td><td rowspan=2></td><td rowspan=2></td></tr>
 <tr class="f" ><td is="x-d" id="out05"></td><td is="x-d" id="out06"></td></tr>
-<tr class="f" ><th colspan=3 rowspan=2>アンナ</th><td rowspan=2></td><td ><input type="number" id="in14" min=0 max=9999 size=4 /></td><td ><input type="number" id="in15" min=0 max=9999 size=4 /></td><td rowspan=2></td><td rowspan=2></td></tr>
+<tr class="f" ><th colspan=3 rowspan=2>アンナ</th><td rowspan=2></td><td ><input type="number" id="in13" min=0 max=9999 size=4 /></td><td ><input type="number" id="in14" min=0 max=9999 size=4 /></td><td rowspan=2></td><td rowspan=2></td><td rowspan=2>[王子]</td></tr>
 <tr class="f" ><td is="x-d" id="out07"></td><td is="x-d" id="out08"></td></tr>
-<tr class="t"><th nowrap colspan=3>バフ後</th><td is="x-d" id="out10"></td><td is="x-d" id="out11"></td><td is="x-d" id="out12"></td><td is="x-d" id="out13"></td><td is="x-d" id="out14"></td></tr>
+<tr class="t"><th class="csw">■</th><th nowrap colspan=2>バフ後</th><td is="x-d" id="out10"></td><td is="x-d" id="out11"></td><td is="x-d" id="out12"></td><td is="x-d" id="out13"></td><td is="x-d" id="out14"></td><td></td></tr>
 </table>
 </body>
