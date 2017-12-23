@@ -486,7 +486,7 @@ document.body.onload=function(olev){
       n2=ex0-ex1-ex2;
       n3=n1;
       n4=y;
-      if( i>0 ){
+      if( i>0 ){ /* <= 皇帝 */
         n2=n2-ex3*i;
         n4=n4+(i-1);
         lv=getLv(rea,n2);
@@ -511,11 +511,11 @@ document.body.onload=function(olev){
         n4++;
       }
     }
-    for( ; doT && i < 9 ; i++ ) if( i > 0 ) t.rows[0].cells[i+1].style["display"]="none";
+    for( ; doT && i < 9 ; i++ ) if( i > 0 ) t.rows[0].cells[i+1].style["display"]="none"; /* <= ヘッダ行の余分列を非表示 */
     setV(inobj[19], saveword.backupstr());
  }
 
- document.body.addEventListener( "click", function(ev){
+ function doSelect(ev){
     var lv,i,j,m,u,v,w,x,y,z;
     var t=document.getElementById("t");
     switch( ev.target.parentNode.tagName.toUpperCase() ){
@@ -567,7 +567,7 @@ document.body.onload=function(olev){
         }
         break;
     }
- });
+ }
 
  /* initialize */
  (function(){
@@ -613,7 +613,7 @@ document.body.onload=function(olev){
 
     for( i=0 ; i < 2 ; i++ ){
       var obj=location[["search","hash"][i]];
-      if( obj && obj.length > 1 ){
+      if( obj && obj.length > 1 ){ /* <= 空のときは何もしない */
         obj=obj.substring(obj.indexOf(["?","#"][i])+1);
         if( saveword.checkstr(obj) ){
           saveword.restorestr(obj);
@@ -651,6 +651,10 @@ document.body.onload=function(olev){
  document.body.addEventListener( "change", function(ev){
    if( ev.target.id != "in19" ) doDraw(ev);
  });
+  var touchObj=null;
+  document.body.addEventListener( "touchstart",function(ev){ touchObj=ev.target; } );
+  document.body.addEventListener( "touchend",function(ev){ if( touchObj==ev.target){ doSelect(ev);} touchObj=null; } );
+ document.body.addEventListener( "click", doSelect );
 
  doDraw(olev);
 
