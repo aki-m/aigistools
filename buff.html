@@ -2,7 +2,7 @@
  <META http-equiv="Content-Type" content="text/html;"  charset="UTF-8">
  <META http-equiv="Content-Script-Type" content="text/javascript">
  <META http-equiv="Content-Style-Type" content="text/css">
- <title>千年戦争アイギス　バフ計算機</title>
+ <title>千年戦争アイギス　バフ試算表</title>
 <!--
 　　　　 r＝、､　　　　　　　　 , '⌒ヽ 
 　　　　((::::::..ヽヽ　_＿＿　 　{ i:::::::l |　
@@ -745,7 +745,6 @@ document.body.onload=function(olev){
        if( buf[k][l] && buf[k][l].on ){
          if( m == 0 ) t.rows[i].className="on";
          l=buf[k][t.rows[i].cells[2].innerText]; 
-         j=l.v[m]; /*"画面の値は装飾されて使えないので配列から取得" */
          if( ! l.chkf ){
            if( /^編成バフ|^配置バフ/.test(k) ) for(o=0;o<3;o++) v[o] += l.v[m];
            if( (/^スキルバフ/.test(k) || k.substr(0,7) == "ステ加算値バフ") ) for(o=0;o<3;o++) if( v[o] < l.v[m] ) v[o] = l.v[m];
@@ -782,7 +781,9 @@ document.body.onload=function(olev){
        if( o ) v[o+3]++; /*ダンサー、アンナは1/10 */
        if( v[o+3] > 0 && v[o] >= 10 && v[o] % 10 == 0 ){ v[o] /= 10 ; v[o+3]--; } /*正規化*/
        if( v[o+3] > 0 && v[o] >= 10 && v[o] % 10 == 0 ){ v[o] /= 10 ; v[o+3]--; } /*正規化*/
-       outobj[ [m,m+4,m+6][o]   ].innerText= (""+v[o]).substr(0,(""+v[o]).length-v[o+3])+"."+(""+v[o]).substr((""+v[o]).length-v[o+3],8) ; /*0,1,2,3,4*/
+       k=""+v[o];
+       i=k.length;
+       outobj[ [m,m+4,m+6][o] ].innerText= k.substr(0,k.length-v[o+3])+(v[o+3]?"."+k.substr(k.length-v[o+3],8):"") ; /*0,1,2,3,4*/
        while( v[o+3] > 0 ) { v[o] = (v[o] - (v[o]%10)) /10 ; v[o+3]--; } /* <=整数化 */
      }
      setV( outobj[10+m], Math.floor(v[0]/1+v[1]/1+v[2]/1) ); /*10,11,12,13,14*/
@@ -937,7 +938,7 @@ document.body.onload=function(olev){
   doDraw(olev);
 }
 </script>
-<div nowrap><b>千年戦争アイギス　バフ計算機　</b>
+<div nowrap><b>千年戦争アイギス　バフ試算表　</b>
 <span>復活の呪文<input type="text" size=68 style="font-family:monospace;" id="in19"/><input type="button" id="restoreB" value="復活" id="in20"/></span>
 <div style="display:inline-block; font-size:13px;"><a href="meisei.html">...名声値カレンダー</a><br><a href="ikusei2.html">...育成試算表</a></div></div>
 <table  id="t">
