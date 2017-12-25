@@ -55,7 +55,7 @@ span{ padding:3px 2px 2px 2px; }
 #t th,#t tr.t th.csw{ background-color: steelblue; color:white; }
 #t tr.f th,#t tr.f td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
 #t tr.t th{ background-color:#fd6; color:#632; }
-#t tr.t td{ background-color:#fed; color:black; }
+#t tr.t td{ font-size:20px; font-weight:600; background-color:#fed; color:black; }
 input[type="number"] {  text-align:center;  }
 input[type="button"] {
  background-color: #e8ffff;
@@ -235,7 +235,7 @@ document.body.onload=function(olev){
     },
     "スキルバフ(自己)":{                                                                                              
       "英雄の片鱗":{           skill:1,on:0 ,v:[300,300,300,0,0],cn:["王子【幼少】"       ] ,setf:"60  1 010" ,chkf:["60  1 010"] },
-      "アイギスの神器":{       skill:1,on:0 ,v:[0,200,200,0,0] ,cn:["王子(アイギス神器)"  ] ,setf:"60  1 010" ,chkf:["60  1 010"] },
+      "アイギスの神器":{       skill:1,on:0 ,v:[0,300,300,0,0] ,cn:["王子(アイギス神器)"  ] ,setf:"60  1 010" ,chkf:["60  1 010"] },
       "ケラウノスの神器":{     skill:1,on:0 ,v:[0,200,  0,0,0] ,cn:["王子(ケラウノス神器)"] ,setf:"60  1 010" ,chkf:["60  1 010"] },
       "獅子刀スルフィカール":{ skill:1,on:0 ,v:[0,150,  0,0,0] ,cn:["王子(砂漠)"          ] ,setf:"60  1 010" ,chkf:["60  1 010"] },
       "援軍要請・撃滅":{       skill:5,on:0 ,v:[0,200,  0,0,0] ,cn:["アルティア"          ] ,setf:"61  1 000" ,chkf:["61  1 000"] },
@@ -771,7 +771,9 @@ document.body.onload=function(olev){
              if(i==0) v[o] = (v[o]-(v[o] % 100))/100; /*<=整数化 */
              else v[o+3]+=2; /*<=整数化しない*/
              if( w[o][i] >= 10000 ){
-               v[o] += ((w[o][i]-(w[o][i]%10000))/10000);
+               k=((w[o][i]-(w[o][i]%10000))/10000);
+               for( j=0 ; j<v[o+3] ; j++ ) k *= 10;
+               v[o] += k;
              }
            }else{ v[o] *= w[o][i]; v[o+3]+=2; }
            if( v[o+3] > 0 && v[o] >= 10 && v[o] % 10 == 0 ){ v[o] /= 10 ; v[o+3]--; } /*正規化*/
@@ -942,7 +944,7 @@ document.body.onload=function(olev){
 <span>復活の呪文<input type="text" size=68 style="font-family:monospace;" id="in19"/><input type="button" id="restoreB" value="復活" id="in20"/></span>
 <div style="display:inline-block; font-size:13px;"><a href="meisei.html">...名声値カレンダー</a><br><a href="ikusei2.html">...育成試算表</a></div></div>
 <table  id="t">
-<tr><th></th><th>キャラ･クラス</th><th>アビ・スキル</th><th nowrap >HP</th><th>攻撃</th><th>防御</th><th>魔耐</th><th>射程</th><th>対象</th></tr>
+<tr><th></th><th>キャラ</th><th>アビ・スキル</th><th nowrap >HP</th><th>攻撃</th><th>防御</th><th>魔耐</th><th>射程</th><th>対象</th></tr>
 <tr class="f" >
   <th colspan=2 rowspan=3>計算対象ユニ</th>
   <td colspan=9>
