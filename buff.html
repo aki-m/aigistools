@@ -118,6 +118,7 @@ input.chk { display:inline; background-color:#90ffcf; }
   var t=document.getElementById("t");
   var gview=[];
   var gname=[];
+  var gflg=[];
   var bgno=[];
   var bview=[];
   var bname=[];
@@ -139,11 +140,12 @@ input.chk { display:inline; background-color:#90ffcf; }
        ,[ ["女","男","無"] ]
        ,[ ["他","帝国","パルス","砂漠"] ]
       ];
-    var addG=function( in_gname ){
+    var addG=function( in_gname , chain_flg , single_flg , buftyp_flg1 , buftyp_flg2 ){
       var i;
       for( i=0 ; i<gname.length && in_gname != gname[i] ; i++ ) ;
       if( i >= gname.length){
         gname[i] = in_gname;
+        gflg [i] = chain_flg + single_flg*2 + buftyp_flg1*4 + buftyp_flg2*32;
         gview[i] = t.insertRow(-1);
         gview[i].innerHTML="<th class='csw'>－</th><th colspan=2 id='h01'>"+gname[i]+"</th><th></th><th></th><th></th><th></th><th></th><th></th>";
         gview[i].className="bufftype";
@@ -161,8 +163,8 @@ input.chk { display:inline; background-color:#90ffcf; }
       bval [i] = in_v;
       bchar[i] = in_cn;
       if(in_skill) bskil[i] = in_skill;
-      if(in_chkf ) bskil[i] = in_chkf;
-      if(in_setf ) bskil[i] = in_setf;
+      if(in_setf ) bsetf[i] = getFlgFromStr(in_setf);
+      if(in_chkf ) for( bchkf[i]=[] ,j=0 ; j<in_chkf.length ; j++ ) bchkf[i][j] = getFlgFromStr( in_chkf[j] );
 
       bview[i] = t.insertRow(-1);
       bview[i].classname="buff";
@@ -188,19 +190,19 @@ input.chk { display:inline; background-color:#90ffcf; }
       l = bview[i].insertCell(n+3);
       if( ! /.*自己/.test(gname[in_gno]) ){
         for( k=0 ; in_chkf && k <  in_chkf.length ; k++ ){
-          n=in_chkf[k];
+          n=bchkf[i][k];
           if( k == 4 ) l.innerHTML += "<br>";
-          if( n == "60  1 010" ){ l.innerText += "[王子]"; continue; }
-          if( n == "60  1 011" ){ l.innerText += "[皇帝]"; continue; }
-          if( n == "45  1 000" ){ l.innerText += "[カグヤ]"; continue; }
-          if( n == "XXXXXX00X" ){ l.innerText += "[近接女性]"; continue; }
-          if( n == "XXXXXX01X" ){ l.innerText += "[近接男性]"; continue; }
-          m=n.substr(0,1); if( m != "X"   &&                                n.substr(1,8) == "XXXXXXXX" ){ l.innerText += "["+lbl[0][0][m/1]+"]"; continue; }
-          m=n.substr(1,3); if( m != "XXX" && n.substr(0,1) == "X"        && n.substr(4,5) == "XXXXX"    ){ l.innerText += "["+lbl[1][(m-(m%100))/100][m%100]+"]"; continue; }
-          m=n.substr(4,2); if( m != "XX"  && n.substr(0,4) == "XXXX"     && n.substr(6,3) == "XXX"      ){ l.innerText += "["+lbl[2][0][m/1]+"]"; continue; }
-          m=n.substr(6,1); if( m != "X"   && n.substr(0,6) == "XXXXXX"   && n.substr(7,2) == "XX"       ){ l.innerText += "["+lbl[3][0][m/1]+"]"; continue; }
-          m=n.substr(7,1); if( m != "X"   && n.substr(0,7) == "XXXXXXX"  && n.substr(8,1) == "X"        ){ l.innerText += "["+lbl[4][0][m/1]+"]"; continue; }
-          m=n.substr(8,1); if( m != "X"   && n.substr(0,8) == "XXXXXXXX"                                ){ l.innerText += "["+lbl[5][0][m/1]+"]"; continue; }
+          if( n[0] == 6 && n[1] == 0 && n[2] == 1  && n[3] == 0 && n[4] == 1 && n[5] == 0 ){ l.innerText += "[王子]"; continue; }
+          if( n[0] == 6 && n[1] == 0 && n[2] == 1  && n[3] == 0 && n[4] == 1 && n[5] == 1 ){ l.innerText += "[皇帝]"; continue; }
+          if( n[0] == 4 && n[1] == 5 && n[2] == 1  && n[3] == 0 && n[4] == 0 && n[5] == 0 ){ l.innerText += "[カグヤ]"; continue; }
+          if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1  && n[3] == 0 && n[4] == 0 && n[5] ==-1 ){ l.innerText += "[近接女性]"; continue; }
+          if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1  && n[3] == 0 && n[4] == 1 && n[5] ==-1 ){ l.innerText += "[近接男性]"; continue; }
+          if( n[0] !=-1 && n[1] ==-1 && n[2] ==-1  && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ){ l.innerText += "["+lbl[0][0][n[0]]+"]"; continue; }
+          if( n[0] ==-1 && n[1] !=-1 && n[2] ==-1  && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ){ l.innerText += "["+lbl[1][(n[1]-(n[1]%100))/100][n[1]%100]+"]"; continue; }
+          if( n[0] ==-1 && n[1] ==-1 && n[2] !=-1  && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ){ l.innerText += "["+lbl[2][0][n[2]]+"]"; continue; }
+          if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1  && n[3] !=-1 && n[4] ==-1 && n[5] ==-1 ){ l.innerText += "["+lbl[3][0][n[3]]+"]"; continue; }
+          if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1  && n[3] ==-1 && n[4] !=-1 && n[5] ==-1 ){ l.innerText += "["+lbl[4][0][n[4]]+"]"; continue; }
+          if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1  && n[3] ==-1 && n[4] ==-1 && n[5] !=-1 ){ l.innerText += "["+lbl[5][0][n[5]]+"]"; continue; }
           if( ! /.*X/.test(n) ) l.innerText += "[自身？]";
         }
       }
@@ -214,7 +216,7 @@ input.chk { display:inline; background-color:#90ffcf; }
       if(i==1 || i==2){ n.innerText=lbl[i][j][k]; inobj[5+i].add(n); }else{ n.setAttribute("num",k); n.type="button"; inobj[5+i].appendChild(n); }
     }
 
-    r=addG("編成バフ(全体)");
+    r=addG("編成バフ(全体)" ,0,0 ,0,0 );
     addB(r,"全員の最大ＨＰアップ【中】"   ,0,[10, 0, 0,0, 0],["アデル"         ]);
     addB(r,"全員の最大ＨＰアップ【大】"   ,0,[14, 0, 0,0, 0],["アイシャ"       ]);
     addB(r,"全員の攻撃力アップ【小】"     ,0,[ 0, 2, 0,0, 0],["アリア"         ]);
@@ -226,7 +228,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"難攻不落の要塞"               ,0,[ 0, 0,17,0, 0],["ルイーズ"       ]);
     addB(r,"舞巫女の守護霊"               ,0,[0,0,0,50000,0],["ミヤビ"         ]);
 
-    r=addG("編成バフ(近・遠,性別限定)");
+    r=addG("編成バフ(近・遠,性別限定)" ,0,0 ,0,1 );
     addB(r,"打ち出の小槌"                 ,0,[ 0, 5, 0, 0, 0],["カグラ"      ],["XXXXXX0XX"]);
     addB(r,"剣聖武芸指南"                 ,0,[ 0,10, 0, 0, 0],["ジークリンデ"],["XXXXXX0XX"]);
     addB(r,"六丈銭の赤備え"               ,0,[ 5, 5, 5, 0, 0],["マツリ"      ],["XXXXXX0XX"]);
@@ -237,7 +239,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"防御力魔法耐性アップ【男】"   ,0,[ 0,0,5,50000,0],["オスカー"    ],["XXXXXXX1X"]);
     addB(r,"トレジャーハント【酒】"       ,0,[15, 0, 0, 0, 0],["ロベルト"    ],["XXXXXXX1X"]);
 
-    r=addG("編成バフ(職種,種族限定)");
+    r=addG("編成バフ(職種,種族限定)" ,0,0 ,0,2 );
       /* 職種 */
     addB(r,"撤退支援"                     ,0,[20, 0, 0, 0, 0],["アルティア"  ],["X1  XXXXX"]);
     addB(r,"シールドブースト"             ,0,[ 0,0,5,50000,0],["リーゼロッテ"],["X1  XXXXX","X2  XXXXX"]);
@@ -293,7 +295,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"屍体活性"                     ,0,[ 5, 5, 5, 0, 0],["レイメイ"    ],["XXXX8 XXX"]); /*不死者*/
     addB(r,"侍女の献身（カグヤ）"         ,0,[ 0,10,10, 0, 0],["ヒカゲ"      ],["45  1 000"]); /*カグヤ*/
 
-    r=addG("編成バフ(所属,レアリティ限定)");
+    r=addG("編成バフ(所属,レアリティ限定)" ,0,0 ,0,3 );
       /* 所属 */
     addB(r,"隠された神器の後継者"         ,0,[ 5, 5, 5, 0, 0],["アンジェリーネ"    ],["XXXXXXXX1"]);
     addB(r,"帝国治癒士の務め"             ,0,[ 5,0,0,50000,0],["エリアス"          ],["XXXXXXXX1"]);
@@ -306,7 +308,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"シルバーフルチャージ"         ,0,[ 5, 0, 0, 0, 0],["ロゼット"          ],["2XXXXXXXX"]);
     addB(r,"騎士姫の導き"                 ,0,[ 5, 5, 5, 0, 0],["シェリー"          ],["2XXXXXXXX"]);
 
-    r=addG("配置バフ(全体)");
+    r=addG("配置バフ(全体)" ,0,0 ,1,0 );
     addB(r,"戦意高揚"                     ,0,[ 0,20,20, 0, 0],["王子(アイギス神器)","王子(ケラウノス神器)"]);
     addB(r,"戦意高揚【砂漠】"             ,0,[ 0,20,20, 0, 0],["王子(砂漠)"        ]);
     addB(r,"戦意高揚【小】"               ,0,[ 0,10,10, 0, 0],["王子【幼少】"      ]);
@@ -315,7 +317,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"聖銀竜の加護"                 ,0,[ 0, 0, 5, 5, 0],["ティファ"          ]);
     addB(r,"職：コマンダー"               ,0,[ 0,3,3,30000,0],["アルティア","ジェローム","ケイティ","浴衣の兵長フィリス"]);
 
-    r=addG("配置バフ(近・遠,性別限定)");
+    r=addG("配置バフ(近・遠,性別限定)" ,0,0 ,1,1 );
     addB(r,"酒池肉林(対女性)"             ,0,[ 0,10, 0, 0, 0],["堕姫"              ],["XXXXXXX0X"]);
     addB(r,"酒池肉林(対男性)"             ,0,[ 0,-10,0, 0, 0],["堕姫"              ],["XXXXXXX1X"]);
     addB(r,"超鎧狩り"                     ,0,[ 0,10, 0, 0, 0],["アマンダ"          ],["XXXXXX0XX"]);
@@ -324,7 +326,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"マスタースミス＋武器職人【男専用】",0,[0,15,15,0,0],["ゴルドー"        ],["XXXXXX01X"]);
     addB(r,"マスタースミス＋鍛冶神の祝福" ,0,[ 0,15,15, 0, 0],["ティニー"          ],["XXXXXX00X"]);
 
-    r=addG("配置バフ(職種,種族限定)");
+    r=addG("配置バフ(職種,種族限定)" ,0,0 ,1,2 );
       /* 職種 */
     addB(r,"火力支援指揮"                 ,0,[ 0,10, 0,0, 0] ,["ヘレナ"          ],["X114XXXXX","X105XXXXX","X126XXXXX"]);
     addB(r,"マスタースミス＋ソードスミス" ,0,[ 0, 5, 5,0, 0] ,["サンディー"      ],["X1  XXXXX","X8  XXXXX","X11 XXXXX","X14 XXXXX","X26 XXXXX","X35 XXXXX","60  1 010"]); /*ソードスミス*/
@@ -358,14 +360,14 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"龍の天祐?+Iさん(+1人)"        ,0,[ 0, 5, 5,0, 0] ,["ハクノカミ"      ],["61062 100"]);
     addB(r,"龍の天祐?+Jさん(+1人)"        ,0,[ 0, 5, 5,0, 0] ,["ハクノカミ"      ],["61062 100"]);
 
-    r=addG("配置バフ(自己・確立,動的)");
+    r=addG("配置バフ(自己・確立,動的)" ,0,0 ,1,3 );
     addB(r,"魔剣覚醒？"                   ,0,[ 0,80, 0,0, 0] ,["シビラ"          ] ,["65  1 000"],"65  1 000" );
     addB(r,"ホーリーエンチャント？"       ,0,[ 0,80, 0,0, 0] ,["コーネリア"      ] ,["65  1 000"],"611 1 000" );
     addB(r,"大鑑巨砲"                     ,0,[ 0,90, 0,0, 0] ,["イブキ"          ] ,["618 1 000"],"618 1 000" );
     addB(r,"マルダーンフ・マルダーン"     ,0,[ 0,20, 0,0, 0] ,["ダリューン"      ] ,["627 1 012"],"627 1 012" );
     addB(r,"必殺の一撃"                   ,0,[ 0,90, 0,0, 0] ,["ユリアン","ドロシー" ]);
 
-    r=addG("スキルバフ(自己)");
+    r=addG("スキルバフ(自己)" ,1,1 ,2,0 );
     addB(r,"英雄の片鱗"                 ,1,[300,300,300,0,0],["王子【幼少】"       ],["60  1 010"],"60  1 010");
     addB(r,"アイギスの神器"             ,1,[ 0,300,300,0,0],["王子(アイギス神器)"  ],["60  1 010"],"60  1 010");
     addB(r,"ケラウノスの神器"           ,1,[ 0,200,  0,0,0],["王子(ケラウノス神器)"],["60  1 010"],"60  1 010");
@@ -484,7 +486,7 @@ input.chk { display:inline; background-color:#90ffcf; }
  "アデル":[  "攻撃力強化Ⅳ"     ],
 */
 
-    r=addG("スキルバフ(射程内)");
+    r=addG("スキルバフ(射程内)" ,0,0 ,2,1 );
     addB(r,"士気高揚"                     ,0,[0,112,112,0,0] ,["王子"          ]);
     addB(r,"士気高揚＋英雄の末裔"         ,0,[0,115,115,0,0] ,["王子"          ]);
     addB(r,"士気高揚＋勇者"               ,0,[0,117,117,0,0] ,["王子"          ]);
@@ -505,7 +507,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"隊商防御陣"                   ,0,[0,  0,120,0,0] ,["ディエーラ"    ]);
     addB(r,"守護聖樹の輝光"               ,0,[0,  0,200,0,0] ,["守護の聖樹"    ]);
 
-    r=addG("スキルバフ(全体)");
+    r=addG("スキルバフ(全体)" ,0,0 ,2,2 );
     addB(r,"英雄の片鱗"                   ,0,[0,120,120,0,0] ,["王子【幼少】"]);
     addB(r,"火竜の炎陣"                   ,0,[0,120,  0,0,0] ,["イグニス"    ]);
     addB(r,"烈火の陣"                     ,0,[0,120,  0,0,0] ,["ウズメ","イグニス"]);
@@ -521,7 +523,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"金城の陣(最終)"               ,0,[0,  0,130,0,0] ,["レン"        ]);
     addB(r,"性質変換の秘術"               ,0,[0,  0,125,0,0] ,["シャルル"    ]);
 
-    r=addG("スキルバフ(系統)");
+    r=addG("スキルバフ(系統)" ,0,0 ,2,3 );
     addB(r,"大山賊時代"                   ,0,[200,  0,0,0,0] ,["アマンダ"      ],["X6  XXXXX"]);
     addB(r,"基本戦術・陣地防御"           ,0,[0,  0,120,0,0] ,["ヘレナ"        ]);
     addB(r,"基本戦術・反転攻勢"           ,0,[0,120,  0,0,0] ,["ヘレナ"        ]);
@@ -550,10 +552,10 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"魔獣獄炎操"                   ,0,[0,150,  0,0,0] ,["モルテナ"      ],["X202XXXXX"]); /*魔物トークン*/
     addB(r,"帝国の勇者＋アダマスの神器"   ,0,[0,125,125,0, 0] ,["白の皇帝"        ],["XXXXXXXX1"]);
 
-    r=addG("スキルバフ(レア指定)");
+    r=addG("スキルバフ(レア指定)" ,0,0 ,2,4 );
     addB(r,"ダモクレスの剣"               ,0,[0,120,120,0,0] ,["ロゼット"        ],["2XXXXXXXX"]);
 
-    r=addG("ステ加算値バフ(ダンサー)");
+    r=addG("ステ加算値バフ(ダンサー)" ,0,1 ,3,1 );
     addB(r,"魅惑の舞"                     ,0,[0, 700, 700,0,0],["ミヤビ"         ]);
     addB(r,"不可侵の神事舞"               ,0,[0,1200,1200,0,0],["ミヤビ"         ]);
     addB(r,"ラストダンス"                 ,0,[0,1000,1000,0,0],["ビビアン"       ]);
@@ -567,7 +569,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"エスカレートステップ(2回目)"  ,0,[0,1200,1200,0,0],["マーニー"       ]);
     addB(r,"エスカレートステップ(最終)"   ,0,[0,1300,1300,0,0],["マーニー"       ]);
 
-    r=addG("ステ加算値バフ(政務官)");
+    r=addG("ステ加算値バフ(政務官)" ,0,1 ,3,2 );
     addB(r,"全力サポート"                 ,0,[0,1000,1000,0,0],["アンナ","アンナ(支給服)","アンナ(軍服)"]);
     addB(r,"究極サポート"                 ,0,[0,1200,1200,0,0],["アンナ(水着)"]);
   })();
@@ -578,7 +580,7 @@ input.chk { display:inline; background-color:#90ffcf; }
       n[0]=n[0]+(v<<n[1]);
       n[1]=n[1]+l;
       while( n[1] >= 6 ){
-        n[2] += saveword.charmap.substr(n[0]&63,1);
+        n[2] += saveword.charmap.charAt(n[0]&63);
         n[0] >>= 6;
         n[1] -= 6;
       }
@@ -586,9 +588,9 @@ input.chk { display:inline; background-color:#90ffcf; }
     getS:function(n,l){
       var r;
       while( n[1] < l && n[2].length > 0 ){
-        n[0] += saveword.charmap.indexOf(n[2].substr(0,1)) << n[1];
+        n[0] += saveword.charmap.indexOf(n[2].charAt(0)) << n[1];
         n[1] +=6;
-        n[2] = n[2].substr(1,n[2].length-1);
+        n[2] = n[2].slice(1);
       }
       r=n[0]&((1<<l)-1);
       n[0] >>= l;
@@ -617,9 +619,9 @@ input.chk { display:inline; background-color:#90ffcf; }
       for( i=0 ; i < bon.length ; i++ ){
         saveword.addS(w, bon[i]  ,1); /*1:選択・非選択 */
       }
-      if( w[1] > 0 ) w[2] += saveword.charmap.substr( w[0]&63,1 ); /*末尾の6BITに満たない端数 */
-      for(i=j=0 ; i<w[2].length ; i++ ) j=j^saveword.charmap.indexOf(w[2].substr(i,1)); /* CHECK-SUM */
-      w[2] += saveword.charmap.substr( j,1 );
+      if( w[1] > 0 ) w[2] += saveword.charmap.charAt( w[0]&63 ); /*末尾の6BITに満たない端数 */
+      for(i=j=0 ; i<w[2].length ; i++ ) j=j^saveword.charmap.indexOf(w[2].charAt(i)); /* CHECK-SUM */
+      w[2] += saveword.charmap.charAt( j );
       return w[2];
     },
     restorestr:function(s){
@@ -648,16 +650,12 @@ input.chk { display:inline; background-color:#90ffcf; }
     checkstr:function(str){
       var i,j;
       for(i=j=0 ; i+1 < str.length ; i++ ){
-        j=j^saveword.charmap.indexOf(str.substr(i,1));
+        j=j^saveword.charmap.indexOf(str.charAt(i));
       }
-      return ( j == saveword.charmap.indexOf(str.substr(i,1)) );
+      return ( j == saveword.charmap.indexOf(str.charAt(i)) );
     }
  };
 
- function findB(in_gname , in_bname){
-    for( r=bname.length-1 ; r >= 0 && in_bname != bname[r] && in_gname != gname[bgno[r]] ; r-- );
-    return r;
- }
  function cnvN(v){
     if( (""+v).length <= 3 ) return v;
     if( (""+v).substr(0,(""+v).length-3) == "-" ) return v;
@@ -743,34 +741,71 @@ input.chk { display:inline; background-color:#90ffcf; }
    }
  }
 
- function getFlgStr(){
-  return (getV( inobj[ 5] )+" "  ).substr(0,1)
-       + (getV( inobj[ 6] )+"   ").substr(0,3)
-       + (getV( inobj[ 7] )+"  " ).substr(0,2)
-       + (getV( inobj[ 8] )+" "  ).substr(0,1)
-       + (getV( inobj[ 9] )+" "  ).substr(0,1)
-       + (getV( inobj[10] )+" "  ).substr(0,1);
+ function getFlgFromStr(str){
+   var r=[];
+   var l;
+   l=str.substr(0,1); r[0] = ( l != "X"   )? l/1 : -1 ;
+   l=str.substr(1,3); r[1] = ( l != "XXX" )? l/1 : -1 ;
+   l=str.substr(4,2); r[2] = ( l != "XX"  )? l/1 : -1 ;
+   l=str.substr(6,1); r[3] = ( l != "X"   )? l/1 : -1 ;
+   l=str.substr(7,1); r[4] = ( l != "X"   )? l/1 : -1 ;
+   l=str.substr(8,1); r[5] = ( l != "X"   )? l/1 : -1 ;
+   return r;
+ }
+ function getFlg(){
+  return [getV( inobj[ 5] ) ,
+          getV( inobj[ 6] ) ,
+          getV( inobj[ 7] ) ,
+          getV( inobj[ 8] ) ,
+          getV( inobj[ 9] ) ,
+          getV( inobj[10] ) ];
  }
  function setFlg( str ){
-   var l;
-   l=str.substr(0,1); if( l != "X"   ) setV( inobj[ 5] , l   );
-   l=str.substr(1,3); if( l != "XXX" ) setV( inobj[ 6] , l/1 );
-   l=str.substr(4,2); if( l != "XX"  ) setV( inobj[ 7] , l/1 );
-   l=str.substr(6,1); if( l != "X"   ) setV( inobj[ 8] , l   );
-   l=str.substr(7,1); if( l != "X"   ) setV( inobj[ 9] , l   );
-   l=str.substr(8,1); if( l != "X"   ) setV( inobj[10] , l   );
- }
- function chkFlgStr( stat , checker ){
-   var i,l;
-   for( i=0 ; i < checker.length ; i++ ){
-     l=checker[i].substr(0,1); if( l != "X"   && stat.substr(0,1)   != l   ) continue;
-     l=checker[i].substr(1,3); if( l != "XXX" && stat.substr(1,3)/1 != l/1 ) continue;
-     l=checker[i].substr(4,2); if( l != "XX"  && stat.substr(4,2)   != l/1 ) continue;
-     l=checker[i].substr(6,1); if( l != "X"   && stat.substr(6,1)   != l   ) continue;
-     l=checker[i].substr(7,1); if( l != "X"   && stat.substr(7,1)   != l   ) continue;
-     l=checker[i].substr(8,1); if( l != "X"   && stat.substr(8,1)   != l   ) continue;
-     return true;
+     if( str[0] != -1 ) setV( inobj[ 5] , str[0] );
+     if( str[1] != -1 ) setV( inobj[ 6] , str[1] );
+     if( str[2] != -1 ) setV( inobj[ 7] , str[2] );
+     if( str[3] != -1 ) setV( inobj[ 8] , str[3] );
+     if( str[4] != -1 ) setV( inobj[ 9] , str[4] );
+     if( str[5] != -1 ) setV( inobj[10] , str[5] );
+/* OLD
+   if( str instanceof Array ){
+   }else{
+     var l;
+     l=str.substr(0,1); if( l != "X"   ) setV( inobj[ 5] , l   );
+     l=str.substr(1,3); if( l != "XXX" ) setV( inobj[ 6] , l/1 );
+     l=str.substr(4,2); if( l != "XX"  ) setV( inobj[ 7] , l/1 );
+     l=str.substr(6,1); if( l != "X"   ) setV( inobj[ 8] , l   );
+     l=str.substr(7,1); if( l != "X"   ) setV( inobj[ 9] , l   );
+     l=str.substr(8,1); if( l != "X"   ) setV( inobj[10] , l   );
    }
+*/
+ }
+ function chkFlg( stat , checker ){
+     var i,l;
+     for( i=0 ; i < checker.length ; i++ ){
+       if( checker[i][0] != -1 && stat[0] != checker[i][0] ) continue;
+       if( checker[i][1] != -1 && stat[1] != checker[i][1] ) continue;
+       if( checker[i][2] != -1 && stat[2] != checker[i][2] ) continue;
+       if( checker[i][3] != -1 && stat[3] != checker[i][3] ) continue;
+       if( checker[i][4] != -1 && stat[4] != checker[i][4] ) continue;
+       if( checker[i][5] != -1 && stat[5] != checker[i][5] ) continue;
+       return true;
+     }
+/* OLD
+   if( stat instanceof Array ){
+   }else{
+     var i,l;
+     for( i=0 ; i < checker.length ; i++ ){
+       l=checker[i].substr(0,1); if( l != "X"   && stat.substr(0,1)   != l   ) continue;
+       l=checker[i].substr(1,3); if( l != "XXX" && stat.substr(1,3)/1 != l/1 ) continue;
+       l=checker[i].substr(4,2); if( l != "XX"  && stat.substr(4,2)   != l/1 ) continue;
+       l=checker[i].substr(6,1); if( l != "X"   && stat.substr(6,1)   != l   ) continue;
+       l=checker[i].substr(7,1); if( l != "X"   && stat.substr(7,1)   != l   ) continue;
+       l=checker[i].substr(8,1); if( l != "X"   && stat.substr(8,1)   != l   ) continue;
+       return true;
+     }
+   }
+*/
    return false;
  }
 
@@ -788,18 +823,10 @@ input.chk { display:inline; background-color:#90ffcf; }
             bon[l]=0;
        }
      }
-     switch( gname[bgno[i]] ){ 
-       case "スキルバフ(自己)":
-         if( bchar[i].length == 1 ) for( l=0 ; l<bname.length ; l++ ) if( /^編成バフ/.test(bname[bgno[l]]) || /^配置バフ/.test(gname[bgno[l]]) )
-           for( m=0 ; m< bchar[l].length ; m++ ) if( bchar[i][0] == bchar[l][m] ) 
-              bon[l]=1; /* <="自己バフから、そのユニの編成・配置バフがあればそちらもON" */
-       case "ステ加算値バフ(政務官)":
-       case "ステ加算値バフ(ダンサー)":
-         /* "１つのみ" */
-         for( l=0 ; l<bname.length ; l++ ) if( bgno[l] == bgno[i] ) bon[l]=0;
-         break;
-       default:
-     }
+     
+     if( (gflg[bgno[i]]&1) && bchar[i].length == 1 ) for( l=0 ; l < bname.length ; l++ ) for( m=0 ; ( gflg[bgno[l]] & 0x18 ) == 0 && m < bchar[l].length ; m++ )
+          if( bchar[i][0] == bchar[l][m] ) bon[l]=1; /* <="自己バフから、そのユニの編成・配置バフがあればそちらもON" */
+     for( l=0 ; (gflg[bgno[i]]&2) && l<bname.length ; l++ ) if( bgno[l] == bgno[i] ) bon[l]=0;  /* "１つのみ" */
    }
    bon[i] = k?1:0;
    if( bsetf[i] ) setFlg( bsetf[i] );
@@ -807,34 +834,35 @@ input.chk { display:inline; background-color:#90ffcf; }
  }
 
  function doDraw(ev){
-   var i,j,k,l,m,n;
+   var i,j,k,m;
    var v=[0,0,0]; /*値、ダンサーステ、アンナステ*/
    var w;
-   var flg = [getFlgStr() ,"51151 100" ,"61001 100" ];
-   i=j=k=l=m=n=-1;
+   var flg = [getFlg() ,[5,115,1,1,0,0] ,[6,100,1,1,0,0] ];
+   i=j=k=m=-1;
    for( m=0 ; m<5 ; m++ ){
      v[0]=v[1]=v[2]=0;
      w= [ [0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]];/*"i-dacer-anna:編成、射程、スキル射程、スキル全体、スキル系統、スキル特殊、スキル自己、ステ加算"*/
      for( i=0 ; i < gname.length ; i++  ){
+       k = gflg[i] & 0x1c ;
        for( j=0 ; j < bname.length ; j++ ){
          if( bgno[j] != i ) continue;
          if( bon[j] ){
            if( bview[j].className != "on" ) bview[j].className="on";
            if( ! bchkf[j] ){
-             if( /^編成バフ|^配置バフ/.test(gname[i]) ) for(o=0;o<3;o++) v[o] += bval[j][m];
-             if( (/^スキルバフ/.test(gname[i]) || gname[i].substr(0,7) == "ステ加算値バフ") ) for(o=0;o<3;o++) if( v[o] < bval[j][m] ) v[o] = bval[j][m];
+             if( ( gflg[i] & 0x18 ) == 0 ) for(o=0;o<3;o++) v[o] += bval[j][m];
+             if( ( gflg[i] & 0x18 ) == 8 ) for(o=0;o<3;o++) if( v[o] < bval[j][m] ) v[o] = bval[j][m];
            }else for( o=0 ; o<3 ; o++ ){
-             if( ! chkFlgStr( flg[o] , bchkf[j] ) ) continue;
-             if( /^編成バフ|^配置バフ/.test(gname[i]) ) v[o] += bval[j][m];
-             if( (/^スキルバフ/.test(gname[i]) || gname[i].substr(0,7) == "ステ加算値バフ") && v[o] < bval[j][m] ) v[o] = bval[j][m];
+             if( ! chkFlg( flg[o] , bchkf[j] ) ) continue;
+             if( ( gflg[i] & 0x18 ) == 0 ) v[o] += bval[j][m];
+             if( ( gflg[i] & 0x18 ) == 8 && v[o] < bval[j][m] ) v[o] = bval[j][m];
            }
          }else{
            if( m == 0 ) bview[j].className="";
          }
        }
-       if( /^編成バフ/.test(gname[i]) ) for(o=0;o<3;o++) w[o][0] += v[o];
-       if( /^配置バフ/.test(gname[i]) ) for(o=0;o<3;o++) w[o][1] += v[o];
-       if( /^編成バフ|^配置バフ/.test(gname[i]) ){
+       if( ( gflg[i] & 0x1c ) == 0 ) for(o=0;o<3;o++) w[o][0] += v[o];
+       if( ( gflg[i] & 0x1c ) == 4 ) for(o=0;o<3;o++) w[o][1] += v[o];
+       if( ( gflg[i] & 0x18 ) == 0 ){
            if( (v[0]%10000) != (v[1]%10000) || (v[0]%10000) != (v[2]%10000) ){
              gview[i].cells[2+m].innerText = "＋"+(v[0]%10000)+","+(v[1]%10000)+","+(v[2]%10000)+"％";
            }else{
@@ -846,24 +874,19 @@ input.chk { display:inline; background-color:#90ffcf; }
            }else if( v[0] ){
              gview[i].cells[2+m].innerText += "＋"+v[0];
            }
-         }else if( /^スキルバフ/.test(k) ){
+       }else if( ( gflg[i] & 0x1c ) == 8 ){
            gview[i].cells[2+m].innerText= (v[0] != v[1] || v[0] != v[2])?("×"+(v[0]?(v[0]/100.0):"-")+","+(v[1]?(v[1]/100.0):"-")+","+(v[2]?(v[2]/100.0):"-")):v[0]?("×"+(v[0]/100.0)):"";
-           switch(k){
-             case "スキルバフ(自己)":     for(o=0;o<3;o++) if( w[o][2] < v[o] ) w[o][2] = v[o];  break;
-             case "スキルバフ(射程内)":   for(o=0;o<3;o++) if( w[o][3] < v[o] ) w[o][3] = v[o];  break;
-             case "スキルバフ(全体)":     for(o=0;o<3;o++) if( w[o][4] < v[o] ) w[o][4] = v[o];  break;
-             case "スキルバフ(系統)":     for(o=0;o<3;o++) if( w[o][5] < v[o] ) w[o][5] = v[o];  break;
-             case "スキルバフ(レア指定)": for(o=0;o<3;o++) if( w[o][6] < v[o] ) w[o][6] = v[o];  break;
-           }
-         }
-         else if( "ステ加算値バフ(ダンサー)" == k && w[1][7] < v[1] ) w[1][7] = v[1];
-         else if( "ステ加算値バフ(政務官)"   == k && w[2][7] < v[2] ) w[2][7] = v[2];
-         v[0]=v[1]=v[2]=0;
+           k = (( gflg[i] & 0x0e0 )>>5)+2;
+           for(o=0;o<3;o++) if( w[o][k] < v[o] ) w[o][k] = v[o];
+       }
+       else if( (gflg[i] & 0x0fc)==0x0c && w[1][7] < v[1] ) w[1][7] = v[1];
+       else if( (gflg[i] & 0x0fc)==0x2c && w[2][7] < v[2] ) w[2][7] = v[2];
+       v[0]=v[1]=v[2]=0;
      }
      v=[0,0,0,0,0,0];
      for(o=0;o<3;o++){
        if( m != 1 && m != 2 && o != 0 ) continue;
-       if( o != 2 || chkFlgStr( flg[0] , ["60  1 010"] ) ){
+       if( o != 2 || chkFlg( flg[0] , [[6,0,1,0,1,0]] ) ){
          v[o]=getV(inobj[ [m,m+10,m+12][o] ]);
          v[o+3]=0;
          for( i=0 ;  i <= 7 ; i++ ){
@@ -942,6 +965,7 @@ input.chk { display:inline; background-color:#90ffcf; }
       }
       alert("その呪文は正しくないようだ");
     }
+    for( j=bname.length-1 ; j >= 0 && (gname[bgno[j]] != "スキルバフ(自己)" || bname[j] != "アイギスの神器") ; j-- );
     setV(inobj[ 0],2600); /* HP */
     setV(inobj[ 1],540);  /* atk */
     setV(inobj[ 2],700);  /* def */
@@ -951,7 +975,7 @@ input.chk { display:inline; background-color:#90ffcf; }
     setV(inobj[12],444);  /* d-def */
     setV(inobj[13],294);  /* a-atk */
     setV(inobj[14],197);  /* a-def */
-    onoff( findB("スキルバフ(自己)","アイギスの神器") ,1);
+    if( j >= 0 ) onoff( j , 1 );
     doDraw(olev);
   };
 
