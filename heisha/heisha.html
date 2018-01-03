@@ -14,11 +14,10 @@
 使い方
 ・このページのhtmlをＰＣに保存する
 ・同じ場所に兵舎のスクショを置く
-　　サイズは９６０ × ６４０
 　　ファイル名は1.png , 2.png ...(拡張子は選択したもの)
-　　画面位置を指定してスクショが撮れるツールだと楽
 ・まとめる列数、縦方向のスクショ数(行数)を選択
-・下に表示された画像を名前をつけて保存
+・スクショの切り抜き部分を入力
+・下に表示された画像を名前をつけて保存(IE以外)
 </pre>
 <div>
 <select id="cols">
@@ -27,6 +26,10 @@
   <option value=3 selected="selectef">３列</option>
   <option value=4>４列</option>
   <option value=5>５列</option>
+  <option value=6>６列</option>
+  <option value=7>７列</option>
+  <option value=8>８列</option>
+  <option value=9>９列</option>
 </select>
 <select id="rows">
   <option value=1>１行</option>
@@ -45,22 +48,37 @@
   <option value=".jpeg">スクショ拡張子は.jpeg</option>
   <option value=".bmp">スクショ拡張子は.bmp</option>
 </select>
+くりぬき左上Ｘ位置<input type="number" min=0 max=9999 size=4 id="sx" value=370 />
+Ｙ位置<input type="number" min=0 max=9999 size=4 id="sy" value=50  />
+幅<input type="number" min=0 max=9999 size=4 id="sw" value=590 />
+高さ<input type="number" min=0 max=9999 size=4 id="sh" value=590 />
+ヘッダ部高さ<input type="number" min=0 max=9999 size=4 id="hh" value=30  />
 </div>
 <canvas id="cv"></canvas>
 <script language="javascript">
 function makeimage(ev){
   var cv=document.getElementById("cv");
-  cv.width    = 590 * document.getElementById("cols").value;
-  cv.height   = 560 * document.getElementById("rows").value + 30;
+  var sx=document.getElementById("sx").value/1;
+  var sy=document.getElementById("sy").value/1;
+  var sw=document.getElementById("sw").value/1;
+  var sh=document.getElementById("sh").value/1;
+  var hh=document.getElementById("hh").value/1;
+  cv.width    = sw * document.getElementById("cols").value;
+  cv.height   = (sh-hh) * document.getElementById("rows").value + hh;
   makeimage.i = 0;
   makeimage.img.src = (makeimage.i+1)+document.getElementById("ext").value; /*最初のイメージ*/
 }
 makeimage.img = new Image();
 makeimage.img.onload = function (){
+  var sx=document.getElementById("sx").value/1;
+  var sy=document.getElementById("sy").value/1;
+  var sw=document.getElementById("sw").value/1;
+  var sh=document.getElementById("sh").value/1;
+  var hh=document.getElementById("hh").value/1;
   var cols=document.getElementById("cols").value/1;
   var rows=document.getElementById("rows").value/1;
   var y= makeimage.i % rows;
-  document.getElementById("cv").getContext("2d").drawImage( makeimage.img , 370 , y?80:50 , 590 , 590, Math.floor(makeimage.i/rows)*590,y*560+(y?30:0),590,590 );
+  document.getElementById("cv").getContext("2d").drawImage( makeimage.img ,sx ,sy+(y?hh:0) ,sw ,sh ,Math.floor(makeimage.i/rows)*sw,y*(sh-hh)+(y?hh:0),sw,sh );
   if( ++makeimage.i < cols*rows ) makeimage.img.src=(makeimage.i+1)+document.getElementById("ext").value; /*2つ目以降のイメージ*/
 };
 document.body.onload=makeimage;
