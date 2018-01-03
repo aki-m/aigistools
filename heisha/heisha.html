@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html lang="ja"><head>
+ <META http-equiv="Content-Type" content="text/html;">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title>兵舎キャラ点呼</title>
+</head>
+<body>
+<div nowrap>
+<b>兵舎キャラ点呼　　　　　　　　　　　　　　　　　</b>
+<span style="font-size:13px;position:absolute;top:0px;right:0px;"><a href="../ikusei2.html">...育成試算表</a><br><a href="../meisei.html">...名声値カレンダー</a><br><a href="../buff.html">...バフ試算表</a></span>
+</div>
+
+<pre>
+使い方
+・このページのhtmlをＰＣに保存する
+・同じ場所に兵舎のスクショを置く
+　　サイズは９６０ × ６４０
+　　ファイル名は1.png , 2.png ...(拡張子は選択したもの)
+　　画面位置を指定してスクショが撮れるツールだと楽
+・まとめる列数、縦方向のスクショ数(行数)を選択
+・下に表示された画像を名前をつけて保存
+</pre>
+<div>
+<select id="cols">
+  <option value=1>１列</option>
+  <option value=2>２列</option>
+  <option value=3 selected="selectef">３列</option>
+  <option value=4>４列</option>
+  <option value=5>５列</option>
+</select>
+<select id="rows">
+  <option value=1>１行</option>
+  <option value=2>２行</option>
+  <option value=3>３行</option>
+  <option value=4>４行</option>
+  <option value=5>５行</option>
+  <option value=6>６行</option>
+  <option value=7 selected="selected">７行</option>
+  <option value=8>８行</option>
+  <option value=9>９行</option>
+</select>
+<select id="ext">
+  <option value=".png">スクショ拡張子は.png</option>
+  <option value=".jpg">スクショ拡張子は.jpg</option>
+  <option value=".jpeg">スクショ拡張子は.jpeg</option>
+  <option value=".bmp">スクショ拡張子は.bmp</option>
+</select>
+</div>
+<canvas id="cv"></canvas>
+<script language="javascript">
+
+function makeimage(ev){
+  //var cv=document.createElement("canvas");
+  var cv=document.getElementById("cv");
+  cv.width    = 590 * document.getElementById("cols").value;
+  cv.height   = 560 * document.getElementById("rows").value + 30;
+  makeimage.i = 0;
+  makeimage.img.src = (makeimage.i+1)+document.getElementById("ext").value; /*最初のイメージ*/
+}
+makeimage.img = new Image();
+makeimage.img.onload = function (){
+  var cols=document.getElementById("cols").value/1;
+  var rows=document.getElementById("rows").value/1;
+  var y= makeimage.i % rows;
+  document.getElementById("cv").getContext("2d").drawImage( makeimage.img , 370 , y?80:50 , 590 , 590, Math.floor(makeimage.i/rows)*590,y*560+(y?30:0),590,590 );
+  if( ++makeimage.i < cols*rows ) makeimage.img.src=(makeimage.i+1)+document.getElementById("ext").value; /*2つ目以降のイメージ*/
+};
+document.body.onload=makeimage;
+document.body.addEventListener( "change", makeimage );
+</script>
+</body>
