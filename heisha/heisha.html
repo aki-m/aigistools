@@ -7,55 +7,73 @@
 <body>
 <div nowrap>
 <b>兵舎キャラ点呼　　　　　　　　　　　　　　　　　</b>
-<span style="font-size:13px;position:absolute;top:0px;right:0px;"><a href="../ikusei2.html">...育成試算表</a><br><a href="../meisei.html">...名声値カレンダー</a><br><a href="../buff.html">...バフ試算表</a></span>
 </div>
-
-<pre>
-使い方
-・このページのhtmlをＰＣに保存する
-・同じ場所に兵舎のスクショを置く
-　　ファイル名は1.png , 2.png ...(拡張子は選択したもの)
-・まとめる列数、縦方向のスクショ数(行数)を選択
-・スクショの切り抜き部分を入力
-・下に表示された画像を名前をつけて保存(IE以外)
-</pre>
+<div style="position:relative;">
+<span style="display:inline-block;">
+<u>使い方</u>
+<ul style="margin:0px 0px;">
+<li>このページのhtmlをＰＣに保存する</li>
+<li>同じ場所に兵舎のスクショを置く<br>ファイル名と右のリストを合わせる</li>
+<li>まとめる列数、縦方向のスクショ数(行数)を選択　</li>
+<li>スクショの切り抜き部分を入力</li>
+<li>下に表示された画像を名前をつけて保存(IE以外)</li>
+</ul>
 <div>
-<select id="cols">
-  <option value=1>１列</option>
-  <option value=2>２列</option>
-  <option value=3 selected="selectef">３列</option>
-  <option value=4>４列</option>
-  <option value=5>５列</option>
-  <option value=6>６列</option>
-  <option value=7>７列</option>
-  <option value=8>８列</option>
-  <option value=9>９列</option>
-</select>
-<select id="rows">
-  <option value=1>１行</option>
-  <option value=2>２行</option>
-  <option value=3>３行</option>
-  <option value=4>４行</option>
-  <option value=5>５行</option>
-  <option value=6>６行</option>
-  <option value=7 selected="selected">７行</option>
-  <option value=8>８行</option>
-  <option value=9>９行</option>
-</select>
-<select id="ext">
-  <option value=".png">スクショ拡張子は.png</option>
-  <option value=".jpg">スクショ拡張子は.jpg</option>
-  <option value=".jpeg">スクショ拡張子は.jpeg</option>
-  <option value=".bmp">スクショ拡張子は.bmp</option>
-</select>
-くりぬき左上Ｘ位置<input type="number" min=0 max=9999 size=4 id="sx" value=370 />
-Ｙ位置<input type="number" min=0 max=9999 size=4 id="sy" value=50  />
-幅<input type="number" min=0 max=9999 size=4 id="sw" value=590 />
-高さ<input type="number" min=0 max=9999 size=4 id="sh" value=590 />
-ヘッダ部高さ<input type="number" min=0 max=9999 size=4 id="hh" value=30  />
+  <select id="cols">
+    <option value=1>１列</option>
+    <option value=2>２列</option>
+    <option value=3 selected="selectef">３列</option>
+    <option value=4>４列</option>
+    <option value=5>５列</option>
+    <option value=6>６列</option>
+    <option value=7>７列</option>
+    <option value=8>８列</option>
+    <option value=9>９列</option>
+    <option value=10>１０列</option>
+  </select>
+  <select id="rows">
+    <option value=1>１行</option>
+    <option value=2>２行</option>
+    <option value=3>３行</option>
+    <option value=4>４行</option>
+    <option value=5>５行</option>
+    <option value=6>６行</option>
+    <option value=7 selected="selected">７行</option>
+    <option value=8>８行</option>
+    <option value=9>９行</option>
+    <option value=10>１０行</option>
+  </select>
+  <span>←並べる数↓スクショ切抜き</span><br>
+  <span>左上Ｘ位置</span>      <input type="number" min=0 max=9999 size=4 id="sx" value=370 />
+  <span>Ｙ位置</span>          <input type="number" min=0 max=9999 size=4 id="sy" value=50  /><br>
+  <span>幅</span>              <input type="number" min=0 max=9999 size=4 id="sw" value=590 />
+  <span>高さ(ヘッダ込み)</span><input type="number" min=0 max=9999 size=4 id="sh" value=590 /><br>
+  <span>ヘッダ部高さ</span>    <input type="number" min=0 max=9999 size=4 id="hh" value=30  />
+</div>
+</span>
+<span id="fnlist" style="display:inline-block;overflow-y: scroll;position: absolute;bottom: 0px;top: 0px; border:solid 1px black;"></span>
 </div>
 <canvas id="cv"></canvas>
+<span style="position:fixed; top:0px; left:0px; height:100%; width:100%; background-color:rgba(0,0,0,0.7); display:none;" >
+  <img style="position:absolute;top:50%;left:50%;"  id="preview" />
+</span>
+<span style="font-size:13px;position:absolute;top:0px;right:0px;"><a href="../ikusei2.html">...育成試算表</a><br><a href="../meisei.html">...名声値カレンダー</a><br><a href="../buff.html">...バフ試算表</a></span>
 <script language="javascript">
+function clickCB(ev){ /*<= preview */
+  var img=document.getElementById( "preview" );
+  if( img.parentNode.style.display != "none" ){
+    img.parentNode.style.display= "none";
+    return;
+  }
+  if( ev.target.id.charAt(0) != 'b' ) return;
+  img.src = document.getElementById( "f"+ev.target.id.slice(1) ).value;
+  img.parentNode.style.display= "inline-block";
+}
+function centering(ev){
+  ev.target.style.marginLeft = -ev.target.width/2;
+  ev.target.style.marginTop  = -ev.target.height/2;
+
+}
 function makeimage(ev){
   var cv=document.getElementById("cv");
   var sx=document.getElementById("sx").value/1;
@@ -66,7 +84,7 @@ function makeimage(ev){
   cv.width    = sw * document.getElementById("cols").value;
   cv.height   = (sh-hh) * document.getElementById("rows").value + hh;
   makeimage.i = 0;
-  makeimage.img.src = (makeimage.i+1)+document.getElementById("ext").value; /*最初のイメージ*/
+  makeimage.img.src = document.getElementById( "f"+(makeimage.i+1) ).value; /*最初のイメージ*/
 }
 makeimage.img = new Image();
 makeimage.img.onload = function (){
@@ -79,10 +97,33 @@ makeimage.img.onload = function (){
   var rows=document.getElementById("rows").value/1;
   var y= makeimage.i % rows;
   document.getElementById("cv").getContext("2d").drawImage( makeimage.img ,sx ,sy+(y?hh:0) ,sw ,sh ,Math.floor(makeimage.i/rows)*sw,y*(sh-hh)+(y?hh:0),sw,sh );
-  if( ++makeimage.i < cols*rows ) makeimage.img.src=(makeimage.i+1)+document.getElementById("ext").value; /*2つ目以降のイメージ*/
+  if( ++makeimage.i < cols*rows ) makeimage.img.src=document.getElementById( "f"+(makeimage.i+1) ).value; /*2つ目以降のイメージ*/
 };
 document.body.onload=makeimage;
 document.body.addEventListener( "change", makeimage );
+document.body.addEventListener( "click", clickCB );
+document.getElementById("preview").onload = centering ;
+(function(){
+  var i,e;
+  var l=document.getElementById("fnlist");
+  for(i=0;i<100;i++){
+    e=document.createElement("input");
+    e.type="text";
+    e.size=80;
+    e.id="f"+(i+1);
+    e.value=(i+1)+".png";
+    l.appendChild( e );
+    e=document.createElement("input");
+    e.type="button";
+    e.value="プレビュー...";
+    e.style.paddingTop="0px";
+    e.style.paddingBottom="0px";
+    e.id="b"+(i+1);
+    l.appendChild( e );
+    l.appendChild( document.createElement("br"));
+    
+  }
+})();
 </script>
 </body>
 </html>

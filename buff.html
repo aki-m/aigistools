@@ -495,6 +495,8 @@ input.chk { display:inline; background-color:#90ffcf; }
     addB(r,"天杖レヴァンテイン"         ,0,[  0,140,0,0,120],["エステル"           ],["61021 100"],[1688,1049,120,25,260]);
     /*  (r,"プロテクションⅡ"           ,5,[---------------],["イリス"             ],["61031 100"],[])範囲バフ*/
     addB(r,"聖女の結界"                 ,0,[  0,140,  0,0,0],["イリス"             ],["61031 100"],[]);
+    addB(r,"オーバーヒール"             ,0,[  0,300,  0,0,0],["春着イリス"         ],["61031 100"],[]);
+    addB(r,"聖女の攻めがるた"           ,0,[  0, 70,  0,0,0],["春着イリス"         ],["61031 100"],[]);
     addB(r,"癒しの至宝"                 ,5,[  0,  0,0,0,160],["リアナ"             ],["61031 100"],[]);
     addB(r,"真癒しの至宝"               ,0,[  0,  0,0,0,160],["リアナ"             ],["61031 100"],[]);
     addB(r,"コキュートス"               ,0,[  0,170,  0,0,0],["デスピア"           ],["61041 100"],[]);
@@ -854,12 +856,12 @@ input.chk { display:inline; background-color:#90ffcf; }
      setV( inobj[2] , bsets[i][2] ? bsets[i][2] : 0 );
      setV( inobj[3] , bsets[i][3] ? bsets[i][3] : 0 );
      setV( inobj[4] , bsets[i][4] ? bsets[i][4] : 0 );
-     if( bchkf[i][0] != -1 ) setV( inobj[ 5] , bchkf[i][0] );
-     if( bchkf[i][1] != -1 ) setV( inobj[ 6] , bchkf[i][1] );
-     if( bchkf[i][2] != -1 ) setV( inobj[ 7] , bchkf[i][2] );
-     if( bchkf[i][3] != -1 ) setV( inobj[ 8] , bchkf[i][3] );
-     if( bchkf[i][4] != -1 ) setV( inobj[ 9] , bchkf[i][4] );
-     if( bchkf[i][5] != -1 ) setV( inobj[10] , bchkf[i][5] );
+     if( bchkf[i][0][0] != -1 ) setV( inobj[ 5] , bchkf[i][0][0] );
+     if( bchkf[i][0][1] != -1 ) setV( inobj[ 6] , bchkf[i][0][1] );
+     if( bchkf[i][0][2] != -1 ) setV( inobj[ 7] , bchkf[i][0][2] );
+     if( bchkf[i][0][3] != -1 ) setV( inobj[ 8] , bchkf[i][0][3] );
+     if( bchkf[i][0][4] != -1 ) setV( inobj[ 9] , bchkf[i][0][4] );
+     if( bchkf[i][0][5] != -1 ) setV( inobj[10] , bchkf[i][0][5] );
    }
    doDraw(null);
  }
