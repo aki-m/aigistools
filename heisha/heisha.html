@@ -115,28 +115,16 @@ function makeimage(ev){
     sh=document.getElementById("sh").value/1;
     hh=document.getElementById("hh").value/1;
   }
-  cv.width    = sw * document.getElementById("cols").value;
-  cv.height   = (sh-hh) * document.getElementById("rows").value + hh;
-  var x,y;
   var cols=document.getElementById("cols").value/1;
   var rows=document.getElementById("rows").value/1;
-  for( x=0 ; x < cols ; x++ ) for( y=0 ; y < rows ; y++ ){
-    makeimage.imgs[x*rows+y]= new Image();
-    makeimage.imgs[x*rows+y].cbdata = {};
-    makeimage.imgs[x*rows+y].cbdatax  = x;
-    makeimage.imgs[x*rows+y].cbdatay  = y;
-    makeimage.imgs[x*rows+y].cbdata.i = x*rows+y;
-    makeimage.imgs[x*rows+y].onload = function(){
-      cv.getContext("2d").drawImage( this ,sx              ,sy+(this.cbdatay?hh:0)                  ,sw ,sh-(this.cbdatay?hh:0)
-                                          ,this.cbdatax*sw ,this.cbdaty*(sh-hh)+(this.chdatay?hh:0) ,sw ,sh-(this.cbdatay?hh:0) );
-      makeimage.imgs[this.cbdata.i].onload = null;
-      makeimage.imgs[this.cbdata.i]        = null;
-    };
-    makeimage.imgs[x*rows+y].src = document.getElementById( "f"+(x*rows+y+1) ).value;
-  }
+  cv.width    = sw * cols;
+  cv.height   = (sh-hh) * rows + hh;
+  makeimage.i = 0;
+  makeimage.img = new Image();
+  makeimage.img.onload = makeimage.loadimage;
+  makeimage.img.src = document.getElementById( "f1" ).value;
 }
 makeimage.presetval={"h1":[370,50,590,590,30],"b1":[525,50,410,560,56],"k1":[30,0,900,640,505]};
-makeimage.imgs = [];
 makeimage.loadimage = function (){
   var sx=document.getElementById("sx").value/1;
   var sy=document.getElementById("sy").value/1;
@@ -146,7 +134,9 @@ makeimage.loadimage = function (){
   var cols=document.getElementById("cols").value/1;
   var rows=document.getElementById("rows").value/1;
   var y= makeimage.i % rows;
-  document.getElementById("cv").getContext("2d").drawImage( makeimage.img ,sx ,sy+(y?hh:0) ,sw ,sh ,Math.floor(makeimage.i/rows)*sw,y*(sh-hh)+(y?hh:0),sw,sh );
+  document.getElementById("cv").getContext("2d").drawImage( makeimage.img
+    ,sx                              ,sy       +(y?hh:0) ,sw ,sh-(y?hh:0)
+    ,sw*Math.floor(makeimage.i/rows) ,y*(sh-hh)+(y?hh:0) ,sw ,sh-(y?hh:0) );
   if( ++makeimage.i < cols*rows ) makeimage.img.src=document.getElementById( "f"+(makeimage.i+1) ).value; /*2つ目以降のイメージ*/
 };
 document.body.onload=makeimage;
