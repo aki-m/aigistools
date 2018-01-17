@@ -42,8 +42,33 @@
     <option value=8>８行</option>
     <option value=9>９行</option>
     <option value=10>１０行</option>
+    <option value=11>１１行</option>
+    <option value=12>１２行</option>
+    <option value=13>１３行</option>
+    <option value=14>１４行</option>
+    <option value=15>１５行</option>
+    <option value=16>１６行</option>
+    <option value=17>１７行</option>
+    <option value=18>１８行</option>
+    <option value=19>１９行</option>
+    <option value=20>２０行</option>
+    <option value=21>２１行</option>
+    <option value=22>２２行</option>
+    <option value=23>２３行</option>
+    <option value=24>２４行</option>
+    <option value=25>２５行</option>
+    <option value=26>２６行</option>
+    <option value=27>２７行</option>
+    <option value=28>２８行</option>
+    <option value=29>２９行</option>
+    <option value=30>３０行</option>
   </select>
   <span>←並べる数↓スクショ切抜き</span><br>
+  <span>プリセット：</span><select id="preset">
+    <option value="h1">兵舎・交流回想(960x640：PCブラウザ枠無し)</option>
+    <option value="b1">プレボ(960x640：PCブラウザ枠無し)</option>
+    <option value="k1">交流セリフ(960x640：PCブラウザ枠無し)</option>
+  </select><br>
   <span>左上Ｘ位置</span>      <input type="number" min=0 max=9999 size=4 id="sx" value=370 />
   <span>Ｙ位置</span>          <input type="number" min=0 max=9999 size=4 id="sy" value=50  /><br>
   <span>幅</span>              <input type="number" min=0 max=9999 size=4 id="sw" value=590 />
@@ -75,17 +100,27 @@ function centering(ev){
 
 }
 function makeimage(ev){
+  var sx,sy,sw,sh,hh;
   var cv=document.getElementById("cv");
-  var sx=document.getElementById("sx").value/1;
-  var sy=document.getElementById("sy").value/1;
-  var sw=document.getElementById("sw").value/1;
-  var sh=document.getElementById("sh").value/1;
-  var hh=document.getElementById("hh").value/1;
+  if(ev.target.id == "preset" || ( ev.target.parentNode && ev.target.parentNode.id == "preset") ){
+     document.getElementById("sx").value=sx=makeimage.presetval[ev.target.value][0];
+     document.getElementById("sy").value=sy=makeimage.presetval[ev.target.value][1];
+     document.getElementById("sw").value=sw=makeimage.presetval[ev.target.value][2];
+     document.getElementById("sh").value=sh=makeimage.presetval[ev.target.value][3];
+     document.getElementById("hh").value=hh=makeimage.presetval[ev.target.value][4];
+  }else{
+    sx=document.getElementById("sx").value/1;
+    sy=document.getElementById("sy").value/1;
+    sw=document.getElementById("sw").value/1;
+    sh=document.getElementById("sh").value/1;
+    hh=document.getElementById("hh").value/1;
+  }
   cv.width    = sw * document.getElementById("cols").value;
   cv.height   = (sh-hh) * document.getElementById("rows").value + hh;
   makeimage.i = 0;
   makeimage.img.src = document.getElementById( "f"+(makeimage.i+1) ).value; /*最初のイメージ*/
 }
+makeimage.presetval={"h1":[370,50,590,590,30],"b1":[525,50,410,560,56],"k1":[30,0,900,640,505]};
 makeimage.img = new Image();
 makeimage.img.onload = function (){
   var sx=document.getElementById("sx").value/1;
