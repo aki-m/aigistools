@@ -852,11 +852,11 @@ input.chk { display:inline; background-color:#90ffcf; }
    for( l=1 ; l   <= i            && bchar[i].length == bchar[i-l].length && bchar[i][0] == bchar[i-l][0] && bname[i] == bname[i-l] ; l++ ) bon[i-l] = k?1:0;
    for( l=1 ; i+l <  bname.length && bchar[i].length == bchar[i+l].length && bchar[i][0] == bchar[i+l][0] && bname[i] == bname[i+l] ; l++ ) bon[i+l] = k?1:0;
    if( bsets[i] && bchkf[i].length == 1 ){
-     setV( inobj[0] , bsets[i][0] ? bsets[i][0] : 0 );
-     setV( inobj[1] , bsets[i][1] ? bsets[i][1] : 0 );
-     setV( inobj[2] , bsets[i][2] ? bsets[i][2] : 0 );
-     setV( inobj[3] , bsets[i][3] ? bsets[i][3] : 0 );
-     setV( inobj[4] , bsets[i][4] ? bsets[i][4] : 0 );
+     if( bsets[i][0] ) setV( inobj[0] , bsets[i][0] );
+     if( bsets[i][1] ) setV( inobj[1] , bsets[i][1] );
+     if( bsets[i][2] ) setV( inobj[2] , bsets[i][2] );
+     if( bsets[i][3] ) setV( inobj[3] , bsets[i][3] );
+     if( bsets[i][4] ) setV( inobj[4] , bsets[i][4] );
      if( bchkf[i][0][0] != -1 ) setV( inobj[ 5] , bchkf[i][0][0] );
      if( bchkf[i][0][1] != -1 ) setV( inobj[ 6] , bchkf[i][0][1] );
      if( bchkf[i][0][2] != -1 ) setV( inobj[ 7] , bchkf[i][0][2] );
@@ -909,7 +909,8 @@ input.chk { display:inline; background-color:#90ffcf; }
              gview[i].cells[2+m].innerText += "＋"+v[0];
            }
        }else if( ( gflg[i] & 0x1c ) == 8 ){
-           gview[i].cells[2+m].innerText= (v[0] != v[1] || v[0] != v[2])?("×"+(v[0]?(v[0]/100.0):"-")+","+(v[1]?(v[1]/100.0):"-")+","+(v[2]?(v[2]/100.0):"-")):v[0]?("×"+(v[0]/100.0)):"";
+           if( v[0] >= 10000 ) gview[i].cells[2+m].innerText= "＋"+(v[0]-(v[0]%10000))/10000+","+(v[1]-(v[1]%10000))/10000+","+(v[2]-(v[2]%10000))/10000;
+           else                gview[i].cells[2+m].innerText= (v[0] != v[1] || v[0] != v[2])?("×"+(v[0]?(v[0]/100.0):"-")+","+(v[1]?(v[1]/100.0):"-")+","+(v[2]?(v[2]/100.0):"-")):v[0]?("×"+(v[0]/100.0)):"";
            k = (( gflg[i] & 0x0e0 )>>5)+2;
            for(o=0;o<3;o++) if( w[o][k] < v[o] ) w[o][k] = v[o];
        }
@@ -936,7 +937,11 @@ input.chk { display:inline; background-color:#90ffcf; }
                for( j=0 ; j<v[o+3] ; j++ ) k *= 10;
                v[o] += k;
              }
-           }else{ v[o] *= w[o][i]; v[o+3]+=2; }
+           }else{
+             k=((w[o][i]-(w[o][i]%10000))/10000);
+             for( j=0 ; j< v[o+3] ; j++ ) k*=10;
+             v[o] += k;
+           }
            if( v[o+3] > 0 && v[o] >= 10 && v[o] % 10 == 0 ){ v[o] /= 10 ; v[o+3]--; } /*正規化*/
            if( v[o+3] > 0 && v[o] >= 10 && v[o] % 10 == 0 ){ v[o] /= 10 ; v[o+3]--; } /*正規化*/
          }
