@@ -941,6 +941,7 @@ input.chk { display:inline; background-color:#90ffcf; }
              k=((w[o][i]-(w[o][i]%10000))/10000);
              for( j=0 ; j< v[o+3] ; j++ ) k*=10;
              v[o] += k;
+             if( w[o][i]%10000 ){ v[o] *= (w[o][i]%10000); v[o+3]+=2; }
            }
            if( v[o+3] > 0 && v[o] >= 10 && v[o] % 10 == 0 ){ v[o] /= 10 ; v[o+3]--; } /*正規化*/
            if( v[o+3] > 0 && v[o] >= 10 && v[o] % 10 == 0 ){ v[o] /= 10 ; v[o+3]--; } /*正規化*/
