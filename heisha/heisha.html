@@ -117,12 +117,31 @@ function makeimage(ev){
   }
   cv.width    = sw * document.getElementById("cols").value;
   cv.height   = (sh-hh) * document.getElementById("rows").value + hh;
-  makeimage.i = 0;
-  makeimage.img.src = document.getElementById( "f"+(makeimage.i+1) ).value; /*最初のイメージ*/
+  var x,y;
+  var cols=document.getElementById("cols").value/1;
+  var rows=document.getElementById("rows").value/1;
+  for( x=0 ; x < cols ; x++ ) for( y=0 ; y < rows ; y++ ){
+    makeimage.imgs[x*rows+y]= new Image();
+    makeimage.imgs[x*rows+y].cbdata = {};
+    makeimage.imgs[x*rows+y].cbdata.sx  = sx;
+    makeimage.imgs[x*rows+y].cbdata.sy  = sy+(y?hh:0);
+    makeimage.imgs[x*rows+y].cbdata.sw  = sw;
+    makeimage.imgs[x*rows+y].cbdata.sh  = sh;
+    makeimage.imgs[x*rows+y].cbdata.hh  = hh;
+    makeimage.imgs[x*rows+y].cbdata.dx  = x*sw;
+    makeimage.imgs[x*rows+y].cbdata.dy  = y*(sh-hh)+(y?hh:0);
+    makeimage.imgs[x*rows+y].cbdata.i   = x*rows+y;
+    makeimage.imgs[x*rows+y].onload = function(){
+      cv.getContext("2d").drawImage( this , this.cbdata.sx ,this.cbdata.sy ,this.cbdata.sw ,this.cbdata.sh , this.cbdata.dx , this.cbdata.dy , this.cbdata.sw , this.cbdata.sh );
+      makeimage.imgs[this.cbdata.i].onload = null;
+      makeimage.imgs[this.cbdata.i]        = null;
+    };
+    makeimage.imgs[x*rows+y].src = document.getElementById( "f"+(x*rows+y+1) ).value;
+  }
 }
 makeimage.presetval={"h1":[370,50,590,590,30],"b1":[525,50,410,560,56],"k1":[30,0,900,640,505]};
-makeimage.img = new Image();
-makeimage.img.onload = function (){
+makeimage.imgs = [];
+makeimage.loadimage = function (){
   var sx=document.getElementById("sx").value/1;
   var sy=document.getElementById("sy").value/1;
   var sw=document.getElementById("sw").value/1;
