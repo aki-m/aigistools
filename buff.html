@@ -1329,24 +1329,24 @@ input.chk { display:inline; background-color:#90ffcf; }
    doDraw(null);
  }
 
- function calcTeamPre( in_scan_rec , scan_idx , scan_val , isOuji ){
+ function calcTeamPre( in_scan_rec , scan_idx , scan_val , flg0 ){
    var i,j;
    var single={}; /*連想配列の操作は重いので、固定部分は先に作っておく*/
    var multi=[];
    var multi_i=[];
    var multi_v=[];
    for( i=0 ; i<in_scan_rec.length ; i++ ) if( bchar[in_scan_rec[i]].length <=1 ){
-    single[ bchar[in_scan_rec[i]][0] ]=scan_val[i];
+    single[ bchar[in_scan_rec[i]][0] ] |= scan_val[i]; /*そのバフを使用するのが特定されている場合は総当りの除外*/
    }else{
-    for( j=0 ; j<multi.length && multi[j] != in_scan_rec[i] ; j++);
-    if( j >= multi.length ){
+    for( j=0 ; j<multi.length && multi[j] != in_scan_rec[i] ; j++); /*同一バフ(表示上の同一行)検索*/
+    if( j >= multi.length ){ /*無い場合は追加*/
       multi[j]  =in_scan_rec[i];
       multi_i[j]=0;
       multi_v[j]=scan_val[i];
      }
    }
    viewHensei(
-     calcTeam(single,multi,multi_i,multi_v,isOuji)
+     calcTeam(single,multi,multi_i,multi_v, chkFlg( flg0 , [[6,0,1,0,1,0]] ) ) ,flg0[1]
    );
  }
 
@@ -1357,7 +1357,7 @@ input.chk { display:inline; background-color:#90ffcf; }
      if( Object.assign ) wk=Object.assign({},single);
      else{ wk={}; for( i in single ) wk[i]=single[i]; }
      for( i=0 ; i<multi.length ; i++ ){ /*キャラ名をキーに連想配列に格納、名前でシングル化される*/
-      wk[bchar[multi[i]][multi_i[i]]] = multi_v[i];
+      wk[bchar[multi[i]][multi_i[i]]] |= multi_v[i];
      }
      if( ! wk["ミヤビ"] && ! wk["ビビアン"] && ! wk["マーニー"] && ! wk["ハナ"] && ! wk["ワルツ"] ) wk["ダンサー"]=2;
      if( isOuji ) if( ! wk["アンナ"] && ! wk["アンナ(支給服)"] && ! wk["アンナ(軍服)"] && ! wk["アンナ(水着)"] ) wk["政務官"]=2;
@@ -1371,7 +1371,7 @@ input.chk { display:inline; background-color:#90ffcf; }
    }
    return team;
  }
- function viewHensei(team){
+ function viewHensei(team , in_class ){
    var i,j,n,o,wk;
    o="";
    for(i=0;i<team.length;i++){
@@ -1384,6 +1384,10 @@ input.chk { display:inline; background-color:#90ffcf; }
        }else{
          wk += "(<span class='nw'>"+j+"</span>)";
        }
+     }
+     if( in_class >= 200 ){
+       n+=1;
+       wk += "[<span class='nw'>対象トークン</span>]";
      }
      o += "<section><h4>●編成"+(i+1)+"<span class='nw'>["+n+"人配置]／("+Object.keys(team[i]).length+"人編成)</h4>"+wk+"</section>";
    }
@@ -1508,7 +1512,7 @@ input.chk { display:inline; background-color:#90ffcf; }
        scan_val[j]=2;
      }
    }
-   calcTeamPre( scan_rec , scan_idx , scan_val , chkFlg( flg[0] , [[6,0,1,0,1,0]] ) );
+   calcTeamPre( scan_rec , scan_idx , scan_val , flg[0] );
  }
 
   function doSelect(e){
