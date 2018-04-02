@@ -15,12 +15,6 @@ var bkplay=Audio.prototype.play;
 Audio.prototype.play=function(){
    cnt++;
    document.getElementById("cnt").innerText=""+cnt;
-   for( var i in buf.getAudioTracks() ) buf.removeTrack(i);
-   var s=this.captureStream();
-   s=s.getAudioTracks();
-   for( var i in s ){
-     buf.addTrack(i);
-   }
 
    if( ! recorder ){
      recorder = new MediaRecorder(buf);
@@ -31,6 +25,14 @@ Audio.prototype.play=function(){
      };
      recorder.start();
    }
+
+   for( var i in buf.getAudioTracks() ) buf.removeTrack(i);
+   var s=this.captureStream();
+   s=s.getAudioTracks();
+   for( var i in s ){
+     buf.addTrack(i);
+   }
+   a.onaddtrack=function(ev3){ buf.addTrack(ev3); }
 
    bkplay.call(this);
 };
