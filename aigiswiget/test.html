@@ -17,7 +17,8 @@ Audio.prototype.play=function(){
    document.getElementById("cnt").innerText=""+cnt;
    for( var i in buf.getAudioTracks() ) buf.removeTrack(i);
    var s=this.captureStream();
-   for( var i in s.getAudioTracks() ){
+   s=s.getAudioTracks();
+   for( var i in s ){
      buf.addTrack(i);
    }
 
