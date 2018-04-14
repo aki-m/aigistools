@@ -1,0 +1,52 @@
+﻿{
+   "name": "ゴブみて",
+   "version": "0.0.1",
+   //"app":{ アプリのとき
+   "background" :{
+     "page": "background.html",
+     "persistent": true
+   //}
+   },
+   "manifest_version": 2,
+   "minimum_chrome_version": "31",
+
+   "permissions": [ "tabs","tabCapture","downloads","commands" ],
+   "page_action": {
+      "default_icon": "icons/icon19.png",
+      "default_title": "ゴブみて"
+   },
+   "content_scripts": [
+       {    "all_frames": false,
+            "js": [ "window.js" ],
+            "matches": [ "http://pc-play.games.dmm.co.jp/play/aigis*",
+                         "http://pc-play.games.dmm.co.jp/play/flower-x*",
+                         "http://pc-play.games.dmm.co.jp/play/kamipror*",
+                         "http://pc-play.games.dmm.com/play/aigisc*",
+                         "http://pc-play.games.dmm.com/play/flower*",
+                         "http://pc-play.games.dmm.com/play/kamipro*",
+                         "http://pc-play.games.dmm.com/play/oshirore*",
+                         "http://pc-play.games.dmm.com/play/kanpani*",
+                         "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854*"
+                       ]
+       } , {"all_frames": true,
+            "js": [ "insert.js" ],
+            "matches": [ "http://assets.millennium-war.net/*",
+                         "http://assets.shiropro-re.net/html/Oshiro.html",
+                         "https://r.kamihimeproject.net/front/*"
+                       ]
+       }
+   ],
+   "commands": {
+       "toggle_capture":{
+           "suggested_key":{
+               "default":"Ctrl+Home"
+           },
+           "description":"toggle capture"
+       }
+   },
+   "icons": {
+      "128": "icons/icon128.png",
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+   }
+}
