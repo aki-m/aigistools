@@ -39,9 +39,19 @@
    "commands": {
        "toggle_capture":{
            "suggested_key":{
-               "default":"Ctrl+Home"
+               "default":"Ctrl+Space",
+               "windows":"Ctrl+Space"
            },
-           "description":"toggle capture"
+           "description":"toggle capture",
+           "global":true
+       },
+       "_execute_page_action":{
+           "suggested_key":{
+               "default":"Ctrl+Home",
+               "windows":"Ctrl+Home"
+           },
+           "description":"toggle capture",
+           "global":true
        }
    },
    "icons": {
