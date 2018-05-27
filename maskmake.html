@@ -1,0 +1,231 @@
+﻿<html lang="ja">
+<head>
+ <META http-equiv="Content-Type" content="text/html;"  charset="UTF-8">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title>簡易マスクコラメーカー</title>
+ <style>
+body{
+  position:absolute;
+  border:0px;
+  margin:0px;
+  width:100%;
+  height:100%;
+ cursor: pointer;
+ user-select: none;
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ -o-user-select: none;
+}
+img {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+#cmd {
+ border:solid 1px black;
+ padding: 10px;
+ position:absolute;
+ top:-40px;
+}
+#cmd:hover{
+ top:0px;
+ position:fixed;
+}
+#cmd span{
+ padding:3px 12px;
+ border-radius:8px;
+ background-color: #e8ffff;
+ border: solid 1px #999;
+}
+#cmd span.bon { background-color: #ff4; }
+</style>
+</head>
+<body>
+<div id="cmd">
+<span id="m0" class="bon">move</span>
+<span id="m1">rot-x</span>
+<span id="m2">rot-y</span>
+<span id="m3">rot-z</span>
+<span id="m4">zoom</span>
+<span id="m5">brightness</span>
+<span id="m6">contrast</span>
+<span id="m7">saturate</span>
+<span id="m8">rot-hue</span>
+<span id="m9">grayscale</span>
+<span id="m10">invert</span>
+<span id="m11">delete</span>
+</div>
+ <script>
+(function(){
+var m={};
+var n=0;
+var mode=0;
+var delete_pending=null;
+var obj=null;
+var sx,sy;
+var cancelEv=function(ev){
+  ev.preventDefault();
+  ev.stopPropagation();
+  return false;
+};
+document.body.addEventListener("dragenter",function(ev){ return cancelEv(ev); });
+document.body.addEventListener("dragover" ,function(ev){ return cancelEv(ev); });
+document.body.addEventListener("dragstart",function(ev){
+  (ev.dataTransfer?ev.dataTransfer:ev.originalEvent.dataTransfer).dropEffect ="move";
+  sx=ev.x;
+  sy=ev.y;
+});
+function mulM( m1,m2 ,overwriteflg){
+  var m3=[];
+  m3[ 0] = m1[ 0]*m2[ 0] +m1[ 1]*m2[ 4] +m1[ 2]*m2[ 8] +m1[ 3]*m2[12];
+  m3[ 1] = m1[ 0]*m2[ 1] +m1[ 1]*m2[ 5] +m1[ 2]*m2[ 9] +m1[ 3]*m2[13];
+  m3[ 2] = m1[ 0]*m2[ 2] +m1[ 1]*m2[ 6] +m1[ 2]*m2[10] +m1[ 3]*m2[14];
+  m3[ 3] = m1[ 0]*m2[ 3] +m1[ 1]*m2[ 7] +m1[ 2]*m2[11] +m1[ 3]*m2[15];
+ 
+  m3[ 4] = m1[ 4]*m2[ 0] +m1[ 5]*m2[ 4] +m1[ 6]*m2[ 8] +m1[ 7]*m2[12];
+  m3[ 5] = m1[ 4]*m2[ 1] +m1[ 5]*m2[ 5] +m1[ 6]*m2[ 9] +m1[ 7]*m2[13];
+  m3[ 6] = m1[ 4]*m2[ 2] +m1[ 5]*m2[ 6] +m1[ 6]*m2[10] +m1[ 7]*m2[14];
+  m3[ 7] = m1[ 4]*m2[ 3] +m1[ 5]*m2[ 7] +m1[ 6]*m2[11] +m1[ 7]*m2[15];
+ 
+  m3[ 8] = m1[ 8]*m2[ 0] +m1[ 9]*m2[ 4] +m1[10]*m2[ 8] +m1[11]*m2[12];
+  m3[ 9] = m1[ 8]*m2[ 1] +m1[ 9]*m2[ 5] +m1[10]*m2[ 9] +m1[11]*m2[13];
+  m3[10] = m1[ 8]*m2[ 2] +m1[ 9]*m2[ 6] +m1[10]*m2[10] +m1[11]*m2[14];
+  m3[11] = m1[ 8]*m2[ 3] +m1[ 9]*m2[ 7] +m1[10]*m2[11] +m1[11]*m2[15];
+ 
+  m3[12] = m1[12]*m2[ 0] +m1[13]*m2[ 4] +m1[14]*m2[ 8] +m1[15]*m2[12];
+  m3[13] = m1[12]*m2[ 1] +m1[13]*m2[ 5] +m1[14]*m2[ 9] +m1[15]*m2[13];
+  m3[14] = m1[12]*m2[ 2] +m1[13]*m2[ 6] +m1[14]*m2[10] +m1[15]*m2[14];
+  m3[15] = m1[12]*m2[ 3] +m1[13]*m2[ 7] +m1[14]*m2[11] +m1[15]*m2[15];
+  if(overwriteflg){
+    m1[ 0]=m3[ 0];
+    m1[ 1]=m3[ 1];
+    m1[ 2]=m3[ 2];
+    m1[ 3]=m3[ 3];
+    m1[ 4]=m3[ 4];
+    m1[ 5]=m3[ 5];
+    m1[ 6]=m3[ 6];
+    m1[ 7]=m3[ 7];
+    m1[ 8]=m3[ 8];
+    m1[ 9]=m3[ 9];
+    m1[10]=m3[10];
+    m1[11]=m3[11];
+    m1[12]=m3[12];
+    m1[13]=m3[13];
+    m1[14]=m3[14];
+    m1[15]=m3[15];
+  }
+  return m3;
+}
+function trans(dx,dy,mode){
+  var w=m[obj.id];
+  w[12] -= w[16]; /*16,17は回転中心を0,0にするためのオフセット*/
+  w[13] -= w[17];
+  switch(mode){
+    case 0:
+      w[16] += dx;
+      w[17] += dy;
+      break;
+    case 1:
+      dy /=20;
+      mulM(w,[1,0,0,0 ,0,Math.cos(dy),-Math.sin(dy),0 ,0,Math.sin(dy),Math.cos(dy),0 ,0,0,0,1] , true);
+      break;
+    case 2:
+      dx /=20;
+      mulM(w,[Math.cos(dx),0,Math.sin(dx),0 ,0,1,0,0 ,-Math.sin(dx),0,Math.cos(dx),0 ,0,0,0,1] , true);
+      break;
+    case 3:
+      dx =(dx+dy)/30;
+      mulM(w,[Math.cos(dx),-Math.sin(dx),0,0 ,Math.sin(dx),Math.cos(dx),0,0 ,0,0,1,0 ,0,0,0,1] , true);
+      break;
+    case 4:
+      dx  = (dx+dy)/30+1;
+      mulM(w,[dx,0,0,0 ,0,dx,0,0 ,0,0,dx,0 ,0,0,0,1] , true);
+      break;
+    case  5: w[19] += (dx+dy)/10; if(w[19] < 0 ){ w[19]=0; } break;
+    case  6: w[20] += (dx+dy)/10; if(w[20] < 0 ){ w[20]=0; } break;
+    case  7: w[21] += (dx+dy)/10; if(w[21] < 0 ){ w[21]=0; } break;
+    case  8: w[22] += (dx+dy)/10; w[22] %= 360; break;
+    case  9: w[23] += (dx+dy)/10; if(w[23] < 0 ){ w[23]=0; } if(w[23] > 100 ){ w[23]=100; } break;
+    case 10: w[24] += (dx+dy)/10; if(w[24] < 0 ){ w[24]=0; } if(w[24] > 100 ){ w[24]=100; } break;
+  }
+  w[12] += w[16];
+  w[13] += w[17];
+  if( mode <= 4 ){
+    obj.style.transform="matrix3d("
+                              +w[ 0]+","+w[ 1]+","+w[ 2]+","+w[ 3]+","
+                              +w[ 4]+","+w[ 5]+","+w[ 6]+","+w[ 7]+","
+                              +w[ 8]+","+w[ 9]+","+w[10]+","+w[11]+","
+                              +w[12]+","+w[13]+","+w[14]+","+w[15]+")";
+  }else{
+      obj.style.filter="brightness("+w[19]+"%) "
+                      +"contrast("+w[20]+"%) "
+                      +"saturate("+w[21]+"%) "
+                      +"hue-rotate("+w[22]+"deg)"
+                      +"grayscale("+w[23]+"%) "
+                      +"invert("+w[24]+"%) ";
+  }
+}
+
+document.body.addEventListener("drag", function(ev){
+  obj = ev.target;
+  trans( ev.x - sx , ev.y - sy ,mode);
+  sx=ev.x;
+  sy=ev.y;
+});
+document.body.addEventListener("drop",function(ev){
+  var tr   = ev.dataTransfer?ev.dataTransfer:ev.originalEvent.dataTransfer;
+  if( delete_pending ){
+   document.body.removeChild(delete_pending);
+   document.getElementById("m11").innerText="delete";
+   delete_pending = null;
+  }
+  if( tr.files && tr.files.length > 0 ){
+    tr=tr.files[0];
+    m["i"+n] = [ 1,0,0,0 ,0,1,0,0 ,0,0,1,0 ,ev.x,ev.y,0,1 ,ev.x,ev.y,0 ,100,100,100,0,0,0 ];
+    setTimeout( function(){
+      obj = document.createElement("img");
+      obj.id="i"+n; n++;
+      obj.src=window.URL.createObjectURL(tr);
+      obj.draggable="true";
+      obj.addEventListener( "load", function(ev2){
+        trans( -ev2.target.clientWidth/2 , -ev2.target.clientHeight/2 ,0);
+      },0);
+      document.body.append(obj);
+    },0);
+  }else
+  if( ev.target.id && ev.target.id != "" ){
+    obj = ev.target;
+    trans( ev.x - sx , ev.y - sy ,mode);
+  }
+  return cancelEv(ev);
+});
+document.body.onclick=function(ev){
+  switch(ev.target.id){
+   case "m0": document.getElementById("m"+mode).className=""; mode= 0; ev.target.className="bon"; break;
+   case "m1": document.getElementById("m"+mode).className=""; mode= 1; ev.target.className="bon"; break;
+   case "m2": document.getElementById("m"+mode).className=""; mode= 2; ev.target.className="bon"; break;
+   case "m3": document.getElementById("m"+mode).className=""; mode= 3; ev.target.className="bon"; break;
+   case "m4": document.getElementById("m"+mode).className=""; mode= 4; ev.target.className="bon"; break;
+   case "m5": document.getElementById("m"+mode).className=""; mode= 5; ev.target.className="bon"; break;
+   case "m6": document.getElementById("m"+mode).className=""; mode= 6; ev.target.className="bon"; break;
+   case "m7": document.getElementById("m"+mode).className=""; mode= 7; ev.target.className="bon"; break;
+   case "m8": document.getElementById("m"+mode).className=""; mode= 8; ev.target.className="bon"; break;
+   case "m9": document.getElementById("m"+mode).className=""; mode= 9; ev.target.className="bon"; break;
+   case "m10":document.getElementById("m"+mode).className=""; mode=10; ev.target.className="bon"; break;
+   case "m11":
+     if( delete_pending ){
+       ev.target.innerText="delete"; delete_pending=null; obj.style.visibility="visible";
+     }else if(obj){
+       ev.target.innerText="del-cancel"; delete_pending=obj; obj.style.visibility="hidden";
+     }
+     break;
+  }
+}
+document.body.onload=function(){
+alert("１．画像ファイルをドラッグ＆ドロップして表示\n２．上部コマンドバー(マウスカーソルを近づけると表示)でコマンド選択\n３．表示画像をドラッグして位置・角度・色等を調整\n４．１～３繰り返し");
+}
+})();
+ </script>
+</body>
+</html>
