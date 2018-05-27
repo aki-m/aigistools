@@ -20,7 +20,6 @@ body{
 }
 img {
   position: absolute;
-  transform-style: preserve-3d;
 }
 #cmd {
  border:solid 1px black;
@@ -66,16 +65,9 @@ var obj=null;
 var sx,sy;
 var cancelEv=function(ev){
   ev.preventDefault();
-  ev.stopPropagation();
-  return false;
+  //ev.stopPropagation();
+  return true;//false;
 };
-document.body.addEventListener("dragenter",function(ev){ return cancelEv(ev); });
-document.body.addEventListener("dragover" ,function(ev){ return cancelEv(ev); });
-document.body.addEventListener("dragstart",function(ev){
-  (ev.dataTransfer?ev.dataTransfer:ev.originalEvent.dataTransfer).dropEffect ="move";
-  sx=ev.x;
-  sy=ev.y;
-});
 function mulM( m1,m2 ,overwriteflg){
   var m3=[];
   m3[ 0] = m1[ 0]*m2[ 0] +m1[ 1]*m2[ 4] +m1[ 2]*m2[ 8] +m1[ 3]*m2[12];
@@ -117,8 +109,10 @@ function mulM( m1,m2 ,overwriteflg){
   }
   return m3;
 }
+
 function trans(dx,dy,mode){
   var w=m[obj.id];
+  if( ! w ) return;
   w[12] -= w[16]; /*16,17は回転中心を0,0にするためのオフセット*/
   w[13] -= w[17];
   switch(mode){
@@ -152,13 +146,26 @@ function trans(dx,dy,mode){
   w[12] += w[16];
   w[13] += w[17];
   if( mode <= 4 ){
+    obj.style.webkitTransform=
+    obj.style.mozTransform=
+    obj.style.msTransform=
+    obj.style.oTransform=
     obj.style.transform="matrix3d("
                               +w[ 0]+","+w[ 1]+","+w[ 2]+","+w[ 3]+","
                               +w[ 4]+","+w[ 5]+","+w[ 6]+","+w[ 7]+","
                               +w[ 8]+","+w[ 9]+","+w[10]+","+w[11]+","
                               +w[12]+","+w[13]+","+w[14]+","+w[15]+")";
+    obj.style.webkitTransformStyle=
+    obj.style.mozTransformStyle=
+    obj.style.msTransformStyle=
+    obj.style.oTransformStyle=
+    obj.style.transformStyle="preserve-3d";
   }else{
-      obj.style.filter="brightness("+w[19]+"%) "
+    obj.style.webkitFilter=
+    obj.style.mozFilter=
+    obj.style.msFilter=
+    obj.style.oFilter=
+    obj.style.filter="brightness("+w[19]+"%) "
                       +"contrast("+w[20]+"%) "
                       +"saturate("+w[21]+"%) "
                       +"hue-rotate("+w[22]+"deg)"
@@ -167,13 +174,25 @@ function trans(dx,dy,mode){
   }
 }
 
-document.body.addEventListener("drag", function(ev){
-  obj = ev.target;
-  trans( ev.x - sx , ev.y - sy ,mode);
-  sx=ev.x;
-  sy=ev.y;
+document.body.addEventListener("drag",function(ev){
+console.log("drag");
+    if( ev.pageX || ev.pageY ){
+      trans( ev.pageX - sx , ev.pageY - sy ,mode);
+      sx=ev.pageX;
+      sy=ev.pageY;
+    }else if( ev.x || ev.y ){
+      trans( ev.x - sx , ev.y - sy ,mode);
+      sx=ev.x;
+      sy=ev.y;
+    }else if( ev.clientX || ev.clientY ){
+      trans( ev.clientX - sx , ev.clientY - sy ,mode);
+      sx=ev.clientX;
+      sy=ev.clientY;
+    }
+  return cancelEv(ev);
 });
 document.body.addEventListener("drop",function(ev){
+console.log("drop");
   var tr   = ev.dataTransfer?ev.dataTransfer:ev.originalEvent.dataTransfer;
   if( delete_pending ){
    document.body.removeChild(delete_pending);
@@ -182,24 +201,109 @@ document.body.addEventListener("drop",function(ev){
   }
   if( tr.files && tr.files.length > 0 ){
     tr=tr.files[0];
-    m["i"+n] = [ 1,0,0,0 ,0,1,0,0 ,0,0,1,0 ,ev.x,ev.y,0,1 ,ev.x,ev.y,0 ,100,100,100,0,0,0 ];
-    setTimeout( function(){
-      obj = document.createElement("img");
-      obj.id="i"+n; n++;
-      obj.src=window.URL.createObjectURL(tr);
-      obj.draggable="true";
-      obj.addEventListener( "load", function(ev2){
+    if( ev.pageX || ev.pageY ){
+      m["i"+n] = [ 1,0,0,0 ,0,1,0,0 ,0,0,1,0 ,ev.pageX,ev.pageY,0,1 ,ev.pageX,ev.pageY,0 ,100,100,100,0,0,0 ];
+    }else if( ev.x || ev.y ){
+      m["i"+n] = [ 1,0,0,0 ,0,1,0,0 ,0,0,1,0 ,ev.x,ev.y,0,1 ,ev.x,ev.y,0 ,100,100,100,0,0,0 ];
+    }else{
+      m["i"+n] = [ 1,0,0,0 ,0,1,0,0 ,0,0,1,0 ,mouseX,ev.screenY,0,1 ,mouseX,ev.screenY,0 ,100,100,100,0,0,0 ];
+    }
+    obj = document.createElement("img");
+    obj.id="i"+n; n++;
+    obj.src=window.URL.createObjectURL(tr);
+    obj.draggable=false;
+    obj.addEventListener( "load", function(ev2){
         trans( -ev2.target.clientWidth/2 , -ev2.target.clientHeight/2 ,0);
-      },0);
-      document.body.append(obj);
-    },0);
+    });
+    document.body.append(obj);
   }else
   if( ev.target.id && ev.target.id != "" ){
     obj = ev.target;
-    trans( ev.x - sx , ev.y - sy ,mode);
+    if( ev.pageX || ev.pageY ){
+      trans( ev.pageX - sx , ev.pageY - sy ,mode);
+      sx=ev.pageX;
+      sy=ev.pageY;
+    }else if( ev.x || ev.y ){
+      trans( ev.x - sx , ev.y - sy ,mode);
+      sx=ev.x;
+      sy=ev.y;
+    }else if( ev.clientX || ev.clientY ){
+      trans( ev.clientX - sx , ev.clientY - sy ,mode);
+      sx=ev.clientX;
+      sy=ev.clientY;
+    }
+
   }
   return cancelEv(ev);
 });
+var mdown=false;
+document.body,onmousedown=function(ev){
+console.log("mdown");
+  if( ev.target.id.charAt(0) == "i" ){
+    if( ev.pageX || ev.pageY ){
+      sx=ev.pageX;
+      sy=ev.pageY;
+    }else if( ev.x || ev.y ){
+      sx=ev.x;
+      sy=ev.y;
+    }else if( ev.clientX || ev.clientY ){
+      sx=ev.clientX;
+      sy=ev.clientY;
+    }
+    mdown=true;
+  }
+}
+
+document.body,onmousemove=function(ev){
+console.log("mmove");
+  if( mdown ){
+    if( ev.pageX || ev.pageY ){
+      trans( ev.pageX - sx , ev.pageY - sy ,mode);
+      sx=ev.pageX;
+      sy=ev.pageY;
+    }else if( ev.x || ev.y ){
+      trans( ev.x - sx , ev.y - sy ,mode);
+      sx=ev.x;
+      sy=ev.y;
+    }else if( ev.clientX || ev.clientY ){
+      trans( ev.clientX - sx , ev.clientY - sy ,mode);
+      sx=ev.clientX;
+      sy=ev.clientY;
+    }
+    return cancelEv(ev);
+  }
+}
+
+document.body,onmouseup=function(ev){
+console.log("mup");
+  if( mdown ){
+    mdown=false;
+    return cancelEv(ev);
+  }
+}
+document.addEventListener("wheel",function(ev){
+console.log("mup");
+  if( obj ){
+    var dy=(ev.deltaY?-ev.deltaY:ev.wheelDalta?ev.wheelDalta:-ev.detail)/50;
+    trans( dy , dy ,mode);
+    return cancelEv(ev);
+  }
+});
+/*
+document.addEventListener("dragenter",function(ev){
+console.log("d-enter");
+ return cancelEv(ev);
+});
+*/
+document.addEventListener("contextmenu",function(ev){
+console.log("menu");
+ return cancelEv(ev);
+});
+document.addEventListener("dragover" ,function(ev){
+console.log("d-over");
+ return cancelEv(ev);
+});
+
 document.body.onclick=function(ev){
   switch(ev.target.id){
    case "m0": document.getElementById("m"+mode).className=""; mode= 0; ev.target.className="bon"; break;
