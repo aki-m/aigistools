@@ -244,6 +244,7 @@ var mdown=false;
 document.body,onmousedown=function(ev){
 console.log("mdown");
   if( ev.target.id.charAt(0) == "i" ){
+    obj=ev.target;
     if( ev.pageX || ev.pageY ){
       sx=ev.pageX;
       sy=ev.pageY;
