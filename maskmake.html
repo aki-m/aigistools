@@ -213,7 +213,11 @@ console.log("drop");
     obj.src=window.URL.createObjectURL(tr);
     obj.draggable=false;
     obj.addEventListener( "load", function(ev2){
-        trans( -ev2.target.clientWidth/2 , -ev2.target.clientHeight/2 ,0);
+      var cw=-ev2.target.clientWidth/2;
+      var ch=-ev2.target.clientHeight/2;
+      setTimeout( function(){
+        trans( cw , ch ,0);
+      },0);
     });
     document.body.append(obj);
   }else
