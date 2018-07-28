@@ -62,23 +62,23 @@ span.w{ border:none; white-space:normal; }
 #t tr:hover           > td.REA4{ background:#d0ffff; color:black; }
 #t tr:hover           > td.REA3{ background:#ffffb0; color:black; }
 #t tr:hover           > td.REA2{ background:#b0b0b0; color:black; }
-#t tr.on              > td     { background:#bef; color:black; }
-#t tr.on              > td.REA6{ background:#bef; color:black; }
-#t tr.on              > td.REA5{ background:#bef; color:black; }
-#t tr.on              > td.REA4{ background:#bef; color:black; }
-#t tr.on              > td.REA3{ background:#bef; color:black; }
-#t tr.on              > td.REA2{ background:#bef; color:black; }
+#t tr.on              > td     { background:#afb; color:black; }
+#t tr.on              > td.REA6{ background:#afb; color:black; }
+#t tr.on              > td.REA5{ background:#afb; color:black; }
+#t tr.on              > td.REA4{ background:#afb; color:black; }
+#t tr.on              > td.REA3{ background:#afb; color:black; }
+#t tr.on              > td.REA2{ background:#afb; color:black; }
 #t.m tr               > td.REA6{ background:#909090; color:white; }
 #t.m tr               > td.REA5{ background:#e0e0e0; color:black; }
 #t.m tr               > td.REA4{ background:#d0ffff; color:black; }
 #t.m tr               > td.REA3{ background:#ffffb0; color:black; }
 #t.m tr               > td.REA2{ background:#b0b0b0; color:black; }
-#t.m tr.on              > td     { background:#bef; color:black; }
-#t.m tr.on              > td.REA6{ background:#bef; color:black; }
-#t.m tr.on              > td.REA5{ background:#bef; color:black; }
-#t.m tr.on              > td.REA4{ background:#bef; color:black; }
-#t.m tr.on              > td.REA3{ background:#bef; color:black; }
-#t.m tr.on              > td.REA2{ background:#bef; color:black; }
+#t.m tr.on              > td     { background:#afb; color:black; }
+#t.m tr.on              > td.REA6{ background:#afb; color:black; }
+#t.m tr.on              > td.REA5{ background:#afb; color:black; }
+#t.m tr.on              > td.REA4{ background:#afb; color:black; }
+#t.m tr.on              > td.REA3{ background:#afb; color:black; }
+#t.m tr.on              > td.REA2{ background:#afb; color:black; }
 
 #t th,#t tr.t > th.csw,#t tr.f > th.csw,#t tr.f>th.ssw{ background-color: steelblue; color:white; }
 #t tr.f > th,#t tr.f > td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
@@ -241,41 +241,42 @@ input.chk { display:inline; background-color:#90ffcf; }
 <li>「兵舎、聖霊預かり所にいるだけで」または<br>
 「所持しているだけで」となっているアビ</li>
 <li>女神の加護(＝ショップブースト)</li>
-</ul></li>
+</ul></li><br>
 <li><b>編成すると適用（編成バフ）</b><br>
-ミッション開始時に適用、またはwave開始時に<br>
-再計算される。(waveをまたぐ敵のHPを除く)<br>
-トークンに編成バフはかからない。(編成に居ない為)<br>
-撤退およびホリーでの復活で変化なし。(効果は継続)<br>
 <ul>
 <li>「出撃メンバーにいるだけで」等となっている<br>アビ・クラスアビ
 (GG/GG+、シーフ特性等も同様)</li>
 <li>アビのうちクリア報酬UP系のもの<br>年賀の祝い袋,金運招来,豊穣の杖,大商人の才覚</li>
 </ul>
-</li>
+ミッション開始時に適用、またはwave開始時に<br>
+再計算される。(waveをまたぐ敵のHPを除く)<br>
+トークンに編成バフはかからない。(編成に居ない為)<br>
+撤退およびホリーでの復活で変化なし。(効果は継続)
+</li><br>
 <li><b>配置中適用（配置バフ）</b><br>
-配置、死亡、撤退、消滅、回収毎に計算される。<br>
 <ul>
 <li>「配置中」等となっているアビ・クラスアビ</li>
 </ul>
-</li>
+配置、死亡、撤退、消滅、回収毎に計算される。<br>
+ダンサー系は加算バフとして別枠で計算される。
+</li><br>
 <li><b>スキル時、スキル中適用（スキルバフ）</b><br>
-スキル発動時、終了時に計算される。<br>
-スキル時間無限は回収や麻痺で効果が切れる。<br>
-永続強化スキルはミッション中継続。<br>
 <ul>
 <li>スキル欄に記載されているもの</li>
 <li>「スキル中」等となっているアビ・クラスアビ</li>
 </ul>
+スキル発動時、終了時に計算される。<br>
+スキル時間無限は回収や麻痺で効果が切れる。<br>
+永続強化スキルはミッション中継続。
+</li><br>
 <li><b>特定条件で適用（動的バフ）</b><br>
-その他の条件。主に攻防時に判断・計算されるもの<br>
 <ul>
-<li>
-HP減少、特定の敵、天候、キャッチ、確立など<br>
-
-</li>
+<li>特定の敵、天候、キャッチ、確立などで発動するもの</li>
 </ul>
-</li>
+主に攻防時に判断・計算されるもの。<br>
+HP減少系が根性バフとしてスキルと同じ位置で計算<br>
+と説明しているところがあるが未検証
+</li><br>
 </ul>
 <h3>■バフ順序</h3>
 
@@ -289,6 +290,7 @@ HP減少、特定の敵、天候、キャッチ、確立など<br>
 <div class='i'>Lv分の能力値</div>＋
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
+<div>×</div><div class='i'>加護・優待</div>
 <div>×</div><div class='i'>編成バフ合計値</div></span>
 <div>×</div><div class='i'>配置バフ合計値</div></span>
 <div>×</div><div class='i'>配置バフ(チーム)</div>
@@ -311,9 +313,10 @@ HP減少、特定の敵、天候、キャッチ、確立など<br>
 <div class='i'>Lv分の能力値</div>＋
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
+<div>×</div><div class='i'>加護・優待</div>
 <div>×</div><div class='i'>編成バフ合計値</div></span>
 <div>×</div><div class='i'>配置バフ合計値</div></span>
-<div>×</div><div class='i'>ダンサー補正</div>
+<div>×</div><div class='i'>ダンサー補正(1/10)</div>
 <div>×</div><div class='i'>スキルバフ(ダンサー)</div>
 <div>×</div>
 
@@ -373,7 +376,9 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
 "王子【幼少】":{          rea:6, class:0  , type:1 , flg:0+2+0, stat:[1300, 340, 240, 0,  0] },
 "王子(アイギス神器)":{    rea:6, class:0  , type:1 , flg:0+2+0, stat:[2600, 540, 700,20,  0] },
 "王子(ケラウノス神器)":{  rea:6, class:0  , type:1 , flg:0+2+0, stat:[2400, 690, 540,20,  0] },
-"王子(砂漠)":{            rea:6, class:0  , type:1 , flg:0+2+12,stat:[2200, 680, 420,10,  0] },
+"王子(砂漠)":{            rea:6, class:0  , type:1 , flg:0+2+0 ,stat:[2200, 680, 420,10,  0] },
+"王子(獣装)":{            rea:6, class:0  , type:1 , flg:0+2+0 ,stat:[3200, 720, 640, 0,  0] },
+"王子(巨像)":{            rea:6, class:0  , type:1 , flg:0+2+0 ,stat:[6200,1360, 280, 0,  0] },
 "白の皇帝":{              rea:6, class:0  , type:1 , flg:0+2+4, stat:[2200, 572, 696, 0,  0] },
 "アルティア":{            rea:6, class:1  , type:1 , flg:0+0+0, stat:[2609, 744, 489, 0,  0] },
 "ディーナ":{              rea:6, class:2  , type:1 , flg:0+0+0, stat:[4260, 677, 886, 0,  0] },
@@ -919,6 +924,7 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
 ["防御力魔法耐性アップ【男】"       ,null,  0,   0,   5, 50000,      0,["オスカー"           ],["XXXXXXX1X"]],
 ["トレジャーハント【酒】"           ,null, 15,   0,   0,     0,      0,["ロベルト"           ],["XXXXXXX1X"]]
   ]; G[2].member=[ /*2= 編成バフ(職種,種族限定) */
+["戦意高揚【獣】"                   ,null,  0,  10,   0,     0,      0,["王子(獣装)"         ],["XXXX5 XXX"]],
 ["撤退支援"                         ,null, 20,   0,   0,     0,      0,["アルティア"         ],["X1  XXXXX","X2  XXXXX"]],
 ["シールドブースト"                 ,null,  0,   0,   5, 50000,      0,["リーゼロッテ"       ],["X1  XXXXX","X2  XXXXX"]],
 ["重鎧の手ほどき"                   ,null,  0,   0,   7,     0,      0,["ベルニス"           ],["X2  XXXXX","X33 XXXXX"]],
@@ -994,6 +1000,8 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
   ]; G[4].member=[ /*4="配置バフ(全体)"*/
 ["戦意高揚"                         ,null,  0,  20,  20,     0,      0,["王子(アイギス神器)","王子(ケラウノス神器)"]],
 ["戦意高揚【砂漠】"                 ,null,  0,  20,  20,     0,      0,["王子(砂漠)"         ]],
+["戦意高揚【獣】"                   ,null,  0,  20,  20,     0,      0,["王子(獣装)"         ]],
+["戦意高揚【巨像】"                 ,null,  0,  20,  20,     0,      0,["王子(巨像)"         ]],
 ["戦意高揚【小】"                   ,null,  0,  10,  10,     0,      0,["王子【幼少】"       ]],
 ["幸せの記憶"                       ,null,  0,   5,   5,     0,      0,["レーヴ"             ]],
 ["魔眼の加護"                       ,null,  0,   0,   5, 50000,      0,["バロウス"           ]],
@@ -1067,6 +1075,8 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
 ["アイギスの神器"                   ,null,  0, 300, 300,     0,      0,["王子(アイギス神器)"     ]],
 ["ケラウノスの神器"                 ,null,  0, 200,   0,     0,      0,["王子(ケラウノス神器)"   ]],
 ["獅子刀スルフィカール"             ,null,  0, 150,   0,     0,      0,["王子(砂漠)"             ]],
+["巨獣の牙槌"                       ,null,  0, 700,   0,     0,      0,["王子(獣装)"             ]],
+["天仇の崩岩"                       ,null,  0, 250,-100,     0,      0,["王子(巨像)"             ]],
 ["守護者の神盾"                     ,null,  0,   0, 200,     0,      0,["アルティア","ジェイク"  ]],
 ["援軍要請・撃滅"                   ,null,  0, 200,   0,     0,      0,["アルティア"             ]],
 ["怪力爆砕鉄球"                     ,null,  0, 200, 200,     0,      0,["ディーナ"               ]],
