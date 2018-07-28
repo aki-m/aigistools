@@ -54,16 +54,40 @@ span.w{ border:none; white-space:normal; }
 }
 #t td{ border: solid 1px #00f;  }
 #t tr.bufftype{ border-style:solid; border-color:#00f; border-width: 1px 1px 0px 1px;}
-#t tr td{ background:#eff; color:#888; }
-#t tr.on td{ background:#bef; color:black; }
-#t th,#t tr.t th.csw,#t tr.f th.csw{ background-color: steelblue; color:white; }
-#t tr.f th,#t tr.f td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
-#t tr.t th{ background-color:#fd6; color:#632; }
-#t tr.t td{ font-size:20px; font-weight:600; background-color:#fed; color:black; }
-#help table tr th{ border: solid 1px #608; background:#e0d0e0; }
-#help table tr td{ border: solid 1px #608; background:#f0e0f0; }
-#help table      { border: solid 1px #608; border-collapse: collapse;}
-#help>center>span{ display:inline-block;}
+#t tr    > td{  color:#888; }
+#t tr:nth-child(even) > td{ background:#eeffff; }
+#t tr:nth-child(odd)  > td{ background:#e8ffff; }
+#t tr:hover           > td.REA6{ background:#909090; color:white; }
+#t tr:hover           > td.REA5{ background:#e0e0e0; color:black; }
+#t tr:hover           > td.REA4{ background:#d0ffff; color:black; }
+#t tr:hover           > td.REA3{ background:#ffffb0; color:black; }
+#t tr:hover           > td.REA2{ background:#b0b0b0; color:black; }
+#t tr.on              > td     { background:#bef; color:black; }
+#t tr.on              > td.REA6{ background:#bef; color:black; }
+#t tr.on              > td.REA5{ background:#bef; color:black; }
+#t tr.on              > td.REA4{ background:#bef; color:black; }
+#t tr.on              > td.REA3{ background:#bef; color:black; }
+#t tr.on              > td.REA2{ background:#bef; color:black; }
+#t.m tr               > td.REA6{ background:#909090; color:white; }
+#t.m tr               > td.REA5{ background:#e0e0e0; color:black; }
+#t.m tr               > td.REA4{ background:#d0ffff; color:black; }
+#t.m tr               > td.REA3{ background:#ffffb0; color:black; }
+#t.m tr               > td.REA2{ background:#b0b0b0; color:black; }
+#t.m tr.on              > td     { background:#bef; color:black; }
+#t.m tr.on              > td.REA6{ background:#bef; color:black; }
+#t.m tr.on              > td.REA5{ background:#bef; color:black; }
+#t.m tr.on              > td.REA4{ background:#bef; color:black; }
+#t.m tr.on              > td.REA3{ background:#bef; color:black; }
+#t.m tr.on              > td.REA2{ background:#bef; color:black; }
+
+#t th,#t tr.t > th.csw,#t tr.f > th.csw,#t tr.f>th.ssw{ background-color: steelblue; color:white; }
+#t tr.f > th,#t tr.f > td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
+#t tr.t > th{ background-color:#fd6; color:#632; }
+#t tr.t > td{ font-size:20px; font-weight:600; background-color:#fed; color:black; }
+#help table tr > th{ border: solid 1px #608; background:#e0d0e0; }
+#help table tr > td{ border: solid 1px #608; background:#f0e0f0; }
+#help table        { border: solid 1px #608; border-collapse: collapse;}
+#help>center>span  { display:inline-block;}
 #help>center>span>span,#help>center>span>div.i{ color:black; }
 #help>center>span>span>span,#help>center>span>span>span>span>span{ background-color:#fef;}
 
@@ -117,7 +141,7 @@ input.chk { display:inline; background-color:#90ffcf; }
   <td rowspan=8><div id="out09"style="overflow-y:scroll; height:240px" ></div></td>
 </tr>
 <tr class="f" >
-  <th class="csw">★</th>
+  <th class="ssw">★</th>
   <td is="x-d" id="out00"></td>
   <td is="x-d" id="out01"></td>
   <td is="x-d" id="out02"></td>
@@ -147,7 +171,7 @@ input.chk { display:inline; background-color:#90ffcf; }
   <td is="x-d" id="out08"></td>
 </tr>
 <tr class="t">
-  <th style="border:none; position:relative;"><i style="position:absolute; bottom:0px; left:0px; white-space:nowrap; font-size:11px;">☟表示/非表示(一括・個別)</i></th>
+  <th style="border:none; position:relative;"><i style="position:absolute; bottom:0px; left:0px; white-space:nowrap; font-size:11px;">☟非表示/表示戻し(■:一括)(±÷:個別)</i></th>
   <th nowrap colspan=2>バフ後</th>
   <td is="x-d" id="out10"></td>
   <td is="x-d" id="out11"></td>
@@ -157,7 +181,11 @@ input.chk { display:inline; background-color:#90ffcf; }
 </tr>
 <tr class="t">
   <th class="csw" >■</th>
-  <th nowrap colspan=2>(確立等込み)</th>
+
+  <th colspan=2 style="border:none; position:relative;">
+   <select id="in15" style="position:absolute; bottom:0px; left:0px; white-space:nowrap; border:solid 1px #ffffc0; padding:0px; font-size:12px;"><option value="default">名前で表示を絞り込み</option></select>
+   <span style="position:absolute; right:0px; top:0px; white-space:nowrap;">(確立等込み)<span>
+  </th>
   <td is="x-d" id="out15"></td>
   <td is="x-d" id="out16"></td>
   <td is="x-d" id="out17"></td>
@@ -170,7 +198,7 @@ input.chk { display:inline; background-color:#90ffcf; }
 <h3>■ユニット状態</h3>
 <table >
 <tr><th colspan=3>編成外</th><td>編成されずに兵舎／虫籠にいる状態<td></tr>
-<tr><th rowspan=9 >編成</th><th colspan=2>未配置</th><td>デッキ（マップ下のアイコン）の状態。<br>出撃可能になるとハイライトされる<br>魔神、グリフィンやモトリーで戻した場合も同じ</td></tr>
+<tr><th rowspan=10>編成</th><th colspan=2>未配置</th><td>デッキ（マップ下のアイコン）の状態。<br>出撃可能になるとハイライトされる。<br>魔神、グリフィンやモトリーで戻した場合も同じ</td></tr>
 
 <tr><th rowspan=5 >配置</th><th>非スキル</th><td>スキル発動の時間がきていない or<br>[スキルOK] or スキルを使い切った状態</td></tr>
 <tr><th>スキル中</th><td>ユニットを選択すると発動中と表示される<br>オーラエフェクトのでている状態</td></tr>
@@ -178,12 +206,16 @@ input.chk { display:inline; background-color:#90ffcf; }
 <tr><th>強麻痺</th><td>弱麻痺に加え、ブロック数０</td></tr>
 
 <tr><th>仮死</th><td>HP0で撤退/配置回収せず居座っている状態。<br>ターゲットにならないがマス/配置数は消費</td></tr>
-<tr><th colspan=2>撤退</th><td>マップ、デッキからいなくなった状態<br>ホリーのスキルで未配置へ戻せる</td></tr>
+<tr><th rowspan=4 style="border-right:none">退場</th><th colspan=2 style="border-left:none">マップ、デッキから居なくなった状態</th></tr>
+<tr><th>死亡</th><td>HP0になって居なくなり、星を落とす状態</td></tr>
+<tr><th>撤退</th><td>HP0になって居なくなり、星を落とさない状態</td></tr>
+<tr><th>消滅</th><td>トークンがHP0か効果発動で居なくなった状態</td></tr>
 </table>
 
 <ul>
 <li>他に、ブッロックに対する状態がある(いわゆるキャッチ)<br>
-「マルダーンフ・マルダーン」「神剣フロッティ」の条件</li>
+「神剣フロッティ」、ダリューン/関羽アビの条件、および<br>
+一部ユニット(神官・傀儡)の攻撃スイッチになっている。</li>
 </ul>
 
 <h3>■ミッション特性</h3>
@@ -195,9 +227,56 @@ input.chk { display:inline; background-color:#90ffcf; }
 <li>毒・熱・魔界などのマップ補正</li>
 <li>砂塵・豪雨・吹雪・濃霧などの天候</li>
 <li>収集アイテムの特性等。主に敵強化、地形変動</li>
+<li>ストミ＆曜日1.5倍やストミ消費半減</li>
 </ul>
 </ul>
 
+<h3>■バフ適用のタイミング</h3>
+バフは、かける側が条件・タイミング・効果を握る。<br>
+受ける側は計算時に指定条件に合うものが適用される。<br>
+<ul>
+<li><b>編成外でも常時適用</b>
+<ul>
+<li>条件の無いアビ(自己強化アビ)</li>
+<li>「兵舎、聖霊預かり所にいるだけで」または<br>
+「所持しているだけで」となっているアビ</li>
+<li>女神の加護(＝ショップブースト)</li>
+</ul></li>
+<li><b>編成すると適用（編成バフ）</b><br>
+ミッション開始時に適用、またはwave開始時に<br>
+再計算される。(waveをまたぐ敵のHPを除く)<br>
+トークンに編成バフはかからない。(編成に居ない為)<br>
+撤退およびホリーでの復活で変化なし。(効果は継続)<br>
+<ul>
+<li>「出撃メンバーにいるだけで」等となっている<br>アビ・クラスアビ
+(GG/GG+、シーフ特性等も同様)</li>
+<li>アビのうちクリア報酬UP系のもの<br>年賀の祝い袋,金運招来,豊穣の杖,大商人の才覚</li>
+</ul>
+</li>
+<li><b>配置中適用（配置バフ）</b><br>
+配置、死亡、撤退、消滅、回収毎に計算される。<br>
+<ul>
+<li>「配置中」等となっているアビ・クラスアビ</li>
+</ul>
+</li>
+<li><b>スキル時、スキル中適用（スキルバフ）</b><br>
+スキル発動時、終了時に計算される。<br>
+スキル時間無限は回収や麻痺で効果が切れる。<br>
+永続強化スキルはミッション中継続。<br>
+<ul>
+<li>スキル欄に記載されているもの</li>
+<li>「スキル中」等となっているアビ・クラスアビ</li>
+</ul>
+<li><b>特定条件で適用（動的バフ）</b><br>
+その他の条件。主に攻防時に判断・計算されるもの<br>
+<ul>
+<li>
+HP減少、特定の敵、天候、キャッチ、確立など<br>
+
+</li>
+</ul>
+</li>
+</ul>
 <h3>■バフ順序</h3>
 
 <center><span>
@@ -210,8 +289,8 @@ input.chk { display:inline; background-color:#90ffcf; }
 <div class='i'>Lv分の能力値</div>＋
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
-<div>＋</div><div class='i'>編成バフ合計値</div></span>
-<div>＋</div><div class='i'>配置バフ合計値</div></span>
+<div>×</div><div class='i'>編成バフ合計値</div></span>
+<div>×</div><div class='i'>配置バフ合計値</div></span>
 <div>×</div><div class='i'>配置バフ(チーム)</div>
 <div>×</div><div class='i'>スキルバフ(自己)</div>
 <div>×</div>
@@ -232,8 +311,8 @@ input.chk { display:inline; background-color:#90ffcf; }
 <div class='i'>Lv分の能力値</div>＋
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
-<div>＋</div><div class='i'>編成バフ合計値</div></span>
-<div>＋</div><div class='i'>配置バフ合計値</div></span>
+<div>×</div><div class='i'>編成バフ合計値</div></span>
+<div>×</div><div class='i'>配置バフ合計値</div></span>
 <div>×</div><div class='i'>ダンサー補正</div>
 <div>×</div><div class='i'>スキルバフ(ダンサー)</div>
 <div>×</div>
@@ -254,10 +333,6 @@ input.chk { display:inline; background-color:#90ffcf; }
 <li>ダンサーバフは、ダンサーへのバフが加味される<br>
 ex)堕姫配置にて、王子はデバフされ、アンナバフは増える<br>
 ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と大差ない
-<li>編成バフは、ミッション開始時に適用、あるいは<br>
-wave開始時に再計算される。(waveをまたぐ敵のHPを除く)<br>
-この時にトークンは居ない為、トークンに編成バフはかからない。<br>
-撤退およびホリーでの復活で変化しない(効果は継続される)</li>
 <li>編成バフ加算値は、ステ表記値で計算される</li>
 <li>配置バフ加算値は、編成バフ後の値で計算される</li>
 <li>編成バフ・配置バフは条件に合うものは全て加算。ただし、<br>
@@ -265,8 +340,6 @@ wave開始時に再計算される。(waveをまたぐ敵のHPを除く)<br>
 <li>配置バフのうちチームはこの枠組みに入らず独立して乗算される<br>
 <li>スキルバフは各グループそれぞれで、<br>
 条件に合うものから一番効果の高いものだけが適用される。</li>
-<li>スキル効果時間無限と永続強化スキルは別物<br>
-前者は配置回収や麻痺で効果が切れる。後者はミッション中継続</li>
 <li>チャーミィの「闇の代償」は以下の組み合わせ<br>
 　初期の攻防半減・・・－５０％の配置バフ(対象＝自分)<br>
 　初回スキル時・・・・２倍の永続強化スキルバフ<br>
@@ -280,9 +353,6 @@ wave開始時に再計算される。(waveをまたぐ敵のHPを除く)<br>
 上書きされたら射程内、両方適用されたら属性指定</li>
 </ul></li>
 <li>性別指定のバフはトークンにはかからない。(ニエルは女性扱い)<br>
-<li>GG/GG+、金運招来/豊穣の杖、シーフ特性等も編成発動</li>
-<li>編成外でも発動するものに、ドロアップアビ(シーフ以外)<br>
-サリエット、ショップブースト(取得Ｇアップ等)がある</li>
 
 </ul>
 <br><br>
@@ -299,496 +369,496 @@ wave開始時に再計算される。(waveをまたぐ敵のHPを除く)<br>
   var outobj=[null];
   var t=document.getElementById("t");
   var uni000={ 
-"王子":{                  rea:6, class:0  , type:1 , flg:0+2+0, stat:[1300, 340, 240, 0,  0], buf:null },
-"王子【幼少】":{          rea:6, class:0  , type:1 , flg:0+2+0, stat:[1300, 340, 240, 0,  0], buf:null },
-"王子(アイギス神器)":{    rea:6, class:0  , type:1 , flg:0+2+0, stat:[2600, 540, 700,20,  0], buf:null },
-"王子(ケラウノス神器)":{  rea:6, class:0  , type:1 , flg:0+2+0, stat:[2400, 690, 540,20,  0], buf:null },
-"王子(砂漠)":{            rea:6, class:0  , type:1 , flg:0+2+12,stat:[2200, 680, 420,10,  0], buf:null },
-"白の皇帝":{              rea:6, class:0  , type:1 , flg:0+2+4, stat:[2200, 572, 696, 0,  0], buf:null },
-"アルティア":{            rea:6, class:1  , type:1 , flg:0+0+0, stat:[2609, 744, 489, 0,  0], buf:null },
-"ディーナ":{              rea:6, class:2  , type:1 , flg:0+0+0, stat:[4260, 677, 886, 0,  0], buf:null },
-"ディーネ":{              rea:6, class:2  , type:1 , flg:0+0+0, stat:[3960, 601,1292, 0,  0], buf:null },
-"クリッサ":{              rea:6, class:3  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"レシア":{                rea:6, class:3  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ベルナ":{                rea:6, class:4  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"シビラ":{                rea:6, class:5  , type:1 , flg:0+0+0, stat:[2860,1064, 494,25,  0], buf:null },
-"オリヴィエ":{            rea:6, class:5  , type:3 , flg:0+0+0, stat:[2150,1148, 642,30,  0], buf:null },
-"アンジェリーネ":{        rea:6, class:5  , type:1 , flg:0+0+4, stat:[2903, 917, 657,25,  0], buf:null },
-"シルヴィア":{            rea:6, class:5  , type:8 , flg:0+0+0, stat:[5187, 810, 894,15,  0], buf:null },
-"純白の花嫁カルマ":{      rea:6, class:5  , type:8 , flg:0+0+0, stat:[5040,1011, 478,10,  0], buf:null },
-"ミサ":{                  rea:6, class:5  , type:0 , flg:0+0+0, stat:[4455, 863, 770,25,  0], buf:null },
-"アマンダ":{              rea:6, class:6  , type:1 , flg:0+0+0, stat:[5112,1475, 253, 0,  0], buf:null },
-"ドラニア":{              rea:6, class:7  , type:2 , flg:0+2+0, stat:[1820, 325, 390, 0,  0], buf:null },
-"ヴルム":{                rea:6, class:7  , type:2 , flg:0+0+0, stat:[4290, 792, 895,10,  0], buf:null },
-"アーニャ":{              rea:6, class:7  , type:2 , flg:0+0+0, stat:[3350, 675, 989,20,  0], buf:null },
-"エルドラ":{              rea:6, class:7  , type:2 , flg:0+0+0, stat:[3105, 813, 937, 0,  0], buf:null },
-"ヒバリ":{                rea:6, class:8  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"サキ":{                  rea:6, class:9  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ナギ":{                  rea:6, class:9  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"エスタ":{                rea:6, class:10 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"コーネリア":{            rea:6, class:11 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"暗黒騎士":{              rea:6, class:11 , type:0 , flg:0+2+0, stat:[                     ], buf:null },
-"アリス":{                rea:6, class:13 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"一途な武王姫アリス":{    rea:6, class:13 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"マツリ":{                rea:6, class:14 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ナルサス":{              rea:6, class:14 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"イングリッド":{          rea:6, class:15 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ソフィー":{              rea:6, class:16 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ウェンディ":{            rea:6, class:17 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"イブキ":{                rea:6, class:18 , type:1 , flg:0+0+0, stat:[2355, 649, 305, 0,  0], buf:null },
-"カヨウ":{                rea:6, class:19 , type:6 , flg:0+0+0, stat:[2292, 663, 343,10,  0], buf:null },
-"キュウビ":{              rea:6, class:19 , type:6 , flg:0+0+4, stat:[1820, 642, 517,20,  0], buf:null },
-"エクス":{                rea:6, class:21 , type:1 , flg:0+0+0, stat:[2340, 635, 592,15,  0], buf:null },
-"グレース":{              rea:6, class:21 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"シルセス":{              rea:6, class:21 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ティファ":{              rea:6, class:22 , type:1 , flg:0+0+0, stat:[4160,1154,1097, 5,  0], buf:null },
-"リオン":{                rea:6, class:23 , type:1 , flg:0+0+0, stat:[1995, 739, 348, 0,260], buf:null },
-"セーラ":{                rea:6, class:24 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"エマ":{                  rea:6, class:25 , type:8 , flg:0+0+0, stat:[4000, 929, 729, 0,  0], buf:null },
-"ジークリンデ":{          rea:6, class:26 , type:1 , flg:0+0+4, stat:[                     ], buf:null },
-"ミレイユ":{              rea:6, class:27 , type:1 , flg:0+0+0, stat:[3250, 653, 821,20,  0], buf:null },
-"ダリューン":{            rea:6, class:27 , type:1 , flg:0+2+8, stat:[3375, 709, 624,10,  0], buf:null },
-"ナタク":{                rea:6, class:28 , type:11, flg:0+0+0, stat:[3105,1037,1632,15,  0], buf:null },
-"ラクシャーサ":{          rea:6, class:29 , type:7 , flg:0+0+0, stat:[4355, 985, 338,30,  0], buf:null },
-"メフィスト":{            rea:6, class:29 , type:7 , flg:0+0+4, stat:[4489, 903, 461,30,  0], buf:null },
-"シンシア":{              rea:6, class:30 , type:11, flg:0+0+0, stat:[2000, 563, 506,40,  0], buf:null },
-"シノ":{                  rea:6, class:32 , type:6 , flg:0+0+0, stat:[2430, 898, 410, 0,  0], buf:null },
-"エルミラ":{              rea:6, class:33 , type:1 , flg:0+0+4, stat:[4079, 751, 630, 0,300], buf:null },
-"鬼刃姫":{                rea:6, class:34 , type:6 , flg:0+0+0, stat:[7723,1171, 343, 0,  0], buf:null },
-"ディアナ":{              rea:6, class:35 , type:1 , flg:0+0+4, stat:[2847,1031, 729, 0,  0], buf:null },
-"クラマ":{                rea:6, class:36 , type:9 , flg:0+0+0, stat:[1823, 794, 208, 0,230], buf:null },
-"ティニー":{              rea:6, class:37 , type:4 , flg:0+0+0, stat:[4550, 903, 458, 0,  0], buf:null },
-"アナトリア":{            rea:6, class:38 , type:9 , flg:0+0+0, stat:[4364,1013, 441, 0,  0], buf:null },
-"スーシェン":{            rea:6, class:39 , type:8 , flg:0+0+0, stat:[3816, 819, 612, 0,  0], buf:null },
-"レミィ":{                rea:6, class:40 , type:6 , flg:0+0+0, stat:[6340,1658, 378, 0,  0], buf:null },
-"テンマ":{                rea:6, class:41 , type:1 , flg:0+0+0, stat:[2700, 991, 504,10,  0], buf:null },
-"クーコ":{                rea:6, class:42 , type:6 , flg:0+0+0, stat:[6110,1375, 489, 0,  0], buf:null },
-"リュクス":{              rea:6, class:45 , type:3 , flg:0+0+0, stat:[2600, 999, 390,10,  0], buf:null },
-"金光聖菩":{              rea:6, class:47 , type:11, flg:0+0+0, stat:[3060,1118, 585,20,  0], buf:null },
-"関羽":{                  rea:6, class:48 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"孫堅":{                  rea:6, class:49 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"孫権":{                  rea:6, class:49 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"アンナ":{                rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アンナ(支給服)":{        rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アンナ(水着)":{          rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アンナ(軍服)":{          rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アンナ(アイドル)":{      rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ナナリー":{              rea:6, class:101, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アーシェラ":{            rea:6, class:101, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"エステル":{              rea:6, class:102, type:1 , flg:1+0+0, stat:[1688,1049, 120,25,260], buf:null },
-"イリス":{                rea:6, class:103, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"春着の聖女イリス":{      rea:6, class:103, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"リアナ":{                rea:6, class:103, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"デスピア":{              rea:6, class:104, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ミネルバ":{              rea:6, class:105, type:1 , flg:1+0+0, stat:[2000, 956, 239, 0,330], buf:null },
-"デューオ":{              rea:6, class:105, type:1 , flg:1+0+0, stat:[2391, 940, 241, 0,310], buf:null },
-"ハクノカミ":{            rea:6, class:106, type:2 , flg:1+0+0, stat:[3352, 703, 426, 0,240], buf:null },
-"スー":{                  rea:6, class:107, type:1 , flg:1+0+0, stat:[2496, 538, 340, 0,220], buf:null },
-"キキョウ":{              rea:6, class:108, type:1 , flg:1+0+0, stat:[1553, 624, 117, 0,250], buf:null },
-"エターナー":{            rea:6, class:109, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アイシャ":{              rea:6, class:110, type:1 , flg:1+0+0, stat:[2076, 504, 221, 0,210], buf:null },
-"ミコト":{                rea:6, class:111, type:1 , flg:1+0+0, stat:[1430, 517, 102,10,250], buf:null },
-"ファルネ":{              rea:6, class:112, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"花嫁姿の召喚士ファルネ":{rea:6, class:112, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"リンネ":{                rea:6, class:113, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"刻詠の花嫁リンネ":{      rea:6, class:113, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"フレデリカ":{            rea:6, class:114, type:1 , flg:1+0+0, stat:[2115,1276, 133, 0,360], buf:null },
-"ミヤビ":{                rea:6, class:115, type:1 , flg:1+0+0, stat:[1460, 444, 444,15,170], buf:null },
-"メトゥス":{              rea:6, class:116, type:1 , flg:1+0+0, stat:[1625, 910, 182, 0,280], buf:null },
-"トワ":{                  rea:6, class:117, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"フィオレ":{              rea:6, class:118, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"マキナ":{                rea:6, class:119, type:1 , flg:1+0+0, stat:[1920, 769, 234, 0,230], buf:null },
-"サバル":{                rea:6, class:121, type:5 , flg:1+0+0, stat:[1946, 519, 242, 0,190], buf:null },
-"オロチヒメ":{            rea:6, class:122, type:1 , flg:1+0+0, stat:[2048, 565, 156,20,350], buf:null },
-"モルテナ":{              rea:6, class:123, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ドロテア":{              rea:6, class:124, type:3 , flg:1+0+0, stat:[1520, 998, 196,50,250], buf:null },
-"アンリ":{                rea:6, class:125, type:3 , flg:1+0+0, stat:[2282, 706, 143,10,  0], buf:null },
-"ディエーラ":{            rea:6, class:126, type:1 , flg:1+0+0, stat:[2327, 660, 202, 0,300], buf:null },
-"ソシエ":{                rea:6, class:128, type:1 , flg:1+0+0, stat:[1663,1787, 189, 0,400], buf:null },
-"ラピス":{                rea:6, class:129, type:7 , flg:1+0+0, stat:[2250, 412, 177,35,230], buf:null },
-"コハル":{                rea:6, class:131, type:7 , flg:1+0+0, stat:[3504,   1, 525,20,220], buf:null },
-"諸葛亮":{                rea:6, class:135, type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ジェローム":{            rea:5, class:1  , type:1 , flg:0+2+0, stat:[2276, 655, 396, 0,  0], buf:null },
-"ゼノビア":{              rea:5, class:1  , type:1 , flg:0+0+0, stat:[2541, 733, 529, 0,  0], buf:null },
-"リーゼロッテ":{          rea:5, class:1  , type:1 , flg:0+0+4, stat:[3045, 744, 432, 0,  0], buf:null },
-"ジェイク":{              rea:5, class:1  , type:1 , flg:0+2+0, stat:[2415, 723, 499,10,  0], buf:null },
-"年賀の教官ケイティ":{    rea:5, class:1  , type:1 , flg:0+0+0, stat:[2862, 671, 548, 0,  0], buf:null },
-"ジェリウス":{            rea:5, class:2  , type:1 , flg:0+2+0, stat:[4347, 382, 829,10,  0], buf:null },
-"マリーベル":{            rea:5, class:2  , type:1 , flg:0+0+0, stat:[3325, 403, 544, 0,  0], buf:null },
-"ミランダ":{              rea:5, class:2  , type:1 , flg:0+0+0, stat:[3913, 505, 793, 0,  0], buf:null },
-"聖鈴の大盾ベルニス":{    rea:5, class:2  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"テティス":{              rea:5, class:3  , type:1 , flg:0+0+0, stat:[2539, 675, 452, 0,  0], buf:null },
-"ダリア":{                rea:5, class:3  , type:1 , flg:0+0+0, stat:[3450, 823, 432, 0,  0], buf:null },
-"エミリア":{              rea:5, class:3  , type:1 , flg:0+0+0, stat:[2543, 493, 338,10,  0], buf:null },
-"メイリン":{              rea:5, class:3  , type:1 , flg:0+0+0, stat:[2662, 774, 600,20,  0], buf:null },
-"渚の槍騎兵キャリー":{    rea:5, class:3  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"シプリア":{              rea:5, class:4  , type:1 , flg:0+0+0, stat:[2337, 641, 348, 0,  0], buf:null },
-"エイダ":{                rea:5, class:4  , type:5 , flg:0+0+0, stat:[2430, 564, 259, 0,  0], buf:null },
-"ジュノン":{              rea:5, class:4  , type:1 , flg:0+0+0, stat:[2220, 608, 250, 0,  0], buf:null },
-"セブン":{                rea:5, class:4  , type:1 , flg:0+0+0, stat:[2280, 535, 372, 0,  0], buf:null },
-"サヨ":{                  rea:5, class:4  , type:1 , flg:0+0+0, stat:[2605, 539, 336, 0,  0], buf:null },
-"聖夜の盗賊シプリア":{    rea:5, class:4  , type:1 , flg:0+0+0, stat:[1860, 528, 345, 0,  0], buf:null },
-"リリア":{                rea:5, class:5  , type:1 , flg:0+0+0, stat:[3274, 821, 450,20,  0], buf:null },
-"シェリー":{              rea:5, class:5  , type:1 , flg:0+0+0, stat:[2788, 944, 446,15,  0], buf:null },
-"クローディア":{          rea:5, class:5  , type:1 , flg:0+0+0, stat:[2970, 940, 417,15,  0], buf:null },
-"ルイーズ":{              rea:5, class:5  , type:1 , flg:0+0+0, stat:[2633, 838, 545,15,  0], buf:null },
-"メルヴィナ":{            rea:5, class:5  , type:1 , flg:0+0+0, stat:[2280, 970, 529,20,  0], buf:null },
-"スクハ":{                rea:5, class:5  , type:1 , flg:0+0+0, stat:[2866, 870, 458,15,  0], buf:null },
-"ジュリア":{              rea:5, class:5  , type:1 , flg:0+0+0, stat:[2850, 900, 461,20,  0], buf:null },
-"黒衣の花嫁カルマ":{      rea:5, class:5  , type:8 , flg:0+0+0, stat:[4603, 707, 790,10,  0], buf:null },
-"ライラ":{                rea:5, class:6  , type:1 , flg:0+0+0, stat:[4838,1256, 218, 0,  0], buf:null },
-"セリア":{                rea:5, class:6  , type:1 , flg:0+0+0, stat:[5313, 865, 308,10,  0], buf:null },
-"イメリア":{              rea:5, class:6  , type:1 , flg:0+0+0, stat:[4329, 964, 339, 0,  0], buf:null },
-"ロロネ":{                rea:5, class:6  , type:1 , flg:0+0+0, stat:[4754,1003, 249, 0,  0], buf:null },
-"イグニス":{              rea:5, class:7  , type:2 , flg:0+0+0, stat:[4075, 738, 707, 0,  0], buf:null },
-"リキュノス":{            rea:5, class:7  , type:2 , flg:0+0+0, stat:[                     ], buf:null },
-"サクヤ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[3368, 792, 560, 0,  0], buf:null },
-"モミジ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[3616,1077, 520, 0,  0], buf:null },
-"アカネ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[3510, 804, 660,20,  0], buf:null },
-"シズカ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[2835, 825, 759,20,  0], buf:null },
-"ヒナ":{                  rea:5, class:9  , type:1 , flg:0+0+0, stat:[2162, 407, 230, 0,  0], buf:null },
-"アザミ":{                rea:5, class:9  , type:1 , flg:0+0+0, stat:[1647, 377, 342, 0,  0], buf:null },
-"イザベル":{              rea:5, class:10 , type:1 , flg:0+0+4, stat:[2530, 846, 601,20,  0], buf:null },
-"リディ":{                rea:5, class:10 , type:1 , flg:0+0+0, stat:[1980, 845, 460,20,  0], buf:null },
-"ユリナ":{                rea:5, class:11 , type:1 , flg:0+0+0, stat:[3120, 726, 660,25,  0], buf:null },
-"エルヴァ":{              rea:5, class:11 , type:1 , flg:0+0+0, stat:[3458, 774, 573,10,  0], buf:null },
-"ダルク":{                rea:5, class:11 , type:1 , flg:0+0+0, stat:[3136, 833, 619,15,  0], buf:null },
-"ロアナ":{                rea:5, class:12 , type:3 , flg:0+0+0, stat:[4222, 573, 400, 5,  0], buf:null },
-"リスティス":{            rea:5, class:12 , type:1 , flg:0+0+0, stat:[4959, 665, 351, 0,  0], buf:null },
-"ナキア":{                rea:5, class:12 , type:7 , flg:0+0+0, stat:[                     ], buf:null },
-"リン":{                  rea:5, class:13 , type:1 , flg:0+0+0, stat:[3238, 768, 276, 0,  0], buf:null },
-"ウル":{                  rea:5, class:13 , type:5 , flg:0+0+0, stat:[2777, 950, 358, 0,  0], buf:null },
-"ベストラ":{              rea:5, class:13 , type:9 , flg:0+0+0, stat:[2952, 954, 252, 0,  0], buf:null },
-"リーザ":{                rea:5, class:13 , type:1 , flg:0+0+8, stat:[3008, 833, 313, 0,  0], buf:null },
-"ウズメ":{                rea:5, class:14 , type:1 , flg:0+0+0, stat:[2679, 608, 340, 0,  0], buf:null },
-"シュウカ":{              rea:5, class:14 , type:1 , flg:0+0+0, stat:[2091, 683, 421, 0,  0], buf:null },
-"ヘレナ":{                rea:5, class:14 , type:1 , flg:0+0+0, stat:[2340, 584, 408, 0,  0], buf:null },
-"レオラ":{                rea:5, class:14 , type:1 , flg:0+0+4, stat:[2563, 653, 390, 0,  0], buf:null },
-"シャルロット":{          rea:5, class:15 , type:1 , flg:0+0+0, stat:[1871, 728, 486,10,  0], buf:null },
-"ホルエス":{              rea:5, class:15 , type:1 , flg:0+0+12,stat:[2424, 957, 409,10,  0], buf:null },
-"サビーネ":{              rea:5, class:15 , type:1 , flg:0+0+0, stat:[2171, 804, 392,15,  0], buf:null },
-"シエナ":{                rea:5, class:15 , type:1 , flg:0+0+0, stat:[1808, 779, 483,10,  0], buf:null },
-"聖夜の魔剣シャルロット":{rea:5, class:15 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"クロエ":{                rea:5, class:16 , type:11, flg:0+0+0, stat:[3120,1470, 760,25,  0], buf:null },
-"ミルノ":{                rea:5, class:16 , type:11, flg:0+0+0, stat:[2464, 999,1029,25,  0], buf:null },
-"フォニア":{              rea:5, class:16 , type:11, flg:0+0+0, stat:[3250,1380, 728,25,  0], buf:null },
-"セフィーレ":{            rea:5, class:16 , type:11, flg:0+0+0, stat:[3198,1416, 771,25,  0], buf:null },
-"リッカ":{                rea:5, class:17 , type:1 , flg:0+0+0, stat:[3900, 848, 720, 0,  0], buf:null },
-"ティアル":{              rea:5, class:17 , type:1 , flg:0+0+0, stat:[4026, 936, 693, 0,  0], buf:null },
-"ビエラ":{                rea:5, class:18 , type:1 , flg:0+0+0, stat:[1853, 552, 323, 0,  0], buf:null },
-"リーンベル":{            rea:5, class:18 , type:1 , flg:0+0+0, stat:[1764, 506, 368, 0,  0], buf:null },
-"アメリ":{                rea:5, class:18 , type:1 , flg:0+0+0, stat:[2049, 576, 275, 0,  0], buf:null },
-"イナリ":{                rea:5, class:19 , type:6 , flg:0+0+0, stat:[1886, 611, 334, 5,  0], buf:null },
-"堕姫":{                  rea:5, class:19 , type:6 , flg:0+0+0, stat:[1984, 574, 299, 5,  0], buf:null },
-"フラメル":{              rea:5, class:20 , type:1 , flg:0+0+0, stat:[2100, 521, 550,10,  0], buf:null },
-"セラ":{                  rea:5, class:20 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"フェルミ":{              rea:5, class:20 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ルチア":{                rea:5, class:20 , type:1 , flg:0+0+4, stat:[                     ], buf:null },
-"ジェシカ":{              rea:5, class:21 , type:1 , flg:0+0+0, stat:[3240, 604, 696,20,  0], buf:null },
-"エーリカ":{              rea:5, class:21 , type:1 , flg:0+0+0, stat:[3486, 677, 689,20,  0], buf:null },
-"パルフィ":{              rea:5, class:21 , type:1 , flg:0+0+0, stat:[3490, 496, 858,30,  0], buf:null },
-"ルシル":{                rea:5, class:22 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"エレニア":{              rea:5, class:22 , type:1 , flg:0+0+0, stat:[3895,1002, 848, 0,  0], buf:null },
-"ナディア":{              rea:5, class:22 , type:1 , flg:0+0+0, stat:[4478,1148, 852, 0,  0], buf:null },
-"デイジー":{              rea:5, class:23 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"カティナ":{              rea:5, class:23 , type:1 , flg:0+0+0, stat:[1736, 635, 310, 0,  0], buf:null },
-"サラサ":{                rea:5, class:23 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"アイリーン":{            rea:5, class:24 , type:1 , flg:0+0+0, stat:[2322, 790, 370, 0,  0], buf:null },
-"シャーリー":{            rea:5, class:24 , type:1 , flg:0+0+0, stat:[3295, 552, 518,10,  0], buf:null },
-"リーナ":{                rea:5, class:24 , type:10, flg:0+0+0, stat:[2496, 842, 309,10,  0], buf:null },
-"マリカ":{                rea:5, class:24 , type:1 , flg:0+0+4, stat:[3129, 574, 545,10,  0], buf:null },
-"エデン":{                rea:5, class:25 , type:8 , flg:0+0+0, stat:[3864, 744, 630, 0,  0], buf:null },
-"ラキュア":{              rea:5, class:25 , type:8 , flg:0+0+0, stat:[3526, 802, 680, 0,  0], buf:null },
-"サンドラ":{              rea:5, class:26 , type:1 , flg:0+0+0, stat:[2909, 752, 532, 0,  0], buf:null },
-"グローリア":{            rea:5, class:26 , type:1 , flg:0+0+0, stat:[3630, 764, 486, 0,  0], buf:null },
-"レイブン":{              rea:5, class:26 , type:1 , flg:0+0+0, stat:[2955, 783, 504, 0,  0], buf:null },
-"リシェルテ":{            rea:5, class:26 , type:1 , flg:0+0+0, stat:[3395, 816, 401, 0,  0], buf:null },
-"アリシア":{              rea:5, class:27 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ネフティ":{              rea:5, class:27 , type:1 , flg:0+0+12,stat:[                     ], buf:null },
-"ファー":{                rea:5, class:28 , type:11, flg:0+0+0, stat:[3164, 742,1288,10,  0], buf:null },
-"太公望":{                rea:5, class:28 , type:11, flg:0+0+0, stat:[                     ], buf:null },
-"バロウス":{              rea:5, class:29 , type:7 , flg:0+0+0, stat:[4490, 684, 400,20,  0], buf:null },
-"ベルーフェ":{            rea:5, class:29 , type:7 , flg:0+0+0, stat:[4403, 787, 321,20,  0], buf:null },
-"グレーテル":{            rea:5, class:31 , type:3 , flg:0+0+0, stat:[                     ], buf:null },
-"シェイド":{              rea:5, class:31 , type:3 , flg:0+0+0, stat:[2442, 879, 435, 5,  0], buf:null },
-"チャーミィ":{            rea:5, class:31 , type:3 , flg:0+0+0, stat:[2807, 911, 344, 5,  0], buf:null },
-"カスミ":{                rea:5, class:32 , type:6 , flg:0+0+0, stat:[2353, 874, 304, 0,  0], buf:null },
-"レギーナ":{              rea:5, class:33 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"フリーデ":{              rea:5, class:33 , type:1 , flg:0+0+4, stat:[                     ], buf:null },
-"イツキ":{                rea:5, class:34 , type:6 , flg:0+0+0, stat:[                     ], buf:null },
-"リンドウ":{              rea:5, class:34 , type:6 , flg:0+0+0, stat:[                     ], buf:null },
-"ヴィオラ":{              rea:5, class:35 , type:1 , flg:0+0+4, stat:[                     ], buf:null },
-"アリーセ":{              rea:5, class:35 , type:1 , flg:0+0+4, stat:[2644, 802, 680, 0,  0], buf:null },
-"コノハ":{                rea:5, class:36 , type:6 , flg:0+0+0, stat:[1931, 678, 186, 0,  0], buf:null },
-"サンディー":{            rea:5, class:37 , type:1 , flg:0+0+0, stat:[3931, 744, 394, 0,  0], buf:null },
-"サンディー":{            rea:5, class:37 , type:1 , flg:0+0+0, stat:[3931, 744, 394, 0,  0], buf:null },
-"キャラット":{            rea:5, class:37 , type:1 , flg:0+0+0, stat:[4358, 803, 316, 0,  0], buf:null },
-"ルミアン":{              rea:5, class:37 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ドゥーラ":{              rea:5, class:38 , type:9 , flg:0+0+0, stat:[3852, 893, 392, 5,  0], buf:null },
-"レイメイ":{              rea:5, class:39 , type:8 , flg:0+0+0, stat:[                     ], buf:null },
-"ランファ":{              rea:5, class:39 , type:8 , flg:0+0+0, stat:[                     ], buf:null },
-"ラミィ":{                rea:5, class:40 , type:8 , flg:0+0+0, stat:[                     ], buf:null },
-"エレーヌ":{              rea:5, class:41 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ラテリア":{              rea:5, class:41 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ティール":{              rea:5, class:41 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"フーコ":{                rea:5, class:42 , type:8 , flg:0+0+0, stat:[                     ], buf:null },
-"アルスラーン":{          rea:5, class:43 , type:1 , flg:0+2+8, stat:[2336, 481, 625, 0,  0], buf:null },
-"シェルト":{              rea:5, class:44 , type:1 , flg:0+0+0, stat:[4284, 578, 950,10,  0], buf:null },
-"サリス":{                rea:5, class:44 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ドリー":{                rea:5, class:46 , type:1 , flg:0+0+0, stat:[1775, 413, 410, 0,  0], buf:null },
-"趙雲":{                  rea:5, class:48 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"バシラ":{                rea:5, class:101, type:5 , flg:1+0+0, stat:[1896, 681, 190, 0,260], buf:null },
-"ヴィクトリア":{          rea:5, class:101, type:1 , flg:1+0+0, stat:[2114, 668, 220, 0,290], buf:null },
-"スピカ":{                rea:5, class:101, type:3 , flg:1+0+0, stat:[1116, 712, 263, 5,280], buf:null },
-"リタ":{                  rea:5, class:101, type:1 , flg:1+0+0, stat:[1596, 619, 230, 0,260], buf:null },
-"オスカー":{              rea:5, class:101, type:1 , flg:1+2+0, stat:[1680, 537, 237, 0,260], buf:null },
-"ファランギース":{        rea:5, class:101, type:1 , flg:1+0+8, stat:[1953, 592, 239, 0,296], buf:null },
-"オデット":{              rea:5, class:102, type:1 , flg:1+0+0, stat:[1313, 987, 164,30,240], buf:null },
-"ガラニア":{              rea:5, class:102, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"サーシャ":{              rea:5, class:102, type:1 , flg:1+0+12,stat:[                     ], buf:null },
-"モルディベート":{        rea:5, class:102, type:1 , flg:1+0+0, stat:[1508, 833, 175,20,240], buf:null },
-"魔学の研修生メーリス":{  rea:5, class:102, type:1 , flg:1+0+0, stat:[1064,1004, 167,20,250], buf:null },
-"カミラ":{                rea:5, class:103, type:1 , flg:1+0+0, stat:[2178, 660, 265, 0,260], buf:null },
-"シーディス":{            rea:5, class:103, type:1 , flg:1+0+0, stat:[1440, 692, 289,15,260], buf:null },
-"サーリア":{              rea:5, class:103, type:1 , flg:1+0+0, stat:[2188, 617, 171, 0,285], buf:null },
-"エリアス":{              rea:5, class:103, type:1 , flg:1+0+4, stat:[2088, 616, 285, 0,260], buf:null },
-"ユーノ":{                rea:5, class:103, type:1 , flg:1+0+0, stat:[2044, 588, 189, 0,270], buf:null },
-"フィグネリア":{          rea:5, class:104, type:1 , flg:1+0+0, stat:[1794, 740, 149,10,240], buf:null },
-"ベリンダ":{              rea:5, class:104, type:1 , flg:1+0+0, stat:[1928, 696, 163,10,240], buf:null },
-"アデル":{                rea:5, class:104, type:1 , flg:1+0+0, stat:[1937, 624, 114,15,250], buf:null },
-"エリザ":{                rea:5, class:104, type:1 , flg:1+0+0, stat:[1910, 660, 112,10,250], buf:null },
-"プリム":{                rea:5, class:104, type:1 , flg:1+0+0, stat:[1734, 714, 207,15,240], buf:null },
-"甘菓子の魔女リュリュ":{  rea:5, class:104, type:1 , flg:1+0+0, stat:[1637, 596, 170,10,250], buf:null },
-"レイチェル":{            rea:5, class:105, type:1 , flg:1+0+0, stat:[1781, 847, 213, 0,341], buf:null },
-"ベアトリカ":{            rea:5, class:105, type:1 , flg:1+0+0, stat:[2140, 833, 213, 0,310], buf:null },
-"アネリア":{              rea:5, class:105, type:1 , flg:1+0+0, stat:[1766, 858, 271, 0,310], buf:null },
-"サブリナ":{              rea:5, class:105, type:1 , flg:1+0+0, stat:[1796, 774, 299, 0,310], buf:null },
-"エキドナ":{              rea:5, class:106, type:2 , flg:1+0+0, stat:[                     ], buf:null },
-"ルビナス":{              rea:5, class:106, type:2 , flg:1+0+0, stat:[                     ], buf:null },
-"エリザベート":{          rea:5, class:107, type:1 , flg:1+0+0, stat:[2631, 436, 306, 0,235], buf:null },
-"フラン":{                rea:5, class:107, type:1 , flg:1+0+0, stat:[2232, 402, 344,10,220], buf:null },
-"ルマリア":{              rea:5, class:107, type:1 , flg:1+0+0, stat:[2548, 363, 300, 0,220], buf:null },
-"ヒューナ":{              rea:5, class:107, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"シホ":{                  rea:5, class:108, type:1 , flg:1+0+0, stat:[1587, 507, 104, 0,230], buf:null },
-"カグラ":{                rea:5, class:108, type:1 , flg:1+0+0, stat:[1776, 504, 110, 0,230], buf:null },
-"マリウス":{              rea:5, class:109, type:3 , flg:1+2+0, stat:[1120, 859, 243,30,285], buf:null },
-"パトラ":{                rea:5, class:109, type:1 , flg:1+0+12,stat:[1573, 985, 170,25,260], buf:null },
-"ポーラ":{                rea:5, class:109, type:1 , flg:1+0+0, stat:[1904, 911, 182,25,270], buf:null },
-"レーヴ":{                rea:5, class:109, type:1 , flg:1+0+0, stat:[2050, 648, 300,25,270], buf:null },
-"セレイナ":{              rea:5, class:109, type:1 , flg:1+0+0, stat:[1560, 955, 189,25,260], buf:null },
-"常夏の兎司祭ポーラ":{    rea:5, class:109, type:1 , flg:1+0+0, stat:[2029,1112,  66,25,260], buf:null },
-"レン":{                  rea:5, class:110, type:1 , flg:1+0+0, stat:[1666, 430, 285, 0,230], buf:null },
-"レオナ":{                rea:5, class:110, type:1 , flg:1+0+4, stat:[1755, 519, 324, 0,210], buf:null },
-"コヨミ":{                rea:5, class:111, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ソラノ":{                rea:5, class:112, type:1 , flg:1+0+0, stat:[1620,2065, 177, 0,260], buf:null },
-"恋する召喚士リノ":{      rea:5, class:112, type:1 , flg:1+0+0, stat:[1512,1938, 234, 0,260], buf:null },
-"マール":{                rea:5, class:113, type:1 , flg:1+0+0, stat:[2470, 360, 384, 5,255], buf:null },
-"ピピン":{                rea:5, class:113, type:1 , flg:1+0+0, stat:[2757, 338, 311, 5,240], buf:null },
-"ミア":{                  rea:5, class:113, type:1 , flg:1+0+0, stat:[3191, 417, 202, 5,220], buf:null },
-"メイファ":{              rea:5, class:113, type:5 , flg:1+0+0, stat:[1907, 381, 276, 5,220], buf:null },
-"ジャンナ":{              rea:5, class:114, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"カノン":{                rea:5, class:114, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"マーニー":{              rea:5, class:115, type:1 , flg:1+0+12,stat:[1152, 333, 458,10,170], buf:null },
-"ワルツ":{                rea:5, class:115, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ハナ":{                  rea:5, class:115, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ビビアン":{              rea:5, class:115, type:1 , flg:1+0+12,stat:[1286, 441, 441, 0,170], buf:null },
-"メメント":{              rea:5, class:116, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アニエス":{              rea:5, class:116, type:1 , flg:1+0+0, stat:[1092,1131, 143, 0,300], buf:null },
-"ココロ":{                rea:5, class:117, type:1 , flg:1+0+0, stat:[2123, 464, 141,10,240], buf:null },
-"ププル":{                rea:5, class:118, type:3 , flg:1+0+0, stat:[1190, 896, 222, 5,270], buf:null },
-"メープル":{              rea:5, class:118, type:1 , flg:1+0+0, stat:[1788, 817, 134, 0,290], buf:null },
-"コリン":{                rea:5, class:119, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"シャルル":{              rea:5, class:119, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ヘルミーネ":{            rea:5, class:119, type:1 , flg:1+0+4, stat:[                     ], buf:null },
-"レーレン":{              rea:5, class:119, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"リコラ":{                rea:5, class:120, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"スプラ":{                rea:5, class:120, type:3 , flg:1+0+0, stat:[                     ], buf:null },
-"アイーダ":{              rea:5, class:120, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ローザ":{                rea:5, class:120, type:1 , flg:1+0+4, stat:[                     ], buf:null },
-"リナリア":{              rea:5, class:120, type:3 , flg:1+0+0, stat:[                     ], buf:null },
-"アニータ":{              rea:5, class:121, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"エヴァ":{                rea:5, class:122, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"レヴィ":{                rea:5, class:122, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ブランシュ":{            rea:5, class:123, type:1 , flg:1+0+0, stat:[1740, 570, 166, 0,240], buf:null },
-"ベルディナート":{        rea:5, class:124, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ベルゼッタ":{            rea:5, class:124, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ブシュケ":{              rea:5, class:124, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"エルシャ":{              rea:5, class:125, type:1 , flg:1+0+0, stat:[1662, 627, 187, 5,250], buf:null },
-"メレディス":{            rea:5, class:125, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"トトノ":{                rea:5, class:126, type:1 , flg:1+0+0, stat:[1661, 597, 241, 0,300], buf:null },
-"エイミー":{              rea:5, class:126, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ドルチェ":{              rea:5, class:128, type:1 , flg:1+0+0, stat:[1847,1692, 157, 0,420], buf:null },
-"レーゼル":{              rea:5, class:128, type:1 , flg:1+0+4, stat:[                     ], buf:null },
-"ラルフ":{                rea:5, class:128, type:1 , flg:1+2+4, stat:[1583,1455, 191, 0,400], buf:null },
-"アオバ":{                rea:5, class:128, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"リヴル":{                rea:5, class:129, type:7 , flg:1+0+0, stat:[1694, 343, 210,30,230], buf:null },
-"ヴェルティ":{            rea:5, class:129, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ロレッタ":{              rea:5, class:130, type:1 , flg:1+0+0, stat:[1091, 398, 274,15,290], buf:null },
-"シャオメイ":{            rea:5, class:130, type:1 , flg:1+0+0, stat:[1109, 270, 398,15,290], buf:null },
-"クラリーチェ":{          rea:5, class:130, type:1 , flg:1+0+0, stat:[1100, 356, 287,15,305], buf:null },
-"セノーテ":{              rea:5, class:130, type:1 , flg:1+0+0, stat:[1348, 362, 223,15,290], buf:null },
-"モトリー":{              rea:5, class:132, type:1 , flg:1+0+4, stat:[                     ], buf:null },
-"リェプル":{              rea:5, class:132, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ワンダーハート":{        rea:5, class:132, type:1 , flg:1+0+0, stat:[1455, 334, 219, 0,220], buf:null },
-"シィル":{                rea:5, class:133, type:1 , flg:1+0+0, stat:[1651, 635, 181,10,240], buf:null },
-"ホリー":{                rea:5, class:135, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"カグヤ":{                rea:4, class:5  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"トコヨ":{                rea:4, class:5  , type:0 , flg:0+0+0, stat:[                     ], buf:null },
-"シャルム":{              rea:4, class:7  , type:2 , flg:0+0+0, stat:[                     ], buf:null },
-"ウリデム":{              rea:4, class:12 , type:5 , flg:0+0+0, stat:[3865, 629, 391,10,  0], buf:null },
-"リーエン":{              rea:4, class:13 , type:0 , flg:0+0+0, stat:[                     ], buf:null },
-"パフィリア":{            rea:4, class:16 , type:11, flg:0+0+0, stat:[2830,1128, 735,25,  0], buf:null },
-"フィー":{                rea:4, class:17 , type:1 , flg:0+0+0, stat:[3894, 838,1049, 0,  0], buf:null },
-"ヒカゲ":{                rea:4, class:24 , type:1 , flg:0+0+0, stat:[2400, 644, 286, 0,  0], buf:null },
-"ミーティア":{            rea:4, class:26 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"パテル":{                rea:4, class:27 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ルル":{                  rea:4, class:29 , type:7 , flg:0+0+0, stat:[                     ], buf:null },
-"フォルテ":{              rea:4, class:41 , type:1 , flg:0+0+4, stat:[                     ], buf:null },
-"レイファ":{              rea:4, class:44 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"リゼット":{              rea:4, class:117, type:1 , flg:1+0+0, stat:[1668, 528, 268,10,220], buf:null },
-"スイル":{                rea:4, class:123, type:5 , flg:1+0+0, stat:[2180, 624, 102, 0,220], buf:null },
-"プニル":{                rea:4, class:127, type:0 , flg:1+0+0, stat:[                     ], buf:null },
-"ラーティ":{              rea:4, class:128, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ハルカ":{                rea:4, class:130, type:1 , flg:1+0+4, stat:[                     ], buf:null },
-"プリスナ":{              rea:4, class:132, type:7 , flg:1+0+0, stat:[                     ], buf:null },
-"サルース":{              rea:4, class:134, type:1 , flg:1+0+0, stat:[2758, 444, 100, 0,170], buf:null },
-"ケイティ":{              rea:3, class:1  , type:1 , flg:0+0+0, stat:[2091, 480,  44, 0,  0], buf:null },
-"ユリアン":{              rea:3, class:1  , type:1 , flg:0+2+0, stat:[2643, 660, 398, 0,  0], buf:null },
-"アリア":{                rea:3, class:1  , type:1 , flg:0+0+0, stat:[2310, 713, 408, 0,  0], buf:null },
-"浴衣の兵長フィリス":{    rea:3, class:1  , type:1 , flg:0+0+0, stat:[2668, 600, 303, 0,  0], buf:null },
-"ギャレット":{            rea:3, class:2  , type:1 , flg:0+2+0, stat:[3445, 470, 717, 0,  0], buf:null },
-"ベルニス":{              rea:3, class:2  , type:1 , flg:0+0+0, stat:[3326, 382, 850, 0,  0], buf:null },
-"マチルダ":{              rea:3, class:2  , type:1 , flg:0+0+0, stat:[3985, 378, 723, 0,  0], buf:null },
-"フィリーネ":{            rea:3, class:2  , type:1 , flg:0+0+4, stat:[3297, 459, 777, 0,  0], buf:null },
-"年賀の祝盾レアン":{      rea:3, class:2  , type:1 , flg:0+0+0, stat:[3635, 416, 660, 0,  0], buf:null },
-"キャリー":{              rea:3, class:3  , type:1 , flg:0+0+0, stat:[2911, 938, 448,20,  0], buf:null },
-"夏陽の騎馬乙女エレイン":{rea:3, class:3  , type:1 , flg:0+0+0, stat:[2257, 723, 313,10,  0], buf:null },
-"ベティ":{                rea:3, class:4  , type:1 , flg:0+0+0, stat:[1655, 541, 252, 0,  0], buf:null },
-"キュテリ":{              rea:3, class:4  , type:1 , flg:0+0+0, stat:[2147, 592, 257, 0,  0], buf:null },
-"テミス":{                rea:3, class:5  , type:1 , flg:0+0+0, stat:[2726, 738, 399,15,  0], buf:null },
-"コンラッド":{            rea:3, class:6  , type:1 , flg:0+2+0, stat:[4213, 933, 216, 0,  0], buf:null },
-"リーフ":{                rea:3, class:6  , type:1 , flg:0+0+0, stat:[4618, 917, 195, 0,  0], buf:null },
-"ゴライア":{              rea:3, class:7  , type:2 , flg:0+2+0, stat:[4196, 621, 622, 0,  0], buf:null },
-"サーベイン":{            rea:3, class:7  , type:2 , flg:0+2+4, stat:[3844, 584, 579, 0,  0], buf:null },
-"チズル":{                rea:3, class:8  , type:1 , flg:0+0+0, stat:[4030, 996, 268, 0,  0], buf:null },
-"コジュウロウ":{          rea:3, class:8  , type:1 , flg:0+2+0, stat:[3510, 684, 550,20,  0], buf:null },
-"ヒエン":{                rea:3, class:9  , type:1 , flg:0+2+0, stat:[1553, 379, 215, 0,  0], buf:null },
-"カナメ":{                rea:3, class:9  , type:1 , flg:0+0+0, stat:[2880, 433, 250, 0,  0], buf:null },
-"ステラ":{                rea:3, class:10 , type:1 , flg:0+0+0, stat:[2851, 834, 466,20,  0], buf:null },
-"ドロシー":{              rea:3, class:12 , type:4 , flg:0+0+0, stat:[3672, 608, 326, 0,  0], buf:null },
-"ザラーム":{              rea:3, class:12 , type:1 , flg:0+2+12,stat:[3366, 594, 317,20,  0], buf:null },
-"ジーナ":{                rea:3, class:13 , type:1 , flg:0+0+0, stat:[3337, 653, 230, 0,  0], buf:null },
-"モモ":{                  rea:3, class:13 , type:1 , flg:0+0+0, stat:[2436, 731, 412, 0,  0], buf:null },
-"アネモネ":{              rea:3, class:15 , type:1 , flg:0+0+0, stat:[1726, 690, 357,10,  0], buf:null },
-"エルン":{                rea:3, class:16 , type:11, flg:0+0+0, stat:[2916, 938, 777,25,  0], buf:null },
-"ボリス":{                rea:3, class:17 , type:1 , flg:0+2+0, stat:[3720, 683, 678, 0,  0], buf:null },
-"マリエ":{                rea:3, class:18 , type:1 , flg:0+0+0, stat:[1637, 558, 248, 0,  0], buf:null },
-"フレイ":{                rea:3, class:18 , type:1 , flg:0+0+4, stat:[1564, 528, 246, 0,  0], buf:null },
-"エレット":{              rea:3, class:20 , type:1 , flg:0+0+0, stat:[1965, 453, 433,10,  0], buf:null },
-"ライチ":{                rea:3, class:21 , type:4 , flg:0+0+0, stat:[3862, 478, 780,30,  0], buf:null },
-"アベル":{                rea:3, class:22 , type:1 , flg:0+2+0, stat:[4244, 881, 708, 0,  0], buf:null },
-"マーガレット":{          rea:3, class:23 , type:1 , flg:0+0+0, stat:[1570, 564, 216, 0,  0], buf:null },
-"ゲオルグ":{              rea:3, class:33 , type:1 , flg:0+2+4, stat:[                     ], buf:null },
-"グレン":{                rea:3, class:36 , type:1 , flg:0+2+0, stat:[1787, 526, 161, 0,  0], buf:null },
-"ゴルドー":{              rea:3, class:37 , type:1 , flg:0+2+0, stat:[4236, 680, 249, 0,  0], buf:null },
-"クレア":{                rea:3, class:101, type:1 , flg:1+0+0, stat:[1659, 604, 207, 0,280], buf:null },
-"ベラ":{                  rea:3, class:101, type:5 , flg:1+0+0, stat:[1512, 611, 178, 0,260], buf:null },
-"ストレイ":{              rea:3, class:101, type:1 , flg:1+2+0, stat:[1829, 578, 192, 0,340], buf:null },
-"シャオ":{                rea:3, class:101, type:1 , flg:1+0+0, stat:[1705, 600, 194, 0,280], buf:null },
-"新春の弓巫女ソーマ":{    rea:3, class:101, type:1 , flg:1+0+0, stat:[1628, 639, 196, 0,280], buf:null },
-"夜涼の射的兵ダニエラ":{  rea:3, class:101, type:1 , flg:1+0+0, stat:[1484, 558, 185, 0,260], buf:null },
-"サイラス":{              rea:3, class:102, type:1 , flg:1+2+0, stat:[1437, 761,  98,15,200], buf:null },
-"バルバストラフ":{        rea:3, class:102, type:1 , flg:1+2+0, stat:[1366, 785, 100,15,280], buf:null },
-"メーリス":{              rea:3, class:102, type:1 , flg:1+0+0, stat:[1355, 797,  98,15,240], buf:null },
-"イーリス":{              rea:3, class:103, type:1 , flg:1+0+0, stat:[2106, 580, 189, 0,260], buf:null },
-"フェドラ":{              rea:3, class:103, type:1 , flg:1+0+0, stat:[1760, 536, 167, 0,270], buf:null },
-"ロベルト":{              rea:3, class:103, type:1 , flg:1+2+0, stat:[2510, 396, 180, 0,270], buf:null },
-"聖夜の癒し手アリサ":{    rea:3, class:103, type:1 , flg:1+0+0, stat:[2070, 579, 194, 0,260], buf:null },
-"新春の癒し手イーリス":{  rea:3, class:103, type:1 , flg:1+0+0, stat:[1808, 522, 168, 0,270], buf:null },
-"クロリス":{              rea:3, class:104, type:1 , flg:1+0+0, stat:[1544, 560, 105,10,250], buf:null },
-"ユユ":{                  rea:3, class:104, type:3 , flg:1+0+0, stat:[ 990, 668,  95,13,250], buf:null },
-"リュリュ":{              rea:3, class:104, type:1 , flg:1+0+0, stat:[1532, 636, 147,10,210], buf:null },
-"麦わら帽の魔女カリオペ":{rea:3, class:104, type:1 , flg:1+0+0, stat:[1684, 583, 149,20,240], buf:null },
-"勤勉猫魔女ネーニャ":{    rea:3, class:104, type:1 , flg:1+0+0, stat:[1478, 588, 103,10,250], buf:null },
-"モニカ":{                rea:3, class:105, type:1 , flg:1+0+0, stat:[1610, 744, 194, 0,310], buf:null },
-"モーレット":{            rea:3, class:105, type:1 , flg:1+0+0, stat:[1625, 733, 196, 0,310], buf:null },
-"海賊番長ジョヴァンニ":{  rea:3, class:105, type:1 , flg:1+2+0, stat:[1698, 695, 200, 0,310], buf:null },
-"ヴィンセント":{          rea:3, class:107, type:1 , flg:1+2+0, stat:[2166, 386, 238, 0,220], buf:null },
-"ノエル":{                rea:3, class:108, type:4 , flg:1+0+0, stat:[1470, 837, 165,15,270], buf:null },
-"リノ":{                  rea:3, class:112, type:1 , flg:1+0+0, stat:[1260, 996, 100, 0,300], buf:null },
-"クルル":{                rea:3, class:113, type:1 , flg:1+0+0, stat:[1814, 379, 179, 5,220], buf:null },
-"ゾラ":{                  rea:3, class:114, type:1 , flg:1+0+0, stat:[1385, 914,  98, 0,290], buf:null },
-"メル":{                  rea:3, class:114, type:1 , flg:1+0+0, stat:[1300,1052, 109, 0,320], buf:null },
-"ミステル":{              rea:3, class:118, type:1 , flg:1+0+4, stat:[1596, 816, 125, 0,270], buf:null },
-"ローリエ":{              rea:3, class:118, type:1 , flg:1+0+0, stat:[1320, 774, 122, 0,290], buf:null },
-"フウカ":{                rea:3, class:120, type:1 , flg:1+0+0, stat:[1476, 551, 192, 0,260], buf:null },
-"レダ":{                  rea:3, class:121, type:1 , flg:1+0+0, stat:[1588, 417, 130, 0,190], buf:null },
-"ミトラ":{                rea:3, class:122, type:1 , flg:1+0+0, stat:[1987, 406, 114,10,350], buf:null },
-"リルケ":{                rea:3, class:125, type:1 , flg:1+0+0, stat:[1504, 565, 108, 5,220], buf:null },
-"クレイブ":{              rea:2, class:1  , type:1 , flg:0+1+0, stat:[                     ], buf:null },
-"フィリス":{              rea:2, class:1  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ロザリー":{              rea:2, class:1  , type:3 , flg:0+0+0, stat:[                     ], buf:null },
-"グスタフ":{              rea:2, class:1  , type:4 , flg:0+0+0, stat:[                     ], buf:null },
-"アサル":{                rea:2, class:1  , type:1 , flg:0+0+12,stat:[                     ], buf:null },
-"ベルナール":{            rea:2, class:2  , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"レアン":{                rea:2, class:2  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ダナン":{                rea:2, class:2  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ドワイド":{              rea:2, class:2  , type:1 , flg:0+2+4, stat:[                     ], buf:null },
-"ミーシャ":{              rea:2, class:3  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"エレイン":{              rea:2, class:3  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"チグリ":{                rea:2, class:3  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"セシリー":{              rea:2, class:4  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ハリッサ":{              rea:2, class:4  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"バラッド":{              rea:2, class:4  , type:1 , flg:0+2+12,stat:[                     ], buf:null },
-"ロゼット":{              rea:2, class:5  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"モーティマ":{            rea:2, class:6  , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"ヒューネス":{            rea:2, class:6  , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"ガドラス":{              rea:2, class:7  , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"サノスケ":{              rea:2, class:8  , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"イロハ":{                rea:2, class:8  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"カゲロウ":{              rea:2, class:9  , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"サイゾウ":{              rea:2, class:9  , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"クラーラ":{              rea:2, class:10 , type:1 , flg:0+0+4, stat:[                     ], buf:null },
-"ダン":{                  rea:2, class:13 , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"マオ":{                  rea:2, class:13 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"リカルド":{              rea:2, class:15 , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"カシス":{                rea:2, class:15 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ニエル":{                rea:2, class:16 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"エーテル":{              rea:2, class:20 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ニコラウス":{            rea:2, class:20 , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"ルーテ":{                rea:2, class:21 , type:1 , flg:0+0+4, stat:[                     ], buf:null },
-"リエーレ":{              rea:2, class:22 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ルナール":{              rea:2, class:23 , type:1 , flg:0+0+0, stat:[                     ], buf:null },
-"ミゲル":{                rea:2, class:23 , type:1 , flg:0+2+0, stat:[                     ], buf:null },
-"ルークス":{              rea:2, class:35 , type:1 , flg:0+2+4, stat:[                     ], buf:null },
-"ソーマ":{                rea:2, class:101, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ダニエラ":{              rea:2, class:101, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ローレン":{              rea:2, class:101, type:3 , flg:1+2+0, stat:[                     ], buf:null },
-"カズハ":{                rea:2, class:101, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ヴァレリー":{            rea:2, class:102, type:1 , flg:1+2+0, stat:[                     ], buf:null },
-"パレス":{                rea:2, class:102, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"マーヤ":{                rea:2, class:102, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"アリサ":{                rea:2, class:103, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ドルカ":{                rea:2, class:103, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"クリストファー":{        rea:2, class:103, type:1 , flg:1+2+0, stat:[                     ], buf:null },
-"カリオペ":{              rea:2, class:104, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ネーニャ":{              rea:2, class:104, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"メローネ":{              rea:2, class:104, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ジョヴァンニ":{          rea:2, class:105, type:1 , flg:1+2+0, stat:[                     ], buf:null },
-"ヴェロッテ":{            rea:2, class:105, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"フーリ":{                rea:2, class:107, type:1 , flg:1+0+12,stat:[                     ], buf:null },
-"フドウ":{                rea:2, class:109, type:1 , flg:1+2+0, stat:[                     ], buf:null },
-"シャロン":{              rea:2, class:109, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"フェイ":{                rea:2, class:113, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"パーシス":{              rea:2, class:114, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"ソラーレ":{              rea:2, class:118, type:1 , flg:1+0+8, stat:[                     ], buf:null },
-"テルマ":{                rea:2, class:119, type:1 , flg:1+0+0, stat:[                     ], buf:null },
-"エリック":{              rea:2, class:120, type:1 , flg:1+2+0, stat:[                     ], buf:null },
-"ヒース":{                rea:2, class:125, type:1 , flg:1+2+0, stat:[                     ], buf:null },
+"王子":{                  rea:6, class:0  , type:1 , flg:0+2+0, stat:[1300, 340, 240, 0,  0] },
+"王子【幼少】":{          rea:6, class:0  , type:1 , flg:0+2+0, stat:[1300, 340, 240, 0,  0] },
+"王子(アイギス神器)":{    rea:6, class:0  , type:1 , flg:0+2+0, stat:[2600, 540, 700,20,  0] },
+"王子(ケラウノス神器)":{  rea:6, class:0  , type:1 , flg:0+2+0, stat:[2400, 690, 540,20,  0] },
+"王子(砂漠)":{            rea:6, class:0  , type:1 , flg:0+2+12,stat:[2200, 680, 420,10,  0] },
+"白の皇帝":{              rea:6, class:0  , type:1 , flg:0+2+4, stat:[2200, 572, 696, 0,  0] },
+"アルティア":{            rea:6, class:1  , type:1 , flg:0+0+0, stat:[2609, 744, 489, 0,  0] },
+"ディーナ":{              rea:6, class:2  , type:1 , flg:0+0+0, stat:[4260, 677, 886, 0,  0] },
+"ディーネ":{              rea:6, class:2  , type:1 , flg:0+0+0, stat:[3960, 601,1292, 0,  0] },
+"クリッサ":{              rea:6, class:3  , type:1 , flg:0+0+0, stat:[                     ] },
+"レシア":{                rea:6, class:3  , type:1 , flg:0+0+0, stat:[                     ] },
+"ベルナ":{                rea:6, class:4  , type:1 , flg:0+0+0, stat:[                     ] },
+"シビラ":{                rea:6, class:5  , type:1 , flg:0+0+0, stat:[2860,1064, 494,25,  0] },
+"オリヴィエ":{            rea:6, class:5  , type:3 , flg:0+0+0, stat:[2150,1148, 642,30,  0] },
+"アンジェリーネ":{        rea:6, class:5  , type:1 , flg:0+0+4, stat:[2903, 917, 657,25,  0] },
+"シルヴィア":{            rea:6, class:5  , type:8 , flg:0+0+0, stat:[5187, 810, 894,15,  0] },
+"純白の花嫁カルマ":{      rea:6, class:5  , type:8 , flg:0+0+0, stat:[5040,1011, 478,10,  0] },
+"ミサ":{                  rea:6, class:5  , type:0 , flg:0+0+0, stat:[4455, 863, 770,25,  0] },
+"アマンダ":{              rea:6, class:6  , type:1 , flg:0+0+0, stat:[5112,1475, 253, 0,  0] },
+"ドラニア":{              rea:6, class:7  , type:2 , flg:0+2+0, stat:[1820, 325, 390, 0,  0] },
+"ヴルム":{                rea:6, class:7  , type:2 , flg:0+0+0, stat:[4290, 792, 895,10,  0] },
+"アーニャ":{              rea:6, class:7  , type:2 , flg:0+0+0, stat:[3350, 675, 989,20,  0] },
+"エルドラ":{              rea:6, class:7  , type:2 , flg:0+0+0, stat:[3105, 813, 937, 0,  0] },
+"ヒバリ":{                rea:6, class:8  , type:1 , flg:0+0+0, stat:[                     ] },
+"サキ":{                  rea:6, class:9  , type:1 , flg:0+0+0, stat:[                     ] },
+"ナギ":{                  rea:6, class:9  , type:1 , flg:0+0+0, stat:[                     ] },
+"エスタ":{                rea:6, class:10 , type:1 , flg:0+0+0, stat:[                     ] },
+"コーネリア":{            rea:6, class:11 , type:1 , flg:0+0+0, stat:[                     ] },
+"暗黒騎士":{              rea:6, class:11 , type:0 , flg:0+2+0, stat:[                     ] },
+"アリス":{                rea:6, class:13 , type:1 , flg:0+0+0, stat:[                     ] },
+"一途な武王姫アリス":{    rea:6, class:13 , type:1 , flg:0+0+0, stat:[                     ] },
+"マツリ":{                rea:6, class:14 , type:1 , flg:0+0+0, stat:[                     ] },
+"ナルサス":{              rea:6, class:14 , type:1 , flg:0+0+0, stat:[                     ] },
+"イングリッド":{          rea:6, class:15 , type:1 , flg:0+0+0, stat:[                     ] },
+"ソフィー":{              rea:6, class:16 , type:1 , flg:0+0+0, stat:[                     ] },
+"ウェンディ":{            rea:6, class:17 , type:1 , flg:0+0+0, stat:[                     ] },
+"イブキ":{                rea:6, class:18 , type:1 , flg:0+0+0, stat:[2355, 649, 305, 0,  0] },
+"カヨウ":{                rea:6, class:19 , type:6 , flg:0+0+0, stat:[2292, 663, 343,10,  0] },
+"キュウビ":{              rea:6, class:19 , type:6 , flg:0+0+4, stat:[1820, 642, 517,20,  0] },
+"エクス":{                rea:6, class:21 , type:1 , flg:0+0+0, stat:[2340, 635, 592,15,  0] },
+"グレース":{              rea:6, class:21 , type:1 , flg:0+0+0, stat:[                     ] },
+"シルセス":{              rea:6, class:21 , type:1 , flg:0+0+0, stat:[                     ] },
+"ティファ":{              rea:6, class:22 , type:1 , flg:0+0+0, stat:[4160,1154,1097, 5,  0] },
+"リオン":{                rea:6, class:23 , type:1 , flg:0+0+0, stat:[1995, 739, 348, 0,260] },
+"セーラ":{                rea:6, class:24 , type:1 , flg:0+0+0, stat:[                     ] },
+"エマ":{                  rea:6, class:25 , type:8 , flg:0+0+0, stat:[4000, 929, 729, 0,  0] },
+"ジークリンデ":{          rea:6, class:26 , type:1 , flg:0+0+4, stat:[                     ] },
+"ミレイユ":{              rea:6, class:27 , type:1 , flg:0+0+0, stat:[3250, 653, 821,20,  0] },
+"ダリューン":{            rea:6, class:27 , type:1 , flg:0+2+8, stat:[3375, 709, 624,10,  0] },
+"ナタク":{                rea:6, class:28 , type:11, flg:0+0+0, stat:[3105,1037,1632,15,  0] },
+"ラクシャーサ":{          rea:6, class:29 , type:7 , flg:0+0+0, stat:[4355, 985, 338,30,  0] },
+"メフィスト":{            rea:6, class:29 , type:7 , flg:0+0+4, stat:[4489, 903, 461,30,  0] },
+"シンシア":{              rea:6, class:30 , type:11, flg:0+0+0, stat:[2000, 563, 506,40,  0] },
+"シノ":{                  rea:6, class:32 , type:6 , flg:0+0+0, stat:[2430, 898, 410, 0,  0] },
+"エルミラ":{              rea:6, class:33 , type:1 , flg:0+0+4, stat:[4079, 751, 630, 0,300] },
+"鬼刃姫":{                rea:6, class:34 , type:6 , flg:0+0+0, stat:[7723,1171, 343, 0,  0] },
+"ディアナ":{              rea:6, class:35 , type:1 , flg:0+0+4, stat:[2847,1031, 729, 0,  0] },
+"クラマ":{                rea:6, class:36 , type:9 , flg:0+0+0, stat:[1823, 794, 208, 0,230] },
+"ティニー":{              rea:6, class:37 , type:4 , flg:0+0+0, stat:[4550, 903, 458, 0,  0] },
+"アナトリア":{            rea:6, class:38 , type:9 , flg:0+0+0, stat:[4364,1013, 441, 0,  0] },
+"スーシェン":{            rea:6, class:39 , type:8 , flg:0+0+0, stat:[3816, 819, 612, 0,  0] },
+"レミィ":{                rea:6, class:40 , type:6 , flg:0+0+0, stat:[6340,1658, 378, 0,  0] },
+"テンマ":{                rea:6, class:41 , type:1 , flg:0+0+0, stat:[2700, 991, 504,10,  0] },
+"クーコ":{                rea:6, class:42 , type:6 , flg:0+0+0, stat:[6110,1375, 489, 0,  0] },
+"リュクス":{              rea:6, class:45 , type:3 , flg:0+0+0, stat:[2600, 999, 390,10,  0] },
+"金光聖菩":{              rea:6, class:47 , type:11, flg:0+0+0, stat:[3060,1118, 585,20,  0] },
+"関羽":{                  rea:6, class:48 , type:1 , flg:0+0+0, stat:[                     ] },
+"孫堅":{                  rea:6, class:49 , type:1 , flg:0+0+0, stat:[                     ] },
+"孫権":{                  rea:6, class:49 , type:1 , flg:0+0+0, stat:[                     ] },
+"アンナ":{                rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ] },
+"アンナ(支給服)":{        rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ] },
+"アンナ(水着)":{          rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ] },
+"アンナ(軍服)":{          rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ] },
+"アンナ(アイドル)":{      rea:6, class:100, type:1 , flg:1+0+0, stat:[                     ] },
+"ナナリー":{              rea:6, class:101, type:1 , flg:1+0+0, stat:[                     ] },
+"アーシェラ":{            rea:6, class:101, type:1 , flg:1+0+0, stat:[                     ] },
+"エステル":{              rea:6, class:102, type:1 , flg:1+0+0, stat:[1688,1049, 120,25,260] },
+"イリス":{                rea:6, class:103, type:1 , flg:1+0+0, stat:[                     ] },
+"春着の聖女イリス":{      rea:6, class:103, type:1 , flg:1+0+0, stat:[                     ] },
+"リアナ":{                rea:6, class:103, type:1 , flg:1+0+0, stat:[                     ] },
+"デスピア":{              rea:6, class:104, type:1 , flg:1+0+0, stat:[                     ] },
+"ミネルバ":{              rea:6, class:105, type:1 , flg:1+0+0, stat:[2000, 956, 239, 0,330] },
+"デューオ":{              rea:6, class:105, type:1 , flg:1+0+0, stat:[2391, 940, 241, 0,310] },
+"ハクノカミ":{            rea:6, class:106, type:2 , flg:1+0+0, stat:[3352, 703, 426, 0,240] },
+"スー":{                  rea:6, class:107, type:1 , flg:1+0+0, stat:[2496, 538, 340, 0,220] },
+"キキョウ":{              rea:6, class:108, type:1 , flg:1+0+0, stat:[1553, 624, 117, 0,250] },
+"エターナー":{            rea:6, class:109, type:1 , flg:1+0+0, stat:[                     ] },
+"アイシャ":{              rea:6, class:110, type:1 , flg:1+0+0, stat:[2076, 504, 221, 0,210] },
+"ミコト":{                rea:6, class:111, type:1 , flg:1+0+0, stat:[1430, 517, 102,10,250] },
+"ファルネ":{              rea:6, class:112, type:1 , flg:1+0+0, stat:[                     ] },
+"花嫁姿の召喚士ファルネ":{rea:6, class:112, type:1 , flg:1+0+0, stat:[                     ] },
+"リンネ":{                rea:6, class:113, type:1 , flg:1+0+0, stat:[                     ] },
+"刻詠の花嫁リンネ":{      rea:6, class:113, type:1 , flg:1+0+0, stat:[                     ] },
+"フレデリカ":{            rea:6, class:114, type:1 , flg:1+0+0, stat:[2115,1276, 133, 0,360] },
+"ミヤビ":{                rea:6, class:115, type:1 , flg:1+0+0, stat:[1460, 444, 444,15,170] },
+"メトゥス":{              rea:6, class:116, type:1 , flg:1+0+0, stat:[1625, 910, 182, 0,280] },
+"トワ":{                  rea:6, class:117, type:1 , flg:1+0+0, stat:[                     ] },
+"フィオレ":{              rea:6, class:118, type:1 , flg:1+0+0, stat:[                     ] },
+"マキナ":{                rea:6, class:119, type:1 , flg:1+0+0, stat:[1920, 769, 234, 0,230] },
+"サバル":{                rea:6, class:121, type:5 , flg:1+0+0, stat:[1946, 519, 242, 0,190] },
+"オロチヒメ":{            rea:6, class:122, type:1 , flg:1+0+0, stat:[2048, 565, 156,20,350] },
+"モルテナ":{              rea:6, class:123, type:1 , flg:1+0+0, stat:[                     ] },
+"ドロテア":{              rea:6, class:124, type:3 , flg:1+0+0, stat:[1520, 998, 196,50,250] },
+"アンリ":{                rea:6, class:125, type:3 , flg:1+0+0, stat:[2282, 706, 143,10,  0] },
+"ディエーラ":{            rea:6, class:126, type:1 , flg:1+0+0, stat:[2327, 660, 202, 0,300] },
+"ソシエ":{                rea:6, class:128, type:1 , flg:1+0+0, stat:[1663,1787, 189, 0,400] },
+"ラピス":{                rea:6, class:129, type:7 , flg:1+0+0, stat:[2250, 412, 177,35,230] },
+"コハル":{                rea:6, class:131, type:7 , flg:1+0+0, stat:[3504,   1, 525,20,220] },
+"諸葛亮":{                rea:6, class:135, type:1 , flg:0+0+0, stat:[                     ] },
+"ジェローム":{            rea:5, class:1  , type:1 , flg:0+2+0, stat:[2276, 655, 396, 0,  0] },
+"ゼノビア":{              rea:5, class:1  , type:1 , flg:0+0+0, stat:[2541, 733, 529, 0,  0] },
+"リーゼロッテ":{          rea:5, class:1  , type:1 , flg:0+0+4, stat:[3045, 744, 432, 0,  0] },
+"ジェイク":{              rea:5, class:1  , type:1 , flg:0+2+0, stat:[2415, 723, 499,10,  0] },
+"年賀の教官ケイティ":{    rea:5, class:1  , type:1 , flg:0+0+0, stat:[2862, 671, 548, 0,  0] },
+"ジェリウス":{            rea:5, class:2  , type:1 , flg:0+2+0, stat:[4347, 382, 829,10,  0] },
+"マリーベル":{            rea:5, class:2  , type:1 , flg:0+0+0, stat:[3325, 403, 544, 0,  0] },
+"ミランダ":{              rea:5, class:2  , type:1 , flg:0+0+0, stat:[3913, 505, 793, 0,  0] },
+"聖鈴の大盾ベルニス":{    rea:5, class:2  , type:1 , flg:0+0+0, stat:[                     ] },
+"テティス":{              rea:5, class:3  , type:1 , flg:0+0+0, stat:[2539, 675, 452, 0,  0] },
+"ダリア":{                rea:5, class:3  , type:1 , flg:0+0+0, stat:[3450, 823, 432, 0,  0] },
+"エミリア":{              rea:5, class:3  , type:1 , flg:0+0+0, stat:[2543, 493, 338,10,  0] },
+"メイリン":{              rea:5, class:3  , type:1 , flg:0+0+0, stat:[2662, 774, 600,20,  0] },
+"渚の槍騎兵キャリー":{    rea:5, class:3  , type:1 , flg:0+0+0, stat:[                     ] },
+"シプリア":{              rea:5, class:4  , type:1 , flg:0+0+0, stat:[2337, 641, 348, 0,  0] },
+"エイダ":{                rea:5, class:4  , type:5 , flg:0+0+0, stat:[2430, 564, 259, 0,  0] },
+"ジュノン":{              rea:5, class:4  , type:1 , flg:0+0+0, stat:[2220, 608, 250, 0,  0] },
+"セブン":{                rea:5, class:4  , type:1 , flg:0+0+0, stat:[2280, 535, 372, 0,  0] },
+"サヨ":{                  rea:5, class:4  , type:1 , flg:0+0+0, stat:[2605, 539, 336, 0,  0] },
+"聖夜の盗賊シプリア":{    rea:5, class:4  , type:1 , flg:0+0+0, stat:[1860, 528, 345, 0,  0] },
+"リリア":{                rea:5, class:5  , type:1 , flg:0+0+0, stat:[3274, 821, 450,20,  0] },
+"シェリー":{              rea:5, class:5  , type:1 , flg:0+0+0, stat:[2788, 944, 446,15,  0] },
+"クローディア":{          rea:5, class:5  , type:1 , flg:0+0+0, stat:[2970, 940, 417,15,  0] },
+"ルイーズ":{              rea:5, class:5  , type:1 , flg:0+0+0, stat:[2633, 838, 545,15,  0] },
+"メルヴィナ":{            rea:5, class:5  , type:1 , flg:0+0+0, stat:[2280, 970, 529,20,  0] },
+"スクハ":{                rea:5, class:5  , type:1 , flg:0+0+0, stat:[2866, 870, 458,15,  0] },
+"ジュリア":{              rea:5, class:5  , type:1 , flg:0+0+0, stat:[2850, 900, 461,20,  0] },
+"黒衣の花嫁カルマ":{      rea:5, class:5  , type:8 , flg:0+0+0, stat:[4603, 707, 790,10,  0] },
+"ライラ":{                rea:5, class:6  , type:1 , flg:0+0+0, stat:[4838,1256, 218, 0,  0] },
+"セリア":{                rea:5, class:6  , type:1 , flg:0+0+0, stat:[5313, 865, 308,10,  0] },
+"イメリア":{              rea:5, class:6  , type:1 , flg:0+0+0, stat:[4329, 964, 339, 0,  0] },
+"ロロネ":{                rea:5, class:6  , type:1 , flg:0+0+0, stat:[4754,1003, 249, 0,  0] },
+"イグニス":{              rea:5, class:7  , type:2 , flg:0+0+0, stat:[4075, 738, 707, 0,  0] },
+"リキュノス":{            rea:5, class:7  , type:2 , flg:0+0+0, stat:[                     ] },
+"サクヤ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[3368, 792, 560, 0,  0] },
+"モミジ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[3616,1077, 520, 0,  0] },
+"アカネ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[3510, 804, 660,20,  0] },
+"シズカ":{                rea:5, class:8  , type:1 , flg:0+0+0, stat:[2835, 825, 759,20,  0] },
+"ヒナ":{                  rea:5, class:9  , type:1 , flg:0+0+0, stat:[2162, 407, 230, 0,  0] },
+"アザミ":{                rea:5, class:9  , type:1 , flg:0+0+0, stat:[1647, 377, 342, 0,  0] },
+"イザベル":{              rea:5, class:10 , type:1 , flg:0+0+4, stat:[2530, 846, 601,20,  0] },
+"リディ":{                rea:5, class:10 , type:1 , flg:0+0+0, stat:[1980, 845, 460,20,  0] },
+"ユリナ":{                rea:5, class:11 , type:1 , flg:0+0+0, stat:[3120, 726, 660,25,  0] },
+"エルヴァ":{              rea:5, class:11 , type:1 , flg:0+0+0, stat:[3458, 774, 573,10,  0] },
+"ダルク":{                rea:5, class:11 , type:1 , flg:0+0+0, stat:[3136, 833, 619,15,  0] },
+"ロアナ":{                rea:5, class:12 , type:3 , flg:0+0+0, stat:[4222, 573, 400, 5,  0] },
+"リスティス":{            rea:5, class:12 , type:1 , flg:0+0+0, stat:[4959, 665, 351, 0,  0] },
+"ナキア":{                rea:5, class:12 , type:7 , flg:0+0+0, stat:[                     ] },
+"リン":{                  rea:5, class:13 , type:1 , flg:0+0+0, stat:[3238, 768, 276, 0,  0] },
+"ウル":{                  rea:5, class:13 , type:5 , flg:0+0+0, stat:[2777, 950, 358, 0,  0] },
+"ベストラ":{              rea:5, class:13 , type:9 , flg:0+0+0, stat:[2952, 954, 252, 0,  0] },
+"リーザ":{                rea:5, class:13 , type:1 , flg:0+0+8, stat:[3008, 833, 313, 0,  0] },
+"ウズメ":{                rea:5, class:14 , type:1 , flg:0+0+0, stat:[2679, 608, 340, 0,  0] },
+"シュウカ":{              rea:5, class:14 , type:1 , flg:0+0+0, stat:[2091, 683, 421, 0,  0] },
+"ヘレナ":{                rea:5, class:14 , type:1 , flg:0+0+0, stat:[2340, 584, 408, 0,  0] },
+"レオラ":{                rea:5, class:14 , type:1 , flg:0+0+4, stat:[2563, 653, 390, 0,  0] },
+"シャルロット":{          rea:5, class:15 , type:1 , flg:0+0+0, stat:[1871, 728, 486,10,  0] },
+"ホルエス":{              rea:5, class:15 , type:1 , flg:0+0+12,stat:[2424, 957, 409,10,  0] },
+"サビーネ":{              rea:5, class:15 , type:1 , flg:0+0+0, stat:[2171, 804, 392,15,  0] },
+"シエナ":{                rea:5, class:15 , type:1 , flg:0+0+0, stat:[1808, 779, 483,10,  0] },
+"聖夜の魔剣シャルロット":{rea:5, class:15 , type:1 , flg:0+0+0, stat:[                     ] },
+"クロエ":{                rea:5, class:16 , type:11, flg:0+0+0, stat:[3120,1470, 760,25,  0] },
+"ミルノ":{                rea:5, class:16 , type:11, flg:0+0+0, stat:[2464, 999,1029,25,  0] },
+"フォニア":{              rea:5, class:16 , type:11, flg:0+0+0, stat:[3250,1380, 728,25,  0] },
+"セフィーレ":{            rea:5, class:16 , type:11, flg:0+0+0, stat:[3198,1416, 771,25,  0] },
+"リッカ":{                rea:5, class:17 , type:1 , flg:0+0+0, stat:[3900, 848, 720, 0,  0] },
+"ティアル":{              rea:5, class:17 , type:1 , flg:0+0+0, stat:[4026, 936, 693, 0,  0] },
+"ビエラ":{                rea:5, class:18 , type:1 , flg:0+0+0, stat:[1853, 552, 323, 0,  0] },
+"リーンベル":{            rea:5, class:18 , type:1 , flg:0+0+0, stat:[1764, 506, 368, 0,  0] },
+"アメリ":{                rea:5, class:18 , type:1 , flg:0+0+0, stat:[2049, 576, 275, 0,  0] },
+"イナリ":{                rea:5, class:19 , type:6 , flg:0+0+0, stat:[1886, 611, 334, 5,  0] },
+"堕姫":{                  rea:5, class:19 , type:6 , flg:0+0+0, stat:[1984, 574, 299, 5,  0] },
+"フラメル":{              rea:5, class:20 , type:1 , flg:0+0+0, stat:[2100, 521, 550,10,  0] },
+"セラ":{                  rea:5, class:20 , type:1 , flg:0+0+0, stat:[                     ] },
+"フェルミ":{              rea:5, class:20 , type:1 , flg:0+0+0, stat:[                     ] },
+"ルチア":{                rea:5, class:20 , type:1 , flg:0+0+4, stat:[                     ] },
+"ジェシカ":{              rea:5, class:21 , type:1 , flg:0+0+0, stat:[3240, 604, 696,20,  0] },
+"エーリカ":{              rea:5, class:21 , type:1 , flg:0+0+0, stat:[3486, 677, 689,20,  0] },
+"パルフィ":{              rea:5, class:21 , type:1 , flg:0+0+0, stat:[3490, 496, 858,30,  0] },
+"ルシル":{                rea:5, class:22 , type:1 , flg:0+0+0, stat:[                     ] },
+"エレニア":{              rea:5, class:22 , type:1 , flg:0+0+0, stat:[3895,1002, 848, 0,  0] },
+"ナディア":{              rea:5, class:22 , type:1 , flg:0+0+0, stat:[4478,1148, 852, 0,  0] },
+"デイジー":{              rea:5, class:23 , type:1 , flg:0+0+0, stat:[                     ] },
+"カティナ":{              rea:5, class:23 , type:1 , flg:0+0+0, stat:[1736, 635, 310, 0,  0] },
+"サラサ":{                rea:5, class:23 , type:1 , flg:0+0+0, stat:[                     ] },
+"アイリーン":{            rea:5, class:24 , type:1 , flg:0+0+0, stat:[2322, 790, 370, 0,  0] },
+"シャーリー":{            rea:5, class:24 , type:1 , flg:0+0+0, stat:[3295, 552, 518,10,  0] },
+"リーナ":{                rea:5, class:24 , type:10, flg:0+0+0, stat:[2496, 842, 309,10,  0] },
+"マリカ":{                rea:5, class:24 , type:1 , flg:0+0+4, stat:[3129, 574, 545,10,  0] },
+"エデン":{                rea:5, class:25 , type:8 , flg:0+0+0, stat:[3864, 744, 630, 0,  0] },
+"ラキュア":{              rea:5, class:25 , type:8 , flg:0+0+0, stat:[3526, 802, 680, 0,  0] },
+"サンドラ":{              rea:5, class:26 , type:1 , flg:0+0+0, stat:[2909, 752, 532, 0,  0] },
+"グローリア":{            rea:5, class:26 , type:1 , flg:0+0+0, stat:[3630, 764, 486, 0,  0] },
+"レイブン":{              rea:5, class:26 , type:1 , flg:0+0+0, stat:[2955, 783, 504, 0,  0] },
+"リシェルテ":{            rea:5, class:26 , type:1 , flg:0+0+0, stat:[3395, 816, 401, 0,  0] },
+"アリシア":{              rea:5, class:27 , type:1 , flg:0+0+0, stat:[                     ] },
+"ネフティ":{              rea:5, class:27 , type:1 , flg:0+0+12,stat:[                     ] },
+"ファー":{                rea:5, class:28 , type:11, flg:0+0+0, stat:[3164, 742,1288,10,  0] },
+"太公望":{                rea:5, class:28 , type:11, flg:0+0+0, stat:[                     ] },
+"バロウス":{              rea:5, class:29 , type:7 , flg:0+0+0, stat:[4490, 684, 400,20,  0] },
+"ベルーフェ":{            rea:5, class:29 , type:7 , flg:0+0+0, stat:[4403, 787, 321,20,  0] },
+"グレーテル":{            rea:5, class:31 , type:3 , flg:0+0+0, stat:[                     ] },
+"シェイド":{              rea:5, class:31 , type:3 , flg:0+0+0, stat:[2442, 879, 435, 5,  0] },
+"チャーミィ":{            rea:5, class:31 , type:3 , flg:0+0+0, stat:[2807, 911, 344, 5,  0] },
+"カスミ":{                rea:5, class:32 , type:6 , flg:0+0+0, stat:[2353, 874, 304, 0,  0] },
+"レギーナ":{              rea:5, class:33 , type:1 , flg:0+0+0, stat:[                     ] },
+"フリーデ":{              rea:5, class:33 , type:1 , flg:0+0+4, stat:[                     ] },
+"イツキ":{                rea:5, class:34 , type:6 , flg:0+0+0, stat:[                     ] },
+"リンドウ":{              rea:5, class:34 , type:6 , flg:0+0+0, stat:[                     ] },
+"ヴィオラ":{              rea:5, class:35 , type:1 , flg:0+0+4, stat:[                     ] },
+"アリーセ":{              rea:5, class:35 , type:1 , flg:0+0+4, stat:[2644, 802, 680, 0,  0] },
+"コノハ":{                rea:5, class:36 , type:6 , flg:0+0+0, stat:[1931, 678, 186, 0,  0] },
+"サンディー":{            rea:5, class:37 , type:1 , flg:0+0+0, stat:[3931, 744, 394, 0,  0] },
+"サンディー":{            rea:5, class:37 , type:1 , flg:0+0+0, stat:[3931, 744, 394, 0,  0] },
+"キャラット":{            rea:5, class:37 , type:1 , flg:0+0+0, stat:[4358, 803, 316, 0,  0] },
+"ルミアン":{              rea:5, class:37 , type:1 , flg:0+0+0, stat:[                     ] },
+"ドゥーラ":{              rea:5, class:38 , type:9 , flg:0+0+0, stat:[3852, 893, 392, 5,  0] },
+"レイメイ":{              rea:5, class:39 , type:8 , flg:0+0+0, stat:[                     ] },
+"ランファ":{              rea:5, class:39 , type:8 , flg:0+0+0, stat:[                     ] },
+"ラミィ":{                rea:5, class:40 , type:8 , flg:0+0+0, stat:[                     ] },
+"エレーヌ":{              rea:5, class:41 , type:1 , flg:0+0+0, stat:[                     ] },
+"ラテリア":{              rea:5, class:41 , type:1 , flg:0+0+0, stat:[                     ] },
+"ティール":{              rea:5, class:41 , type:1 , flg:0+0+0, stat:[                     ] },
+"フーコ":{                rea:5, class:42 , type:8 , flg:0+0+0, stat:[                     ] },
+"アルスラーン":{          rea:5, class:43 , type:1 , flg:0+2+8, stat:[2336, 481, 625, 0,  0] },
+"シェルト":{              rea:5, class:44 , type:1 , flg:0+0+0, stat:[4284, 578, 950,10,  0] },
+"サリス":{                rea:5, class:44 , type:1 , flg:0+0+0, stat:[                     ] },
+"ドリー":{                rea:5, class:46 , type:1 , flg:0+0+0, stat:[1775, 413, 410, 0,  0] },
+"趙雲":{                  rea:5, class:48 , type:1 , flg:0+0+0, stat:[                     ] },
+"バシラ":{                rea:5, class:101, type:5 , flg:1+0+0, stat:[1896, 681, 190, 0,260] },
+"ヴィクトリア":{          rea:5, class:101, type:1 , flg:1+0+0, stat:[2114, 668, 220, 0,290] },
+"スピカ":{                rea:5, class:101, type:3 , flg:1+0+0, stat:[1116, 712, 263, 5,280] },
+"リタ":{                  rea:5, class:101, type:1 , flg:1+0+0, stat:[1596, 619, 230, 0,260] },
+"オスカー":{              rea:5, class:101, type:1 , flg:1+2+0, stat:[1680, 537, 237, 0,260] },
+"ファランギース":{        rea:5, class:101, type:1 , flg:1+0+8, stat:[1953, 592, 239, 0,296] },
+"オデット":{              rea:5, class:102, type:1 , flg:1+0+0, stat:[1313, 987, 164,30,240] },
+"ガラニア":{              rea:5, class:102, type:1 , flg:1+0+0, stat:[                     ] },
+"サーシャ":{              rea:5, class:102, type:1 , flg:1+0+12,stat:[                     ] },
+"モルディベート":{        rea:5, class:102, type:1 , flg:1+0+0, stat:[1508, 833, 175,20,240] },
+"魔学の研修生メーリス":{  rea:5, class:102, type:1 , flg:1+0+0, stat:[1064,1004, 167,20,250] },
+"カミラ":{                rea:5, class:103, type:1 , flg:1+0+0, stat:[2178, 660, 265, 0,260] },
+"シーディス":{            rea:5, class:103, type:1 , flg:1+0+0, stat:[1440, 692, 289,15,260] },
+"サーリア":{              rea:5, class:103, type:1 , flg:1+0+0, stat:[2188, 617, 171, 0,285] },
+"エリアス":{              rea:5, class:103, type:1 , flg:1+0+4, stat:[2088, 616, 285, 0,260] },
+"ユーノ":{                rea:5, class:103, type:1 , flg:1+0+0, stat:[2044, 588, 189, 0,270] },
+"フィグネリア":{          rea:5, class:104, type:1 , flg:1+0+0, stat:[1794, 740, 149,10,240] },
+"ベリンダ":{              rea:5, class:104, type:1 , flg:1+0+0, stat:[1928, 696, 163,10,240] },
+"アデル":{                rea:5, class:104, type:1 , flg:1+0+0, stat:[1937, 624, 114,15,250] },
+"エリザ":{                rea:5, class:104, type:1 , flg:1+0+0, stat:[1910, 660, 112,10,250] },
+"プリム":{                rea:5, class:104, type:1 , flg:1+0+0, stat:[1734, 714, 207,15,240] },
+"甘菓子の魔女リュリュ":{  rea:5, class:104, type:1 , flg:1+0+0, stat:[1637, 596, 170,10,250] },
+"レイチェル":{            rea:5, class:105, type:1 , flg:1+0+0, stat:[1781, 847, 213, 0,341] },
+"ベアトリカ":{            rea:5, class:105, type:1 , flg:1+0+0, stat:[2140, 833, 213, 0,310] },
+"アネリア":{              rea:5, class:105, type:1 , flg:1+0+0, stat:[1766, 858, 271, 0,310] },
+"サブリナ":{              rea:5, class:105, type:1 , flg:1+0+0, stat:[1796, 774, 299, 0,310] },
+"エキドナ":{              rea:5, class:106, type:2 , flg:1+0+0, stat:[                     ] },
+"ルビナス":{              rea:5, class:106, type:2 , flg:1+0+0, stat:[                     ] },
+"エリザベート":{          rea:5, class:107, type:1 , flg:1+0+0, stat:[2631, 436, 306, 0,235] },
+"フラン":{                rea:5, class:107, type:1 , flg:1+0+0, stat:[2232, 402, 344,10,220] },
+"ルマリア":{              rea:5, class:107, type:1 , flg:1+0+0, stat:[2548, 363, 300, 0,220] },
+"ヒューナ":{              rea:5, class:107, type:1 , flg:1+0+0, stat:[                     ] },
+"シホ":{                  rea:5, class:108, type:1 , flg:1+0+0, stat:[1587, 507, 104, 0,230] },
+"カグラ":{                rea:5, class:108, type:1 , flg:1+0+0, stat:[1776, 504, 110, 0,230] },
+"マリウス":{              rea:5, class:109, type:3 , flg:1+2+0, stat:[1120, 859, 243,30,285] },
+"パトラ":{                rea:5, class:109, type:1 , flg:1+0+12,stat:[1573, 985, 170,25,260] },
+"ポーラ":{                rea:5, class:109, type:1 , flg:1+0+0, stat:[1904, 911, 182,25,270] },
+"レーヴ":{                rea:5, class:109, type:1 , flg:1+0+0, stat:[2050, 648, 300,25,270] },
+"セレイナ":{              rea:5, class:109, type:1 , flg:1+0+0, stat:[1560, 955, 189,25,260] },
+"常夏の兎司祭ポーラ":{    rea:5, class:109, type:1 , flg:1+0+0, stat:[2029,1112,  66,25,260] },
+"レン":{                  rea:5, class:110, type:1 , flg:1+0+0, stat:[1666, 430, 285, 0,230] },
+"レオナ":{                rea:5, class:110, type:1 , flg:1+0+4, stat:[1755, 519, 324, 0,210] },
+"コヨミ":{                rea:5, class:111, type:1 , flg:1+0+0, stat:[                     ] },
+"ソラノ":{                rea:5, class:112, type:1 , flg:1+0+0, stat:[1620,2065, 177, 0,260] },
+"恋する召喚士リノ":{      rea:5, class:112, type:1 , flg:1+0+0, stat:[1512,1938, 234, 0,260] },
+"マール":{                rea:5, class:113, type:1 , flg:1+0+0, stat:[2470, 360, 384, 5,255] },
+"ピピン":{                rea:5, class:113, type:1 , flg:1+0+0, stat:[2757, 338, 311, 5,240] },
+"ミア":{                  rea:5, class:113, type:1 , flg:1+0+0, stat:[3191, 417, 202, 5,220] },
+"メイファ":{              rea:5, class:113, type:5 , flg:1+0+0, stat:[1907, 381, 276, 5,220] },
+"ジャンナ":{              rea:5, class:114, type:1 , flg:1+0+0, stat:[                     ] },
+"カノン":{                rea:5, class:114, type:1 , flg:1+0+0, stat:[                     ] },
+"マーニー":{              rea:5, class:115, type:1 , flg:1+0+12,stat:[1152, 333, 458,10,170] },
+"ワルツ":{                rea:5, class:115, type:1 , flg:1+0+0, stat:[                     ] },
+"ハナ":{                  rea:5, class:115, type:1 , flg:1+0+0, stat:[                     ] },
+"ビビアン":{              rea:5, class:115, type:1 , flg:1+0+12,stat:[1286, 441, 441, 0,170] },
+"メメント":{              rea:5, class:116, type:1 , flg:1+0+0, stat:[                     ] },
+"アニエス":{              rea:5, class:116, type:1 , flg:1+0+0, stat:[1092,1131, 143, 0,300] },
+"ココロ":{                rea:5, class:117, type:1 , flg:1+0+0, stat:[2123, 464, 141,10,240] },
+"ププル":{                rea:5, class:118, type:3 , flg:1+0+0, stat:[1190, 896, 222, 5,270] },
+"メープル":{              rea:5, class:118, type:1 , flg:1+0+0, stat:[1788, 817, 134, 0,290] },
+"コリン":{                rea:5, class:119, type:1 , flg:1+0+0, stat:[                     ] },
+"シャルル":{              rea:5, class:119, type:1 , flg:1+0+0, stat:[                     ] },
+"ヘルミーネ":{            rea:5, class:119, type:1 , flg:1+0+4, stat:[                     ] },
+"レーレン":{              rea:5, class:119, type:1 , flg:1+0+0, stat:[                     ] },
+"リコラ":{                rea:5, class:120, type:1 , flg:1+0+0, stat:[                     ] },
+"スプラ":{                rea:5, class:120, type:3 , flg:1+0+0, stat:[                     ] },
+"アイーダ":{              rea:5, class:120, type:1 , flg:1+0+0, stat:[                     ] },
+"ローザ":{                rea:5, class:120, type:1 , flg:1+0+4, stat:[                     ] },
+"リナリア":{              rea:5, class:120, type:3 , flg:1+0+0, stat:[                     ] },
+"アニータ":{              rea:5, class:121, type:1 , flg:1+0+0, stat:[                     ] },
+"エヴァ":{                rea:5, class:122, type:1 , flg:1+0+0, stat:[                     ] },
+"レヴィ":{                rea:5, class:122, type:1 , flg:1+0+0, stat:[                     ] },
+"ブランシュ":{            rea:5, class:123, type:1 , flg:1+0+0, stat:[1740, 570, 166, 0,240] },
+"ベルディナート":{        rea:5, class:124, type:1 , flg:1+0+0, stat:[                     ] },
+"ベルゼッタ":{            rea:5, class:124, type:1 , flg:1+0+0, stat:[                     ] },
+"ブシュケ":{              rea:5, class:124, type:1 , flg:1+0+0, stat:[                     ] },
+"エルシャ":{              rea:5, class:125, type:1 , flg:1+0+0, stat:[1662, 627, 187, 5,250] },
+"メレディス":{            rea:5, class:125, type:1 , flg:1+0+0, stat:[                     ] },
+"トトノ":{                rea:5, class:126, type:1 , flg:1+0+0, stat:[1661, 597, 241, 0,300] },
+"エイミー":{              rea:5, class:126, type:1 , flg:1+0+0, stat:[                     ] },
+"ドルチェ":{              rea:5, class:128, type:1 , flg:1+0+0, stat:[1847,1692, 157, 0,420] },
+"レーゼル":{              rea:5, class:128, type:1 , flg:1+0+4, stat:[                     ] },
+"ラルフ":{                rea:5, class:128, type:1 , flg:1+2+4, stat:[1583,1455, 191, 0,400] },
+"アオバ":{                rea:5, class:128, type:1 , flg:1+0+0, stat:[                     ] },
+"リヴル":{                rea:5, class:129, type:7 , flg:1+0+0, stat:[1694, 343, 210,30,230] },
+"ヴェルティ":{            rea:5, class:129, type:1 , flg:1+0+0, stat:[                     ] },
+"ロレッタ":{              rea:5, class:130, type:1 , flg:1+0+0, stat:[1091, 398, 274,15,290] },
+"シャオメイ":{            rea:5, class:130, type:1 , flg:1+0+0, stat:[1109, 270, 398,15,290] },
+"クラリーチェ":{          rea:5, class:130, type:1 , flg:1+0+0, stat:[1100, 356, 287,15,305] },
+"セノーテ":{              rea:5, class:130, type:1 , flg:1+0+0, stat:[1348, 362, 223,15,290] },
+"モトリー":{              rea:5, class:132, type:1 , flg:1+0+4, stat:[                     ] },
+"リェプル":{              rea:5, class:132, type:1 , flg:1+0+0, stat:[                     ] },
+"ワンダーハート":{        rea:5, class:132, type:1 , flg:1+0+0, stat:[1455, 334, 219, 0,220] },
+"シィル":{                rea:5, class:133, type:1 , flg:1+0+0, stat:[1651, 635, 181,10,240] },
+"ホリー":{                rea:5, class:135, type:1 , flg:1+0+0, stat:[                     ] },
+"カグヤ":{                rea:4, class:5  , type:1 , flg:0+0+0, stat:[                     ] },
+"トコヨ":{                rea:4, class:5  , type:0 , flg:0+0+0, stat:[                     ] },
+"シャルム":{              rea:4, class:7  , type:2 , flg:0+0+0, stat:[                     ] },
+"ウリデム":{              rea:4, class:12 , type:5 , flg:0+0+0, stat:[3865, 629, 391,10,  0] },
+"リーエン":{              rea:4, class:13 , type:0 , flg:0+0+0, stat:[                     ] },
+"パフィリア":{            rea:4, class:16 , type:11, flg:0+0+0, stat:[2830,1128, 735,25,  0] },
+"フィー":{                rea:4, class:17 , type:1 , flg:0+0+0, stat:[3894, 838,1049, 0,  0] },
+"ヒカゲ":{                rea:4, class:24 , type:1 , flg:0+0+0, stat:[2400, 644, 286, 0,  0] },
+"ミーティア":{            rea:4, class:26 , type:1 , flg:0+0+0, stat:[                     ] },
+"パテル":{                rea:4, class:27 , type:1 , flg:0+0+0, stat:[                     ] },
+"ルル":{                  rea:4, class:29 , type:7 , flg:0+0+0, stat:[                     ] },
+"フォルテ":{              rea:4, class:41 , type:1 , flg:0+0+4, stat:[                     ] },
+"レイファ":{              rea:4, class:44 , type:1 , flg:0+0+0, stat:[                     ] },
+"リゼット":{              rea:4, class:117, type:1 , flg:1+0+0, stat:[1668, 528, 268,10,220] },
+"スイル":{                rea:4, class:123, type:5 , flg:1+0+0, stat:[2180, 624, 102, 0,220] },
+"プニル":{                rea:4, class:127, type:0 , flg:1+0+0, stat:[                     ] },
+"ラーティ":{              rea:4, class:128, type:1 , flg:1+0+0, stat:[                     ] },
+"ハルカ":{                rea:4, class:130, type:1 , flg:1+0+4, stat:[                     ] },
+"プリスナ":{              rea:4, class:132, type:7 , flg:1+0+0, stat:[                     ] },
+"サルース":{              rea:4, class:134, type:1 , flg:1+0+0, stat:[2758, 444, 100, 0,170] },
+"ケイティ":{              rea:3, class:1  , type:1 , flg:0+0+0, stat:[2091, 480,  44, 0,  0] },
+"ユリアン":{              rea:3, class:1  , type:1 , flg:0+2+0, stat:[2643, 660, 398, 0,  0] },
+"アリア":{                rea:3, class:1  , type:1 , flg:0+0+0, stat:[2310, 713, 408, 0,  0] },
+"浴衣の兵長フィリス":{    rea:3, class:1  , type:1 , flg:0+0+0, stat:[2668, 600, 303, 0,  0] },
+"ギャレット":{            rea:3, class:2  , type:1 , flg:0+2+0, stat:[3445, 470, 717, 0,  0] },
+"ベルニス":{              rea:3, class:2  , type:1 , flg:0+0+0, stat:[3326, 382, 850, 0,  0] },
+"マチルダ":{              rea:3, class:2  , type:1 , flg:0+0+0, stat:[3985, 378, 723, 0,  0] },
+"フィリーネ":{            rea:3, class:2  , type:1 , flg:0+0+4, stat:[3297, 459, 777, 0,  0] },
+"年賀の祝盾レアン":{      rea:3, class:2  , type:1 , flg:0+0+0, stat:[3635, 416, 660, 0,  0] },
+"キャリー":{              rea:3, class:3  , type:1 , flg:0+0+0, stat:[2911, 938, 448,20,  0] },
+"夏陽の騎馬乙女エレイン":{rea:3, class:3  , type:1 , flg:0+0+0, stat:[2257, 723, 313,10,  0] },
+"ベティ":{                rea:3, class:4  , type:1 , flg:0+0+0, stat:[1655, 541, 252, 0,  0] },
+"キュテリ":{              rea:3, class:4  , type:1 , flg:0+0+0, stat:[2147, 592, 257, 0,  0] },
+"テミス":{                rea:3, class:5  , type:1 , flg:0+0+0, stat:[2726, 738, 399,15,  0] },
+"コンラッド":{            rea:3, class:6  , type:1 , flg:0+2+0, stat:[4213, 933, 216, 0,  0] },
+"リーフ":{                rea:3, class:6  , type:1 , flg:0+0+0, stat:[4618, 917, 195, 0,  0] },
+"ゴライア":{              rea:3, class:7  , type:2 , flg:0+2+0, stat:[4196, 621, 622, 0,  0] },
+"サーベイン":{            rea:3, class:7  , type:2 , flg:0+2+4, stat:[3844, 584, 579, 0,  0] },
+"チズル":{                rea:3, class:8  , type:1 , flg:0+0+0, stat:[4030, 996, 268, 0,  0] },
+"コジュウロウ":{          rea:3, class:8  , type:1 , flg:0+2+0, stat:[3510, 684, 550,20,  0] },
+"ヒエン":{                rea:3, class:9  , type:1 , flg:0+2+0, stat:[1553, 379, 215, 0,  0] },
+"カナメ":{                rea:3, class:9  , type:1 , flg:0+0+0, stat:[2880, 433, 250, 0,  0] },
+"ステラ":{                rea:3, class:10 , type:1 , flg:0+0+0, stat:[2851, 834, 466,20,  0] },
+"ドロシー":{              rea:3, class:12 , type:4 , flg:0+0+0, stat:[3672, 608, 326, 0,  0] },
+"ザラーム":{              rea:3, class:12 , type:1 , flg:0+2+12,stat:[3366, 594, 317,20,  0] },
+"ジーナ":{                rea:3, class:13 , type:1 , flg:0+0+0, stat:[3337, 653, 230, 0,  0] },
+"モモ":{                  rea:3, class:13 , type:1 , flg:0+0+0, stat:[2436, 731, 412, 0,  0] },
+"アネモネ":{              rea:3, class:15 , type:1 , flg:0+0+0, stat:[1726, 690, 357,10,  0] },
+"エルン":{                rea:3, class:16 , type:11, flg:0+0+0, stat:[2916, 938, 777,25,  0] },
+"ボリス":{                rea:3, class:17 , type:1 , flg:0+2+0, stat:[3720, 683, 678, 0,  0] },
+"マリエ":{                rea:3, class:18 , type:1 , flg:0+0+0, stat:[1637, 558, 248, 0,  0] },
+"フレイ":{                rea:3, class:18 , type:1 , flg:0+0+4, stat:[1564, 528, 246, 0,  0] },
+"エレット":{              rea:3, class:20 , type:1 , flg:0+0+0, stat:[1965, 453, 433,10,  0] },
+"ライチ":{                rea:3, class:21 , type:4 , flg:0+0+0, stat:[3862, 478, 780,30,  0] },
+"アベル":{                rea:3, class:22 , type:1 , flg:0+2+0, stat:[4244, 881, 708, 0,  0] },
+"マーガレット":{          rea:3, class:23 , type:1 , flg:0+0+0, stat:[1570, 564, 216, 0,  0] },
+"ゲオルグ":{              rea:3, class:33 , type:1 , flg:0+2+4, stat:[                     ] },
+"グレン":{                rea:3, class:36 , type:1 , flg:0+2+0, stat:[1787, 526, 161, 0,  0] },
+"ゴルドー":{              rea:3, class:37 , type:1 , flg:0+2+0, stat:[4236, 680, 249, 0,  0] },
+"クレア":{                rea:3, class:101, type:1 , flg:1+0+0, stat:[1659, 604, 207, 0,280] },
+"ベラ":{                  rea:3, class:101, type:5 , flg:1+0+0, stat:[1512, 611, 178, 0,260] },
+"ストレイ":{              rea:3, class:101, type:1 , flg:1+2+0, stat:[1829, 578, 192, 0,340] },
+"シャオ":{                rea:3, class:101, type:1 , flg:1+0+0, stat:[1705, 600, 194, 0,280] },
+"新春の弓巫女ソーマ":{    rea:3, class:101, type:1 , flg:1+0+0, stat:[1628, 639, 196, 0,280] },
+"夜涼の射的兵ダニエラ":{  rea:3, class:101, type:1 , flg:1+0+0, stat:[1484, 558, 185, 0,260] },
+"サイラス":{              rea:3, class:102, type:1 , flg:1+2+0, stat:[1437, 761,  98,15,200] },
+"バルバストラフ":{        rea:3, class:102, type:1 , flg:1+2+0, stat:[1366, 785, 100,15,280] },
+"メーリス":{              rea:3, class:102, type:1 , flg:1+0+0, stat:[1355, 797,  98,15,240] },
+"イーリス":{              rea:3, class:103, type:1 , flg:1+0+0, stat:[2106, 580, 189, 0,260] },
+"フェドラ":{              rea:3, class:103, type:1 , flg:1+0+0, stat:[1760, 536, 167, 0,270] },
+"ロベルト":{              rea:3, class:103, type:1 , flg:1+2+0, stat:[2510, 396, 180, 0,270] },
+"聖夜の癒し手アリサ":{    rea:3, class:103, type:1 , flg:1+0+0, stat:[2070, 579, 194, 0,260] },
+"新春の癒し手イーリス":{  rea:3, class:103, type:1 , flg:1+0+0, stat:[1808, 522, 168, 0,270] },
+"クロリス":{              rea:3, class:104, type:1 , flg:1+0+0, stat:[1544, 560, 105,10,250] },
+"ユユ":{                  rea:3, class:104, type:3 , flg:1+0+0, stat:[ 990, 668,  95,13,250] },
+"リュリュ":{              rea:3, class:104, type:1 , flg:1+0+0, stat:[1532, 636, 147,10,210] },
+"麦わら帽の魔女カリオペ":{rea:3, class:104, type:1 , flg:1+0+0, stat:[1684, 583, 149,20,240] },
+"勤勉猫魔女ネーニャ":{    rea:3, class:104, type:1 , flg:1+0+0, stat:[1478, 588, 103,10,250] },
+"モニカ":{                rea:3, class:105, type:1 , flg:1+0+0, stat:[1610, 744, 194, 0,310] },
+"モーレット":{            rea:3, class:105, type:1 , flg:1+0+0, stat:[1625, 733, 196, 0,310] },
+"海賊番長ジョヴァンニ":{  rea:3, class:105, type:1 , flg:1+2+0, stat:[1698, 695, 200, 0,310] },
+"ヴィンセント":{          rea:3, class:107, type:1 , flg:1+2+0, stat:[2166, 386, 238, 0,220] },
+"ノエル":{                rea:3, class:108, type:4 , flg:1+0+0, stat:[1470, 837, 165,15,270] },
+"リノ":{                  rea:3, class:112, type:1 , flg:1+0+0, stat:[1260, 996, 100, 0,300] },
+"クルル":{                rea:3, class:113, type:1 , flg:1+0+0, stat:[1814, 379, 179, 5,220] },
+"ゾラ":{                  rea:3, class:114, type:1 , flg:1+0+0, stat:[1385, 914,  98, 0,290] },
+"メル":{                  rea:3, class:114, type:1 , flg:1+0+0, stat:[1300,1052, 109, 0,320] },
+"ミステル":{              rea:3, class:118, type:1 , flg:1+0+4, stat:[1596, 816, 125, 0,270] },
+"ローリエ":{              rea:3, class:118, type:1 , flg:1+0+0, stat:[1320, 774, 122, 0,290] },
+"フウカ":{                rea:3, class:120, type:1 , flg:1+0+0, stat:[1476, 551, 192, 0,260] },
+"レダ":{                  rea:3, class:121, type:1 , flg:1+0+0, stat:[1588, 417, 130, 0,190] },
+"ミトラ":{                rea:3, class:122, type:1 , flg:1+0+0, stat:[1987, 406, 114,10,350] },
+"リルケ":{                rea:3, class:125, type:1 , flg:1+0+0, stat:[1504, 565, 108, 5,220] },
+"クレイブ":{              rea:2, class:1  , type:1 , flg:0+1+0, stat:[                     ] },
+"フィリス":{              rea:2, class:1  , type:1 , flg:0+0+0, stat:[                     ] },
+"ロザリー":{              rea:2, class:1  , type:3 , flg:0+0+0, stat:[                     ] },
+"グスタフ":{              rea:2, class:1  , type:4 , flg:0+0+0, stat:[                     ] },
+"アサル":{                rea:2, class:1  , type:1 , flg:0+0+12,stat:[                     ] },
+"ベルナール":{            rea:2, class:2  , type:1 , flg:0+2+0, stat:[                     ] },
+"レアン":{                rea:2, class:2  , type:1 , flg:0+0+0, stat:[                     ] },
+"ダナン":{                rea:2, class:2  , type:1 , flg:0+0+0, stat:[                     ] },
+"ドワイド":{              rea:2, class:2  , type:1 , flg:0+2+4, stat:[                     ] },
+"ミーシャ":{              rea:2, class:3  , type:1 , flg:0+0+0, stat:[                     ] },
+"エレイン":{              rea:2, class:3  , type:1 , flg:0+0+0, stat:[                     ] },
+"チグリ":{                rea:2, class:3  , type:1 , flg:0+0+0, stat:[                     ] },
+"セシリー":{              rea:2, class:4  , type:1 , flg:0+0+0, stat:[                     ] },
+"ハリッサ":{              rea:2, class:4  , type:1 , flg:0+0+0, stat:[                     ] },
+"バラッド":{              rea:2, class:4  , type:1 , flg:0+2+12,stat:[                     ] },
+"ロゼット":{              rea:2, class:5  , type:1 , flg:0+0+0, stat:[                     ] },
+"モーティマ":{            rea:2, class:6  , type:1 , flg:0+2+0, stat:[                     ] },
+"ヒューネス":{            rea:2, class:6  , type:1 , flg:0+2+0, stat:[                     ] },
+"ガドラス":{              rea:2, class:7  , type:1 , flg:0+2+0, stat:[                     ] },
+"サノスケ":{              rea:2, class:8  , type:1 , flg:0+2+0, stat:[                     ] },
+"イロハ":{                rea:2, class:8  , type:1 , flg:0+0+0, stat:[                     ] },
+"カゲロウ":{              rea:2, class:9  , type:1 , flg:0+0+0, stat:[                     ] },
+"サイゾウ":{              rea:2, class:9  , type:1 , flg:0+2+0, stat:[                     ] },
+"クラーラ":{              rea:2, class:10 , type:1 , flg:0+0+4, stat:[                     ] },
+"ダン":{                  rea:2, class:13 , type:1 , flg:0+2+0, stat:[                     ] },
+"マオ":{                  rea:2, class:13 , type:1 , flg:0+0+0, stat:[                     ] },
+"リカルド":{              rea:2, class:15 , type:1 , flg:0+2+0, stat:[                     ] },
+"カシス":{                rea:2, class:15 , type:1 , flg:0+0+0, stat:[                     ] },
+"ニエル":{                rea:2, class:16 , type:1 , flg:0+0+0, stat:[                     ] },
+"エーテル":{              rea:2, class:20 , type:1 , flg:0+0+0, stat:[                     ] },
+"ニコラウス":{            rea:2, class:20 , type:1 , flg:0+2+0, stat:[                     ] },
+"ルーテ":{                rea:2, class:21 , type:1 , flg:0+0+4, stat:[                     ] },
+"リエーレ":{              rea:2, class:22 , type:1 , flg:0+0+0, stat:[                     ] },
+"ルナール":{              rea:2, class:23 , type:1 , flg:0+0+0, stat:[                     ] },
+"ミゲル":{                rea:2, class:23 , type:1 , flg:0+2+0, stat:[                     ] },
+"ルークス":{              rea:2, class:35 , type:1 , flg:0+2+4, stat:[                     ] },
+"ソーマ":{                rea:2, class:101, type:1 , flg:1+0+0, stat:[                     ] },
+"ダニエラ":{              rea:2, class:101, type:1 , flg:1+0+0, stat:[                     ] },
+"ローレン":{              rea:2, class:101, type:3 , flg:1+2+0, stat:[                     ] },
+"カズハ":{                rea:2, class:101, type:1 , flg:1+0+0, stat:[                     ] },
+"ヴァレリー":{            rea:2, class:102, type:1 , flg:1+2+0, stat:[                     ] },
+"パレス":{                rea:2, class:102, type:1 , flg:1+0+0, stat:[                     ] },
+"マーヤ":{                rea:2, class:102, type:1 , flg:1+0+0, stat:[                     ] },
+"アリサ":{                rea:2, class:103, type:1 , flg:1+0+0, stat:[                     ] },
+"ドルカ":{                rea:2, class:103, type:1 , flg:1+0+0, stat:[                     ] },
+"クリストファー":{        rea:2, class:103, type:1 , flg:1+2+0, stat:[                     ] },
+"カリオペ":{              rea:2, class:104, type:1 , flg:1+0+0, stat:[                     ] },
+"ネーニャ":{              rea:2, class:104, type:1 , flg:1+0+0, stat:[                     ] },
+"メローネ":{              rea:2, class:104, type:1 , flg:1+0+0, stat:[                     ] },
+"ジョヴァンニ":{          rea:2, class:105, type:1 , flg:1+2+0, stat:[                     ] },
+"ヴェロッテ":{            rea:2, class:105, type:1 , flg:1+0+0, stat:[                     ] },
+"フーリ":{                rea:2, class:107, type:1 , flg:1+0+12,stat:[                     ] },
+"フドウ":{                rea:2, class:109, type:1 , flg:1+2+0, stat:[                     ] },
+"シャロン":{              rea:2, class:109, type:1 , flg:1+0+0, stat:[                     ] },
+"フェイ":{                rea:2, class:113, type:1 , flg:1+0+0, stat:[                     ] },
+"パーシス":{              rea:2, class:114, type:1 , flg:1+0+0, stat:[                     ] },
+"ソラーレ":{              rea:2, class:118, type:1 , flg:1+0+8, stat:[                     ] },
+"テルマ":{                rea:2, class:119, type:1 , flg:1+0+0, stat:[                     ] },
+"エリック":{              rea:2, class:120, type:1 , flg:1+2+0, stat:[                     ] },
+"ヒース":{                rea:2, class:125, type:1 , flg:1+2+0, stat:[                     ] },
 
-"ゴーレム":{              rea:0, class:205, type:0 , flg:0+0+0, stat:[                     ], buf:null },
-"守護の聖樹":{            rea:0, class:304, type:0 , flg:1+0+0, stat:[                     ], buf:null },
-"破魔の聖樹":{            rea:0, class:305, type:0 , flg:1+0+0, stat:[                     ], buf:null }
+"ゴーレム":{              rea:0, class:205, type:0 , flg:0+0+0, stat:[                     ] },
+"守護の聖樹":{            rea:0, class:304, type:0 , flg:1+0+0, stat:[                     ] },
+"破魔の聖樹":{            rea:0, class:305, type:0 , flg:1+0+0, stat:[                     ] }
           };
   var NAME  =0; /*bname*/
   var OBJ   =1; /*bview*/
@@ -1805,11 +1875,39 @@ wave開始時に再計算される。(waveをまたぐ敵のHPを除く)<br>
        ,[ ["他","帝国","パルス","砂漠"] ]
       ];
 
-    var r,i,j,k,n,l,b,g,v;
-    for( i in uni000 ) uni000[i].name=i;
+    var r,i,j,k,n,l,b,v;
+    for(i=0;i<=20;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
+    for(i=0;i<=19;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
+    for( i=0 ; i< lbl.length ; i++ ) for( j=0 ; j<lbl[i].length ; j++ ) for( k=0 ; k<lbl[i][j].length ; k++ ){
+      n=document.createElement( (i==1 || i==2 )?"OPTION":"INPUT" );
+      n.value=(i==1 || i==2)?(k+j*100):lbl[i][j][k];
+      if(i==1 || i==2){ n.innerText=lbl[i][j][k]; inobj[5+i].add(n); }else{ n.setAttribute("num",k); n.type="button"; inobj[5+i].appendChild(n); }
+    }
+
+    for( i in uni000 ){
+      v=i;
+      for( j in uni000 ){
+        if( uni000[j].name ) continue;
+        l=0;
+        if(        uni000[v].rea   <  uni000[j].rea   ) l=1;
+        else if(   uni000[v].rea   == uni000[j].rea   ){
+          if(      uni000[v].class >  uni000[j].class ) l=1
+          else if( uni000[v].class == uni000[j].class ){
+            if(    v               >  j               ) l=1
+          }
+        }
+        if(l) v=j;
+      }
+      uni000[v].name=v;
+      n=document.createElement("OPTION");
+      n.value=v;
+      n.innerText=lbl[0][0][uni000[v].rea]+"："+v;
+      inobj[15].add(n);
+      inobj[15].style.backgroundColor="inherit";
+    }
     for( i=0,k=G.length ; --k >= 0; i += G[k].member.length );
     k=G.length ; while(--k >= 0 ){ j=G[k].member.length; while(--j >= 0 ){
-console.log("["+k+","+j+"]");
+      /*console.log("["+k+","+j+"]");*/
       r=G[k].member[j][CHAR]; if(r){ i=r.length; while(--i >= 0 ) r[i] = uni000[ r[i] ]; }
       r=G[k].member[j][MASK]; if(r){ i=r.length; while(--i >= 0 ) r[i] = getFlgFromStr( r[i] ); }
     } }
@@ -1821,69 +1919,106 @@ console.log("["+k+","+j+"]");
       G[k].obj.className = "bufftype";
       G[k].obj.id        = "g"+k;
 
+      var sorti=new Array(G[k].member.length);
+      var nspan=new Array(G[k].member.length);
+      i = G[k].member.length;
+      while( --i >= 0 ){ sorti[i]=i; nspan[i]=1; }
       for( i=0 ; i < G[k].member.length ; i++ ){
-        b=G[k].member[i];
-        b[OBJ] = t.insertRow(-1);
-        b[OBJ].classname="buff";
-        b[OBJ].id="b"+(i*100+k);
-        b[OBJ].insertCell(0).outerHTML="<th nowrap></th>";
-        for( j=1 ; j <= i && b[CHAR].length == G[k].member[i-j][CHAR].length && b[CHAR][0] == G[k].member[i-j][CHAR][0] && b[NAME] == G[k].member[i-j][NAME] ; j++ );
-        if( --j ){
-           l=G[k].member[i-j][OBJ].cells[1].getAttribute("rowspan");
-           G[k].member[i-j][OBJ].cells[1].setAttribute("rowspan",l?(1+l):2 );
-           G[k].member[i-j][OBJ].cells[2].setAttribute("rowspan",l?(1+l):2 );
-        }else{
-           l="<td nowrap>";
-           for( j=0 ; j < b[CHAR].length ; j++){
-             if( j ) l += "<br>";
-             l += b[CHAR][j].name;
-           }
-           b[OBJ].insertCell(-1).outerHTML=l+"</td>" ;
-           b[OBJ].insertCell(-1).outerHTML="<td nowrap>"+ ((G[k].type==4)?b[NAME].slice(0,b[NAME].indexOf("(")):b[NAME]) + "</td>";
-        }
-        for( j=0 ; j<5 ; j++ ){
-          l = b[OBJ].insertCell(-1);
-          l.style["textAlign"]="center";
-          if( b[HP+j] == 0 ) continue;
-          else if( b[HP+j] > 10000  ) l.innerText = "+"+((b[HP+j]-(b[HP+j]%10000))/10000.0);
-          else if( b[HP+j] > 100    ) l.innerText = "×"+(b[HP+j]/100.0);
-          else if( b[HP+j] > 0      ) l.innerText = "+"+b[HP+j]+"％";
-          else if( G[k].type >= 2   ) l.innerText = "×"+((100+b[HP+j])/100.0);
-          else                        l.innerText = b[HP+j]+"％"; 
-        }
-        l = b[OBJ].insertCell(-1);
-        if( G[k].type == 4 ){
-          j=b[NAME].indexOf("(");
-          if( j ) l.innerText=b[NAME].slice(j);
-        }else if( G[k].type != 2 || G[k].seq != 0 ){
-          v="";
-          for( j=0 ; b[MASK] && j <  b[MASK].length ; j++ ){
-            n=b[MASK][j];
-            if( j == 4 ) v += "<br>";
-            if(      n[0] == 6 && n[1] == 0 && n[2] == 1 && n[3] == 0 && n[4] == 1 && n[5] == 0 ) v += "[王子]";
-            else if( n[0] == 6 && n[1] == 0 && n[2] == 1 && n[3] == 0 && n[4] == 1 && n[5] == 1 ) v += "[皇帝]";
-            else if( n[0] == 4 && n[1] == 5 && n[2] == 1 && n[3] == 0 && n[4] == 0 && n[5] == 0 ) v += "[カグヤ]";
-            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] == 0 && n[4] == 0 && n[5] ==-1 ) v += "[近接女性]";
-            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] == 0 && n[4] == 1 && n[5] ==-1 ) v += "[近接男性]";
-            else if( n[0] !=-1 && n[1] ==-1 && n[2] ==-1 && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ) v += "["+lbl[0][0][n[0]]+"]";
-            else if( n[0] ==-1 && n[1] !=-1 && n[2] ==-1 && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ) v += "["+lbl[1][(n[1]-(n[1]%100))/100][n[1]%100]+"]";
-            else if( n[0] ==-1 && n[1] ==-1 && n[2] !=-1 && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ) v += "["+lbl[2][0][n[2]]+"]";
-            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] !=-1 && n[4] ==-1 && n[5] ==-1 ) v += "["+lbl[3][0][n[3]]+"]";
-            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] ==-1 && n[4] !=-1 && n[5] ==-1 ) v += "["+lbl[4][0][n[4]]+"]";
-            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] ==-1 && n[4] ==-1 && n[5] !=-1 ) v += "["+lbl[5][0][n[5]]+"]";
-            else if( n[0] !=-1 && n[1] !=-1 && n[2] !=-1 && n[3] !=-1 && n[4] !=-1 && n[5] !=-1 &&  b[MASK].length > 1 ) v += "[自身]";
+        b=G[k].member[sorti[i]];
+        j = G[k].member.length ;
+        while( --j > i ){
+          n=G[k].member[sorti[j]];
+          l=0;
+          if(            b[CHAR].length   >  n[CHAR].length   ) l=1;
+          else if(       b[CHAR].length   == n[CHAR].length   ){
+            if(          b[CHAR][0].rea   <  n[CHAR][0].rea   ) l=1;
+            else if(     b[CHAR][0].rea   == n[CHAR][0].rea   ){
+              if(        b[CHAR][0].class >  n[CHAR][0].class ) l=1;
+              else if(   b[CHAR][0].class == n[CHAR][0].class ){
+                if(      b[CHAR][0].name  >  n[CHAR][0].name  ) l=1;
+                else if( b[CHAR][0].name  == n[CHAR][0].name  ){
+                  if(    b[NAME]          >  n[NAME]          ) l=1;
+                }
+              }
+            }
           }
-          l.innerHTML = v;
+          if(l){
+              l=sorti[i]; sorti[i]=sorti[j]; sorti[j]=l;
+              l=nspan[i]; nspan[i]=nspan[j]; nspan[j]=l;
+              b=G[k].member[sorti[i]];
+              n=G[k].member[sorti[j]];
+          }
+          if( nspan[j] > 0
+           && b[CHAR].length == n[CHAR].length
+           && b[CHAR][0]     == n[CHAR][0]
+           && b[NAME]        == n[NAME] ){
+              nspan[i] += nspan[j];
+              nspan[j]=0;
+          }
         }
       }
-    }
+      for( i=0 ; i < G[k].member.length ; i++ ){
+        b=G[k].member[sorti[i]];
+        b[OBJ] = t.insertRow(-1);
+        b[OBJ].classname="buff";
+        b[OBJ].id="b"+(sorti[i]*100+k);
+        b[OBJ].insertCell(0).outerHTML="<th nowrap></th>";
+        if( nspan[i] ){
+           v = b[OBJ].insertCell(-1);
+           l = b[CHAR][0].name;
+           for( j=1 ; j < b[CHAR].length ; j++){
+             l += "<br>" + b[CHAR][j].name;
+           }
+           v.innerHTML = l;
+           if( b[CHAR].length ==1 ) v.className="REA"+b[CHAR][0].rea;
+           v.setAttribute("nowrap",'');
+           if( nspan[i] > 1 )
+             v.setAttribute("rowspan",nspan[i] );
 
-    for(i=0;i<=20;i++) inobj [i]=document.getElementById( ((i<10)? "in0": "in")+i );
-    for(i=0;i<=19;i++) outobj[i]=document.getElementById( ((i<10)?"out0":"out")+i );
-    for( i=0 ; i< lbl.length ; i++ ) for( j=0 ; j<lbl[i].length ; j++ ) for( k=0 ; k<lbl[i][j].length ; k++ ){
-      n=document.createElement( (i==1 || i==2 )?"OPTION":"INPUT" );
-      n.value=(i==1 || i==2)?(k+j*100):lbl[i][j][k];
-      if(i==1 || i==2){ n.innerText=lbl[i][j][k]; inobj[5+i].add(n); }else{ n.setAttribute("num",k); n.type="button"; inobj[5+i].appendChild(n); }
+           v = b[OBJ].insertCell(-1);
+           v.innerHTML= ((G[k].type==4)?b[NAME].slice(0,b[NAME].indexOf("(")):b[NAME]) ;
+           if( b[CHAR].length ==1 ) v.className="REA"+b[CHAR][0].rea;
+           v.setAttribute("nowrap",'');
+           if( nspan[i] > 1 ) v.setAttribute("rowspan",nspan[i] );
+        }
+        l=( b[CHAR].length ==1 )?("REA"+b[CHAR][0].rea):null;
+        for( j=0 ; j<5 ; j++ ){
+          v = b[OBJ].insertCell(-1);
+          if( l ) v.className=l;
+          v.style["textAlign"]="center";
+          if( b[HP+j] == 0 ) continue;
+          else if( b[HP+j] > 10000  ) v.innerText = "+"+((b[HP+j]-(b[HP+j]%10000))/10000.0);
+          else if( b[HP+j] > 100    ) v.innerText = "×"+(b[HP+j]/100.0);
+          else if( b[HP+j] > 0      ) v.innerText = "+"+b[HP+j]+"％";
+          else if( G[k].type >= 2   ) v.innerText = "×"+((100+b[HP+j])/100.0);
+          else                        v.innerText = b[HP+j]+"％"; 
+        }
+        v = b[OBJ].insertCell(-1);
+        if( l ) v.className=l;
+        if( G[k].type == 4 ){
+          j=b[NAME].indexOf("(");
+          if( j ) v.innerText=b[NAME].slice(j);
+        }else if( G[k].type != 2 || G[k].seq != 0 ){
+          l="";
+          for( j=0 ; b[MASK] && j <  b[MASK].length ; j++ ){
+            n=b[MASK][j];
+            if( j == 4 ) l += "<br>";
+            if(      n[0] == 6 && n[1] == 0 && n[2] == 1 && n[3] == 0 && n[4] == 1 && n[5] == 0 ) l += "[王子]";
+            else if( n[0] == 6 && n[1] == 0 && n[2] == 1 && n[3] == 0 && n[4] == 1 && n[5] == 1 ) l += "[皇帝]";
+            else if( n[0] == 4 && n[1] == 5 && n[2] == 1 && n[3] == 0 && n[4] == 0 && n[5] == 0 ) l += "[カグヤ]";
+            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] == 0 && n[4] == 0 && n[5] ==-1 ) l += "[近接女性]";
+            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] == 0 && n[4] == 1 && n[5] ==-1 ) l += "[近接男性]";
+            else if( n[0] !=-1 && n[1] ==-1 && n[2] ==-1 && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ) l += "["+lbl[0][0][n[0]]+"]";
+            else if( n[0] ==-1 && n[1] !=-1 && n[2] ==-1 && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ) l += "["+lbl[1][(n[1]-(n[1]%100))/100][n[1]%100]+"]";
+            else if( n[0] ==-1 && n[1] ==-1 && n[2] !=-1 && n[3] ==-1 && n[4] ==-1 && n[5] ==-1 ) l += "["+lbl[2][0][n[2]]+"]";
+            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] !=-1 && n[4] ==-1 && n[5] ==-1 ) l += "["+lbl[3][0][n[3]]+"]";
+            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] ==-1 && n[4] !=-1 && n[5] ==-1 ) l += "["+lbl[4][0][n[4]]+"]";
+            else if( n[0] ==-1 && n[1] ==-1 && n[2] ==-1 && n[3] ==-1 && n[4] ==-1 && n[5] !=-1 ) l += "["+lbl[5][0][n[5]]+"]";
+            else if( n[0] !=-1 && n[1] !=-1 && n[2] !=-1 && n[3] !=-1 && n[4] !=-1 && n[5] !=-1 ) l += "[自身]";
+          }
+          v.innerHTML = l;
+        }
+      }
     }
   })();
 
@@ -2056,8 +2191,8 @@ console.log("["+k+","+j+"]");
          if( /^士気高揚/.test(bl[NAME]) ) bl[BON]=0;
          else
          if( bi[CHAR][0].name != bl[CHAR][0].name
-          &&(bi[CHAR].length <= 1 || bi[CHAR][0].name != bl[CHAR][1].name )
-          &&(bl[CHAR].length <= 1 || bi[CHAR][1].name != bl[CHAR][0].name ) )
+          &&(bi[CHAR].length <= 1 || bi[CHAR][1].name != bl[CHAR][0].name )
+          &&(bl[CHAR].length <= 1 || bi[CHAR][0].name != bl[CHAR][1].name ) )
             bl[BON]=0;
        }
      }
@@ -2304,8 +2439,10 @@ console.log("["+k+","+j+"]");
    calcTeamPre( scan_rec , scan_idx , scan_val , flg[0] );
  }
 
+
   function doSelect(e){
-    var i,j,l,grp;
+    //if(to){clearTimeout(to);} to=null;
+    var i,j,k,l,b,c,grp;
     var cntg0=0; // opened off cnt
     var cntg1=0; // opened on cnt
     var cntg2=0; //opened off
@@ -2314,22 +2451,43 @@ console.log("["+k+","+j+"]");
 
     switch( e.target.parentNode.tagName.toUpperCase() ){
       case "TR":
-        if( e.target.className == "csw" ){
-          if( e.target.parentNode.className == "f" ){ /*★*/
-            i = [ getV(inobj[5]),getV(inobj[6]),getV(inobj[7]),getV(inobj[8]),getV(inobj[9]),getV(inobj[10]) ];
-            for( j=0 ; j < bname.length ; j++ ){
-              if( ! bchkf[j] || chkFlg( i , bchkf[j] ) ){ /*限定の指定無し or 限定対象,行結合をまとめてONする*/
-                for( l=0 ; l   <= j            && bchar[j].length == bchar[j-l].length && bchar[j][0] == bchar[j-l][0] && bname[j] == bname[j-l] ; l++ )
-                  if( bview[j-l].style["display"] != "table-row" ) bview[j-l].style["display"] = "table-row";
-                for( l=1 ; j+l <  bname.length && bchar[j].length == bchar[j+l].length && bchar[j][0] == bchar[j+l][0] && bname[j] == bname[j+l] ; l++ )
-                  if( bview[j+l].style["display"] != "table-row" ) bview[j+l].style["display"] = "table-row";
-                j += l-1;
-              }else{ /*限定対象でない*/
-          	    if( bview[j].style["display"] != "none" ) bview[j].style["display"] = "none";
-          	  }
-          	}
-          	break;
+        if( e.target.className == "ssw" ){
+          i = [ getV(inobj[5])/1,getV(inobj[6])/1,getV(inobj[7])/1,getV(inobj[8])/1,getV(inobj[9])/1,getV(inobj[10])/1 ];
+          for( k=0 ; k< G.length ; k++ ) for( j=0 ; j < G[k].member.length ; j++ ){
+            b=G[k].member[j];
+            if( b[MASK] ) c= chkFlg( i , b[MASK] )?1:0;
+            else if( G[k].type == 4 || (G[k].type ==2 && G[k].seq == 0) ){
+              for( c=b[CHAR].length-1 ; c>=0 ;c-- ){
+                if( b[CHAR][c].rea   == i[0] 
+                 && b[CHAR][c].class == i[1]
+                 && b[CHAR][c].type  == i[2]
+                 && b[CHAR][c].flg   == i[3]+i[4]*2+i[5]*4 ) break;
+              }
+              c=(c>=0)?1:0;
+            }else c=1;
+            if( c ){ /*限定の指定無し or 限定対象,行結合をまとめてONする*/
+              for( l=j ; l   >= 0 ; l-- ){
+                c=G[k].member[l];
+                if( b[CHAR].length != c[CHAR].length 
+                 || b[CHAR][0]     != c[CHAR][0]
+                 || b[NAME]        != c[NAME]    ) break;
+                if( c[OBJ].style["display"] != "table-row" ) c[OBJ].style["display"] = "table-row";
+              }
+              for( l=j+1 ; l <  G[k].member.length ; l++ ){
+                c=G[k].member[l];
+                if( b[CHAR].length != c[CHAR].length 
+                 || b[CHAR][0]     != c[CHAR][0]
+                 || b[NAME]        != c[NAME]    ) break;
+                if( c[OBJ].style["display"] != "table-row" ) c[OBJ].style["display"] = "table-row";
+              }
+              j = l-1;
+            }else{ /*限定対象でない*/
+              if( b[OBJ].style["display"] != "none" ) b[OBJ].style["display"] = "none";
+            }
           }
+        }else if( e.target.className == "nsw" ){
+
+        }else if( e.target.className == "csw" ){
           /*■ ＋ − ÷ */
           if( e.target.parentNode.id && e.target.parentNode.id.charAt(0) == "g" ) n=e.target.parentNode.id.substr(1)/1;
           for( i=0 ; i < G.length ; i++ ){
@@ -2392,6 +2550,24 @@ console.log("["+k+","+j+"]");
     return true;
   }
 
+  function filterName(name){
+    var i,j,k,b;
+    if( name == "default") return;
+    i=G.length;
+    while( --i >= 0 ){
+      j=G[i].member.length;
+      while( --j >= 0 ){
+        b=G[i].member[j];
+        k=b[CHAR].length;
+        while( --k >= 0 ) if( b[CHAR][k].name == name ) break;
+        if( k >= 0 ){
+          if( b[OBJ].style["display"] != "table-row" ) b[OBJ].style["display"] = "table-row";
+        }else{
+          if( b[OBJ].style["display"] != "none" ) b[OBJ].style["display"] = "none";
+        }
+      }
+    }
+  }
 
   document.body.onload=function b_onload(olev){
     var j;
@@ -2427,12 +2603,28 @@ console.log("["+k+","+j+"]");
         setV( inobj[10] , 0 );
       }
     }
+    if( ev.target == inobj[15] ){
+      filterName(getV(ev.target));
+      setV( inobj[15] , "default" );
+    }
     if( ev.target.id != "in20" ) doDraw(ev);
   });
-  var touchObj=null;
-  document.body.addEventListener( "touchstart",function tstart(ev){ touchObj=ev.target; } );
-  document.body.addEventListener( "touchend",function tend(ev){ if( touchObj==ev.target){ doSelect(ev);} touchObj=null; } );
-  document.body.addEventListener( "click",doSelect );
+
+  var viewport=[0,0];
+  function mdown(ev){
+    viewport[0]= document.body.scrollLeft;
+    viewport[1]= document.body.scrollTop;
+    if( ev.target.tagName.toUpperCase() == "TH" ) document.getElementById("t").className="m";
+  }
+  function mup(ev){
+    document.getElementById("t").className="";
+    if( viewport[0] == document.body.scrollLeft && viewport[1] == document.body.scrollTop) doSelect(ev);
+  }
+  document.body.addEventListener( "touchstart",mdown  );
+  document.body.addEventListener( "touchend",mup  );
+  document.body.addEventListener( "mousedown",mdown );
+  document.body.addEventListener( "mouseup",mup );
+  //document.body.addEventListener( "click",doSelect );
 
 </script>
 </body>
