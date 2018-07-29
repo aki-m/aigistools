@@ -223,7 +223,7 @@ input.chk { display:inline; background-color:#90ffcf; }
 <li>他に、ブッロックに対する状態がある(いわゆるキャッチ)<br>
 「神剣フロッティ」、ダリューン/関羽アビの条件、および<br>
 一部ユニット(神官・傀儡)の攻撃スイッチになっている。</li>
-<li>鏡影よりジャックランタン/帝国護衛が、<br>
+<li>避禍予見の鏡影よりジャックランタン/帝国騎士(護衛隊)が、<br>
 身代わりトークンより復活アビが、<br>
 死亡/撤退より仮死が優先される<br>
 
@@ -287,6 +287,11 @@ input.chk { display:inline; background-color:#90ffcf; }
 スキル発動時、終了時に計算される。<br>
 スキル時間無限は回収や麻痺で効果が切れる。<br>
 永続強化スキルはミッション中継続。
+</li><br>
+<li><b>ダークナイト能力（根性バフ）</b><br>
+何故かスキルと同列で扱われる酷いネーミングのバフ。<br>
+HPの増減(ダメージと回復)で計算される。<br>
+HP連動と違い、配置ユニット表示ステに反映される
 </li><br>
 <li><b>特定条件で適用（動的バフ）</b><br>
 <ul>
@@ -2097,8 +2102,8 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
       saveword.addS(w, getV(inobj[ 13]) ,14); /*14bit:アンナ攻撃 */
       saveword.addS(w, getV(inobj[ 14]) ,14); /*14bit:アンナ防御 */
       for( i=0 ; i < G.length ; i++ ) for( j=0; j < G[i].member.length ; j++ ){
-        b=G[i].member[j];
-        saveword.addS(w, b[BON]  ,1); /*1:選択・非選択 */
+        
+        saveword.addS(w, G[i].member[j][BON]  ,1); /*1:選択・非選択 */
       }
       if( w[1] > 0 ) w[2] += saveword.charmap.charAt( w[0]&63 ); /*末尾の6BITに満たない端数 */
       for(i=j=0 ; i<w[2].length ; i++ ) j=j^saveword.charmap.indexOf(w[2].charAt(i)); /* CHECK-SUM */
@@ -2124,8 +2129,8 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
       setV(inobj[ 12] , saveword.getS(w,14));
       setV(inobj[ 13] , saveword.getS(w,14));
       setV(inobj[ 14] , saveword.getS(w,14));
-      for( i=0 ; i<bon.length ; i++ ){
-        bon[i] = saveword.getS(w,1);
+      for( i=0 ; i < G.length ; i++ ) for( j=0; j < G[i].member.length ; j++ ){
+        G[i].member[j][BON] = saveword.getS(w,1);
       }
     },
     checkstr:function checkstr(str){
@@ -2311,7 +2316,7 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
      for( i=0 ; i<multi.length ; i++ ){ /*総当りの次へ進める*/
        b=multi[i]%100;
        b=G[b].member[(multi[i]-b)/100];
-       if( multi_i[i]+1 >= b[CHAR].length ) break;
+       if( multi_i[i]+1 < b[CHAR].length ) break;
      }
      if( i >= multi.length ) break; /*総当り終わり*/
      multi_i[i]++;                    /*総当りで次へ進めるもの*/
