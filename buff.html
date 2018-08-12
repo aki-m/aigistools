@@ -169,7 +169,7 @@ input.chk { display:inline; background-color:#90ffcf; }
   <td is="x-d" id="out06"></td>
 </tr>
 <tr class="f" >
-  <th colspan=3 rowspan=2>アンナ</th>
+  <th colspan=3 rowspan=2>アンナ/エレメンタラー/シュシュ</th>
   <td rowspan=2></td>
   <td ><input type="number" id="in13" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in14" min=0 max=9999 size=4 /></td>
@@ -1903,6 +1903,34 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
 /*["トリプルショット"  ,5,--------------,["バシラ","サブリナ","リオン","ナナリー" ]]; */
 /*["ラッシュ！"        ,5,--------------,["ダン","ジーナ","ウル"   ]];*/
 
+/*
+  プロパティ名がかぶってなければメンバーからグループを参照できる
+  G[n]:{
+         idx   :0 ,
+         name  :"",
+         flg   :0+0+0 ,
+         type  :0 ,
+         seq   :1 ,
+         obj   :DOM ,
+         v1    :[0,0,0,0,0 ,0,0 ,0,0] ,
+         v2    :[0,0,0,0,0 ,0,0 ,0,0]
+         member:GMember[]
+       }
+  M[n]:{
+         idx  :0
+         name :""
+         perB :[0,0,0,0,0]
+         addB :[0,0,0,0,0]
+         chr  :[uni000[x]...]
+         mask :[[-1,-1-,1-,1-,1-,1]...]
+         obj  :DOM
+         bon  :0
+         __proto__.chkMask  : function
+         __proto__.onoff    : function
+         __proto__.__proto__: G[n]
+  }
+}
+*/
   function GMember(in_a){
     var i,s,l;
     this.idx    =   in_a[0];
@@ -2052,20 +2080,18 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
     }
 
     /*ユニット一覧ソートとプルダウンへの設定*/
-    for( i in uni000 ){
-      v=i;
+    while(true){
+      v=null;
       for( j in uni000 ){
-        if( uni000[j].name ) continue;
-        l=0;
-        if(        uni000[v].rea   <  uni000[j].rea   ) l=1;
-        else if(   uni000[v].rea   == uni000[j].rea   ){
-          if(      uni000[v].class >  uni000[j].class ) l=1
-          else if( uni000[v].class == uni000[j].class ){
-            if(    v               >  j               ) l=1
-          }
-        }
-        if(l) v=j;
+        if(    uni000[j].name ) continue;
+        if(    v               == null
+         ||(   uni000[v].rea   <  uni000[j].rea  
+          ||(  uni000[v].rea   == uni000[j].rea   
+           &&( uni000[v].class >  uni000[j].class
+            ||(uni000[v].class == uni000[j].class 
+             && v              >  j               ))))) v=j;
       }
+      if( v == null ) break;
       uni000[v].name=v;
       n=document.createElement("OPTION");
       n.value=v;
@@ -2230,10 +2256,7 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
       this.addS(w, inobj[ 12].getV() ,14); /*14bit:ダンサー防御 */
       this.addS(w, inobj[ 13].getV() ,14); /*14bit:アンナ攻撃 */
       this.addS(w, inobj[ 14].getV() ,14); /*14bit:アンナ防御 */
-      for( i=0 ; i < G.length ; i++ ) for( j=0; j < G[i].member.length ; j++ ){
-        
-        this.addS(w, G[i].member[j].bon  ,1); /*1:選択・非選択 */
-      }
+      for( i=0 ; i < M.length ; i++ ) this.addS(w, M[i].bon  ,1); /*1:選択・非選択 */
       if( w[1] > 0 ) w[2] += this.charmap.charAt( w[0]&63 ); /*末尾の6BITに満たない端数 */
       for(i=j=0 ; i<w[2].length ; i++ ) j=j^this.charmap.indexOf(w[2].charAt(i)); /* CHECK-SUM */
       w[2] += this.charmap.charAt( j );
@@ -2273,9 +2296,7 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
       inobj[ 12].setV( getS(14) );
       inobj[ 13].setV( getS(14) );
       inobj[ 14].setV( getS(14) );
-      for( i=0 ; i < G.length ; i++ ) for( j=0; j < G[i].member.length ; j++ ){
-        G[i].member[j].bon = getS(1);
-      }
+      for( i=0 ; i < M.length ; i++ ) M[i].bon = getS(1);
     },
     checkstr:function checkstr(in_str){
       var i,j;
@@ -2590,12 +2611,10 @@ if(k<5 && o==0 )    for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]
     /*バフ後の値の更新*/
     for( i=outv.length ; --i >= 0 ; ) if( outv[i] >= 0 ) outobj[i].setV( outv[i] );
     /*選択状態の画面への更新*/
-    for( i=G.length; --i >= 0 ; ){
-      for( j=G[i].member.length; --j >= 0 ; ){
-        b = G[i].member[j];
+    for( i=M.length; --i >= 0 ; ){
+        b = M[i];
         k = b.bon ? "on" : "";
         if( b.obj.className != k ) b.obj.className = k;
-      }
     }
     /*編成*/
     outv="";
@@ -2720,24 +2739,22 @@ if(k<5 && o==0 )    for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]
   }
 
   function filterName(name){
-    var i,j,k,b;
+    var i,k,b;
     if( name == "default") return;
-    for( i=G.length; --i >= 0 ; ){
-      for( j=G[i].member.length; --j >= 0 ; ){
-        b=G[i].member[j];
+    for( i=M.length; --i >= 0 ; ){
+        b=M[i];
         for( k=b.chr.length; --k >= 0 ; ) if( b.chr[k].name == name ) break;
         if( k >= 0 ){
           if( b.obj.style["display"] != "table-row" ) b.obj.style["display"] = "table-row";
         }else{
           if( b.obj.style["display"] != "none" ) b.obj.style["display"] = "none";
         }
-      }
     }
   }
 
   function getSelects(){
-    var i,j,r=[];
-    for( i=0 ; i<G.length ; i++ ) for( j=0 ; j<G[i].member.length ; j++ ) if( G[i].member[j].bon ) r[r.length]=G[i].member[j];
+    var i,r=[];
+    for( i=0 ; i<M.length ; i++ ) if( M[i].bon ) r[r.length]=M[i];
     return r;
   }
 
@@ -2878,6 +2895,31 @@ console.log("["+i+","+j+"]out of num:"+Object.keys(teams[0]).length+","+outv);
       inobj[15].setV( "default" );
     }
     if( ev.target.id != "in20" ) doUpdate(null);
+  });
+
+  function cancelEv(ev){
+    ev.preventDefault();
+    //ev.stopPropagation();
+    return true;//false;
+  };
+
+  document.body.addEventListener("drop",function(ev){
+    console.log("drop");
+    var tr   = ev.dataTransfer?ev.dataTransfer:ev.originalEvent.dataTransfer;
+    if( tr.items.length == 1 && tr.types.length == 1 && tr.types[0] == "text/plain" ){
+      tr.items[0].getAsString(function(s){
+        if( s.length >= 2 && saveword.checkstr(s) ){
+           location.href="?"+s;
+        }else{
+           alert("その呪文は正しくないようだ");
+        }
+      });
+    }
+    return cancelEv(ev);
+  });
+  document.addEventListener("dragover" ,function(ev){
+    console.log("d-over");
+    return cancelEv(ev);
   });
 
   var viewport=[0,0];
