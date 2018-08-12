@@ -1930,10 +1930,10 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
       i=in_a[7].length;
       this.chr    = new Array(i);
       while( --i >= 0  ) this.chr[i] = uni000[ in_a[7][i] ];
-    }else if( in_a[7] typeof String == "string" ){
+    }else if( typeof in_a[7] == "string" ){
       this.chr = [ uni000[ in_a[7] ] ];
     }
-    if( in_a[8] typeof String == "string" ) in_a[8] = [ in_a[8] ];
+    if( typeof in_a[8] == "string" ) in_a[8] = [ in_a[8] ];
     if( in_a[8] ){
       i=this.mask.length;
       this.mask=new Array(i);
