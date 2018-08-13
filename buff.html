@@ -204,6 +204,8 @@ input.chk { display:inline; background-color:#90ffcf; }
 </table>
 
 <span id="help" style="padding:5px; display:none; font-size:16px;position:absolute;top:0px; background:#300020;color:white;" onclick="this.style.display='none'">
+重複／競合は紛らわしいのでうんぬん。
+
 <h3>■ユニット状態</h3>
 <table >
 <tr><th colspan=4>編成外</th><td>編成されずに兵舎／虫籠にいる状態<td></tr>
@@ -229,9 +231,13 @@ input.chk { display:inline; background-color:#90ffcf; }
 </table>
 
 <ul>
-<li>他に、ブッロックに対する状態がある(いわゆるキャッチ)<br>
+<li>ブッロックに対する状態(いわゆるキャッチ)<br>
 「神剣フロッティ」、ダリューン/関羽アビの条件、および<br>
-一部ユニット(神官・傀儡)の攻撃スイッチになっている。</li>
+神官がヒールでなく殴りだしたりするアレ。<br>
+ブロック数0と遠距離ユニットでは発生しない。</li>
+<li>ターゲティングに対する状態(いわゆる隠密)<br>
+トラバサミ、砲撃ポイント、ミミックは常時隠密、<br>
+なのでマーセナリーのように遠距離避雷針にできない。</li>
 <li>避禍予見の鏡影よりジャックランタン/帝国騎士(護衛隊)が、<br>
 身代わりトークンより復活アビが、<br>
 死亡/撤退より仮死が優先される<br>
@@ -243,7 +249,7 @@ input.chk { display:inline; background-color:#90ffcf; }
 <li>奇問遁甲より身代わりが先に反応する</li>
 <li>ウェンディ・ラキュアは、奇問遁甲で<br>配置換えできないが、神秘の聖角では可能</li>
 </ul></li>
-∴ 帝国出身の場合、護衛→鏡→奇問遁甲 となる。
+∴ 帝国出身の場合、護衛＞鏡＞奇問遁甲 となる。
 </ul>
 
 <h3>■ミッション特性</h3>
@@ -315,15 +321,13 @@ HP連動と違い、配置ユニット表示ステに反映される
 <span>
 <span>
 <span>
-<span>
-<span>
 <div>対象キャラのステ表記値</div>
 <div class='i'>Lv分の能力値</div>＋
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
 <div>×</div><div class='i'>加護・優待</div>
-<div>×</div><div class='i'>編成バフ合計値</div></span>
-<div>×</div><div class='i'>配置バフ合計値</div></span>
+<div>×</div><div class='i'>編成バフ合計値</div>
+<div>×</div><div class='i'>配置バフ合計値</div>
 <div>×</div><div class='i'>配置バフ(チーム)</div>
 <div>×</div><div class='i'>スキルバフ(自己)</div>
 <div>×</div>
@@ -338,16 +342,14 @@ HP連動と違い、配置ユニット表示ステに反映される
 <div>×</div><div class='i'>マップ補正</div>
 </span>＋
 <span style='background-color:#fef'>
-<span style='background-color:#dbd'>
-<span style='background-color:#fef'>
 <span style='background-color:#dbd;'>
 <div>ダンザー等のステ表記値</div>
 <div class='i'>Lv分の能力値</div>＋
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
 <div>×</div><div class='i'>加護・優待</div>
-<div>×</div><div class='i'>編成バフ合計値</div></span>
-<div>×</div><div class='i'>配置バフ合計値</div></span>
+<div>×</div><div class='i'>編成バフ合計値</div>
+<div>×</div><div class='i'>配置バフ合計値</div>
 <div>×</div><div class='i'>ダンサー補正(1/10)</div>
 <div>×</div><div class='i'>スキルバフ(ダンサー)</div>
 <div>×</div>
@@ -366,15 +368,17 @@ HP連動と違い、配置ユニット表示ステに反映される
 </span>
 </center>
 <ul>
-<li>ダンサーバフは、ダンサーへのバフが加味される<br>
+<li>ダンサー等加算バフは、ダンサーへのバフまでが加味される<br>
 ex)堕姫配置にて、王子はデバフされ、アンナバフは増える<br>
-ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と大差ない
-<li>編成バフ加算値は、ステ表記値で計算される</li>
-<li>配置バフ加算値は、編成バフ後の値で計算される</li>
-<li>編成バフ・配置バフは条件に合うものは全て加算。ただし、<br>
+ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と大差ない<br>
+ただし、他からの加算バフは自身の加算に及ばない<br>
+ex)アンナはミヤビバフを受けるが王子への加算に受けた分は乗らない</li>
+<li>編成バフは条件に合うものは全て加算。ただし、<br>
+同じもの(同名のもの)はいくつあっても１つ分しか適用されない</li>
+<li>配置バフは条件に合うものは全て加算。ただし、<br>
 同じもの(同名のもの)はいくつあっても１つ分しか適用されない</li>
 <li>配置バフのうちチームはこの枠組みに入らず独立して乗算される<br>
-<li>スキルバフは各グループそれぞれで、<br>
+<li>編成バフ・配置バフ以外は各グループそれぞれで、<br>
 条件に合うものから一番効果の高いものだけが適用される。</li>
 <li>チャーミィの「闇の代償」は以下の組み合わせ<br>
 　初期の攻防半減・・・－５０％の配置バフ(対象＝自分)<br>
@@ -388,10 +392,9 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
 <li>射程内3.1倍以上のバフキャラが追加され<br>
 上書きされたら射程内、両方適用されたら属性指定</li>
 </ul></li>
-<li>性別指定のバフはトークンにはかからない。(ニエルは女性扱い)<br>
-
+<li>ニエルは女性扱い</li>
 </ul>
-<br><br>
+<br>
 </span>
 
 <div style="display:inline-block; font-size:10px;position:absolute;top:0px;right:0px;">
@@ -895,33 +898,61 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
 "テルマ":{                rea:2, class:119, type:1 , flg:1+0+0, stat:[                     ] },
 "エリック":{              rea:2, class:120, type:1 , flg:1+2+0, stat:[                     ] },
 "ヒース":{                rea:2, class:125, type:1 , flg:1+2+0, stat:[                     ] },
-
-"ゴーレム":{              rea:0, class:205, type:0 , flg:0+0+0, stat:[                     ] },
+//                                            種族  遠近 性別 出身
+"スケルトンランサー":{    rea:0, class:200, type:0 , flg:0+0+0, stat:[                     ] },
+"マーセナリー":{          rea:0, class:201, type:0 , flg:0+0+0, stat:[                     ] },
+"オルトロス・ケルベロス":{rea:0, class:202, type:0 , flg:0+0+0, stat:[                     ] },
+"式鬼":{                  rea:0, class:203, type:0 , flg:0+0+0, stat:[                     ] },
+"インプ・デーモン":{      rea:0, class:204, type:0 , flg:0+0+0, stat:[                     ] },
+"ガーディアンゴーレム":{  rea:0, class:205, type:0 , flg:0+0+0, stat:[                     ] },
+"スチームタンク":{        rea:0, class:206, type:0 , flg:0+0+0, stat:[                     ] },
+"化け猫":{                rea:0, class:207, type:0 , flg:0+0+0, stat:[                     ] },
+"大ガマ":{                rea:0, class:208, type:0 , flg:0+0+0, stat:[                     ] },
+"ケットシー":{            rea:0, class:209, type:0 , flg:0+0+0, stat:[                     ] },
+"ジャックランタン":{      rea:0, class:210, type:0 , flg:0+0+0, stat:[                     ] },
+"霧分身":{                rea:0, class:211, type:0 , flg:0+0+0, stat:[                     ] },
+"火エレメント":{          rea:0, class:212, type:0 , flg:0+0+0, stat:[                     ] },
+"土エレメント":{          rea:0, class:213, type:0 , flg:0+0+0, stat:[                     ] },
+"風エレメント":{          rea:0, class:214, type:0 , flg:0+0+0, stat:[                     ] },
+"水エレメント":{          rea:0, class:215, type:0 , flg:0+0+0, stat:[                     ] },
+"闇エレメント":{          rea:0, class:216, type:0 , flg:0+0+0, stat:[                     ] },
+"トラバサミ":{            rea:0, class:217, type:0 , flg:0+0+0, stat:[                     ] },
+"ミミック":{              rea:0, class:218, type:0 , flg:0+0+0, stat:[                     ] },
+"砲撃ポイント":{          rea:0, class:219, type:0 , flg:0+0+0, stat:[                     ] },
+"鏡花水月":{              rea:0, class:220, type:0 , flg:0+0+0, stat:[                     ] },
+"屍導士":{                rea:0, class:221, type:0 , flg:0+0+0, stat:[                     ] },
+"帝国騎士(護衛隊)":{      rea:0, class:222, type:0 , flg:0+0+0, stat:[                     ] },
+"金光聖菩(分身)":{        rea:0, class:223, type:0 , flg:0+0+0, stat:[                     ] },
+"生命の木":{              rea:0, class:300, type:0 , flg:1+0+0, stat:[                     ] },
+"避禍予見の鏡影":{        rea:0, class:301, type:0 , flg:1+0+0, stat:[                     ] },
+"プリズムミラー":{        rea:0, class:302, type:0 , flg:1+0+0, stat:[                     ] },
+"芸術家の逸品":{          rea:0, class:303, type:0 , flg:1+0+0, stat:[                     ] },
 "守護の聖樹":{            rea:0, class:304, type:0 , flg:1+0+0, stat:[                     ] },
-"破魔の聖樹":{            rea:0, class:305, type:0 , flg:1+0+0, stat:[                     ] }
+"破魔の聖樹":{            rea:0, class:305, type:0 , flg:1+0+0, stat:[                     ] },
+"バリスタ":{              rea:0, class:306, type:0 , flg:1+0+0, stat:[                     ] }
           };
   var G=[/*グループ名, ( 最大値型F, 変更連動F, 単一選択F), type(0:編成 1:配置 2:スキル 3:ステ加算 4:動的 5:チーム), SEQ*/
-     { name:"編成バフ(全体)"                ,flg:0+0+0 ,type:0 ,seq:0 },
-     { name:"編成バフ(近・遠,性別限定)"     ,flg:0+0+0 ,type:0 ,seq:1 },
-     { name:"編成バフ(職種,種族限定)"       ,flg:0+0+0 ,type:0 ,seq:2 },
-     { name:"編成バフ(所属,レアリティ限定)" ,flg:0+0+0 ,type:0 ,seq:3 },
-     { name:"配置バフ(全体)"                ,flg:0+0+0 ,type:1 ,seq:0 },
-     { name:"配置バフ(近・遠,性別限定)"     ,flg:0+0+0 ,type:1 ,seq:1 },
-     { name:"配置バフ(職種,種族,自分限定)"  ,flg:0+0+0 ,type:1 ,seq:2 },
-     { name:"配置バフ(チーム)"              ,flg:4+2+1 ,type:2 ,seq:5 },
-     { name:"スキルバフ(自己)"              ,flg:4+2+1 ,type:2 ,seq:0 },
-     { name:"スキルバフ(射程内)"            ,flg:4+0+0 ,type:2 ,seq:1 },
-     { name:"スキルバフ(全体)"              ,flg:4+0+0 ,type:2 ,seq:2 },
-     { name:"スキルバフ(属性指定)"          ,flg:4+0+0 ,type:2 ,seq:3 },
-     { name:"スキルバフ(レア指定)"          ,flg:4+0+0 ,type:2 ,seq:4 },
-     { name:"根性バフ"                      ,flg:4+2+1 ,type:2 ,seq:6 },
-     { name:"ステ加算値バフ(ダンサー)"      ,flg:4+0+1 ,type:3 ,seq:0 },
-     { name:"ステ加算値バフ(政務官)"        ,flg:4+0+1 ,type:3 ,seq:1 },
-     { name:"動的バフ(優先)"                ,flg:4+2+1 ,type:4 ,seq:0 },
-     { name:"動的バフ(特攻)"                ,flg:4+2+1 ,type:4 ,seq:1 },
-     { name:"動的バフ(確立)"                ,flg:4+2+1 ,type:4 ,seq:2 },
-     { name:"動的バフ(ＨＰ連動)"            ,flg:4+2+1 ,type:4 ,seq:3 },
-     { name:"動的バフ(その他条件)"          ,flg:4+2+1 ,type:4 ,seq:4 }];
+     { name:"編成バフ(全体)"                   ,flg:0+0+0 ,type:0 ,seq:0 },
+     { name:"編成バフ(近・遠,性別限定)"        ,flg:0+0+0 ,type:0 ,seq:1 },
+     { name:"編成バフ(職種,種族限定)"          ,flg:0+0+0 ,type:0 ,seq:2 },
+     { name:"編成バフ(所属,レアリティ限定)"    ,flg:0+0+0 ,type:0 ,seq:3 },
+     { name:"配置バフ(全体)"                   ,flg:0+0+0 ,type:1 ,seq:0 },
+     { name:"配置バフ(近・遠,性別限定)"        ,flg:0+0+0 ,type:1 ,seq:1 },
+     { name:"配置バフ(職種,種族,自分限定)"     ,flg:0+0+0 ,type:1 ,seq:2 },
+     { name:"配置バフ(チーム)"                 ,flg:4+2+1 ,type:2 ,seq:5 },
+     { name:"スキルバフ(自己)"                 ,flg:4+2+1 ,type:2 ,seq:0 },
+     { name:"スキルバフ(射程内)"               ,flg:4+0+0 ,type:2 ,seq:1 },
+     { name:"スキルバフ(全体)"                 ,flg:4+0+0 ,type:2 ,seq:2 },
+     { name:"スキルバフ(属性指定)"             ,flg:4+0+0 ,type:2 ,seq:3 },
+     { name:"スキルバフ(レア指定)"             ,flg:4+0+0 ,type:2 ,seq:4 },
+     { name:"根性バフ"                         ,flg:4+2+1 ,type:2 ,seq:6 },
+     { name:"ステ加算値バフ(ダンサー)"         ,flg:4+0+1 ,type:3 ,seq:0 },
+     { name:"ステ加算値バフ(政務官・シュシュ)" ,flg:4+0+1 ,type:3 ,seq:1 },
+     { name:"動的バフ(優先)"                   ,flg:4+2+1 ,type:4 ,seq:0 },
+     { name:"動的バフ(特攻)"                   ,flg:4+2+1 ,type:4 ,seq:1 },
+     { name:"動的バフ(確立)"                   ,flg:4+2+1 ,type:4 ,seq:2 },
+     { name:"動的バフ(ＨＰ連動)"               ,flg:4+2+1 ,type:4 ,seq:3 },
+     { name:"動的バフ(その他条件)"             ,flg:4+2+1 ,type:4 ,seq:4 }];
   var M=[
 /*0=編成バフ(全体) */
  [ 0,"全員の最大ＨＰアップ【中】"       , 10,   0,   0,     0,      0,["アデル"             ]],
@@ -1802,12 +1833,20 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
  [14,"エスカレートステップ(1回目)"              ,  0,1000,1000,     0,      0,["マーニー"                              ]],
  [14,"エスカレートステップ(2回目)"              ,  0,1200,1200,     0,      0,["マーニー"                              ]],
  [14,"エスカレートステップ(最終)"               ,  0,1300,1300,     0,      0,["マーニー"                              ]],
- [14,"ぴょんぴょんエール"                       ,  0, 500,   0,     0,      0,["シュシュ"                              ],["X202XXXXX"]],
- [14,"全力エール"                               ,  0,1000,   0,     0,      0,["シュシュ"                              ],["X202XXXXX"]],
-/*15="ステ加算値バフ(政務官)"*/
- [15,"全力サポート"                             ,  0,1000,1000,     0,      0,["アンナ","アンナ(支給服)","アンナ(軍服)"]],
- [15,"究極サポート"                             ,  0,1200,1200,     0,      0,["アンナ(水着)"                          ]],
- [15,"アンナ・オンステージ"                     ,  0,1000,1000,     0,      0,["アンナ(アイドル)"                      ]],
+/*15="ステ加算値バフ(政務官・エレメンタラー・シュシュ)"*/
+ [15,"全力サポート"                             ,  0,1000,1000,     0,      0,["アンナ","アンナ(支給服)","アンナ(軍服)"],["60  1 010"]],
+ [15,"究極サポート"                             ,  0,1200,1200,     0,      0,["アンナ(水着)"                          ],["60  1 010"]],
+ [15,"アンナ・オンステージ"                     ,  0,1000,1000,     0,      0,["アンナ(アイドル)"                      ],["60  1 010"]],
+ [15,"ぴょんぴょんエール"                       ,  0, 500,-100,     0,      0,["シュシュ"                              ],["X202XXXXX"]],
+ [15,"全力エール"                               ,  0,1000,-100,     0,      0,["シュシュ"                              ],["X202XXXXX"]],
+/*エレメントのときのエレメンタラーは強制適用
+ [15,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["ロレッタ"                              ],["X212XXXXX"]],
+ [15,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["シャオメイ"                            ],["X213XXXXX"]],
+ [15,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["ハルカ"                                ],["X214XXXXX"]],
+ [15,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["セノーテ"                              ],["X215XXXXX"]],
+ [15,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["クラリーチェ"                          ],["X216XXXXX"]],
+*/
+
 /*16="動的バフ(優先)"*/
  [16,"射撃優先(対遠距離)"                       ,  0, 105,   0,     0,      0,["バシラ","リコラ","ヴェロッテ","カズハ" ]],
  [16,"魔法優先(対魔法)"                         ,  0, 105,   0,     0,      0,["ヴィクトリア","ダニエラ"               ]],
@@ -1861,7 +1900,7 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
  [18,"ホーリーエンチャント(20% or 対悪魔,不死)" ,  0, 180,   0,     0,      0,["コーネリア"                            ]],
  [18,"大鑑巨砲(20%、30%)"                       ,  0, 190,   0,     0,      0,["イブキ"                                ]],
  [18,"必殺の一撃(20%)"                          ,  0, 190,   0,     0,      0,["リーフ","ユリアン","ドロシー","リディ","リッカ","メイリン","ラルフ","コーネリア","イブキ","ダナン","バラッド","カリオペ" ]],
- [18,"ミスリルアームズ(15%)"                    ,  0, 180,   0,     0,      0,["セラ","グスタフ","ゴーレム"            ]],
+ [18,"ミスリルアームズ(15%)"                    ,  0, 180,   0,     0,      0,["セラ","グスタフ","ガーディアンゴーレム"]],
  [18,"ラッキーヒット(40%)"                      ,  0, 160,   0,     0,      0,["フレイ","レギーナ","クラーラ"          ]],
  [18,"ラッキーヒール(50%)"                      ,  0, 130,   0,     0,      0,["春着の聖女イリス"                      ]],
  [18,"奇跡の男(1%)"                             ,  0,2390,   0,     0,      0,["ダン"                                  ]],
@@ -2315,8 +2354,8 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
  *  ret [連想配列{key=name,value=配置=2,否=1}]の編成数分の配列
  */
  function calcTeams( /*key=name,value=配置可否の連想配列の編成配列*/
-      in_scan_rec ,  /*選択されたバフ配列 INDEX*100+グループ*/
-      isOuji ){        /*[レア、クラス、種族、近遠、性別、出身]*/
+      isOuji ,        /*[レア、クラス、種族、近遠、性別、出身]*/
+      in_scan_rec ){  /*選択されたバフ配列 INDEX*100+グループ*/
    var i,j,b,n,wk,team;
    var single={}; /*連想配列の操作は重いので、固定部分は先に作っておく*/
    var multi=[];
@@ -2345,7 +2384,7 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
        wk[ b.chr[multi_i[i]].name ] |= G[j].type?2:1;
      }
      if( ! wk["ミヤビ"] && ! wk["ビビアン"] && ! wk["マーニー"] && ! wk["ハナ"] && ! wk["ワルツ"] ) wk["ダンサー"]=2;
-     if( isOuji ) if( ! wk["アンナ"] && ! wk["アンナ(支給服)"] && ! wk["アンナ(軍服)"] && ! wk["アンナ(水着)"] ) wk["政務官"]=2;
+     if( isOuji == 1) if( ! wk["アンナ"] && ! wk["アンナ(支給服)"] && ! wk["アンナ(軍服)"] && ! wk["アンナ(水着)"] ) wk["政務官"]=2;
      i=Object.keys(wk).length;
      if( n == i ) team[team.length]=wk; /*最小編成タイ*/
      else if( n < 0 || n > i ){ n=i ; team=[wk]; } /*最小編成更新*/
@@ -2367,28 +2406,27 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
  *    flg0* [レア、クラス、種族、近遠、性別、出身]
  * ret [選択されたバフINDEX*100+グループ]の配列
  */
- function calcBuffBlock(flg00,flg01,flg02,flg03,flg04,flg05){
+ function calcBuffBlock(isOuji,flg00,flg01,flg02,flg03,flg04,flg05){
    var i,j,k,o,m,b;
    var r=[];
-   var flg = [ [flg00,flg01,flg02,flg03,flg04,flg05] ,[5,115,1,1,0,0] ,[6,100,1,1,0,0] ];
-   var isOuji = (flg00 == 6 && flg01 == 0 && flg02 == 1 && flg03 == 0 && flg04 == 1 && flg05 == 0)
+   var flg0 =  [flg00,flg01,flg02,flg03,flg04,flg05] ;
    var single_select = new Array(G.length*5*3);
    for( i=single_select.length; --i >= 0 ; ) single_select[i]=-1; /*ダミー*/
    for( i=0 ; i < G.length ; i++  ){
      for( j=G[i].v1.length; --j >= 0 ;) G[i].v1[j]=0;/*initialize*/
      for( j=G[i].v2.length; --j >= 0 ;) G[i].v2[j]=0;/*initialize*/
+     if( flg01 == 202 && G[i].type == 3 && G[i].seq == 1 ) G[i].v1[7]=G[i].v1[8]=-100;
      for( j=0 ; j < G[i].member.length ; j++ ){
+       if( flg01 >= 200 && G[i].type == 0 ) continue; /*トークンに編成バフは乗らない*/
        b=G[i].member[j];
        if( ! b.bon ) continue; /*非選択*/
        for( m=0 ; m<5 ; m++ ){
          if( b.perB[m] == 0 && b.addB[m] == 0 ) continue; /*値なし*/
          for( o=0 ; o<3 ; o++ ){ /*自身,ダンサー,アンナ*/
            if( o && m !=1 && m != 2 ) continue; /*ダンサー,アンナは攻防のみ*/
-           if( flg[o][1] >= 200 && G[i].type == 0 ) continue; /*トークンに編成バフは乗らない*/
            if( o != 0 && (G[i].flg&2) != 0 ) continue; /*自己対象*/
-           if( b.chkMask( flg[o] ) == 0 ) continue; /*限定時の対象でない*/
-           if( o == 2 && ! isOuji ) continue; /*アンナは王子のときのみ*/
-           if( G[i].type == 3 && G[i].seq+1 != o ) continue; /*ダンサーの自己バフ*/
+           if( o!=1 && b.chkMask( flg0 ) == 0 ) continue; /*限定時の対象でない*/
+           if( G[i].type == 3 && G[i].seq+1 != o ) continue; /*ダンサーの自己バフは他にかからない*/
 
            k = o?(m+2+o*2):m;//01234 56 78
            if( (G[i].flg & 4) == 0 ){ /*加算型*/
@@ -2420,9 +2458,9 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
  *    inv  [画面の入力数値 HP,ATK,DEF,TRG,RNG,D-ATK,D-DEF,A-ATK,A-DEF]
  *  ret [計算結果outobjの0～19に相当する値
  */
- function calcBuffer(inv){
+ function calcBuffer(isOuji,inv){
    var i,j,k,m,o,v1,v2;
-   var outv = [ inv[0],inv[1],inv[2],inv[3],inv[4], inv[5],inv[6], inv[7],inv[8], -1, 0,0,0,0,0, 0,0,0,0,0];
+   var outv = [ inv[0],inv[1],inv[2],inv[3],inv[4], inv[5],inv[6], isOuji?inv[7]:0,isOuji?inv[8]:0, -1, 0,0,0,0,0, 0,0,0,0,0];
    var outs = [0,0,0,0,0, 0,0, 0,0, 0,0,0,0,0,0, 0,0,0,0,0];
 
    for( o=0 ; o<3 ; o++ ) for( m=0 ; m<5 ; m++ ){
@@ -2462,7 +2500,8 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
        for( j=G.length ; --j >= 0 ; ){
          if( G[j].type != 2 || G[j].seq != k ) continue;
          if( G[j].v1[i] ){
-           outv[i] *= G[j].v1[i]; outs[i] +=2;
+           outv[i] *= G[j].v1[i] +((G[j].v1[i]<0)?100:0);
+           outs[i] += 2;
          }
          if( G[j].v2[i] ){
            v2=G[j].v2[i];
@@ -2481,7 +2520,8 @@ if(k<5 && o==0 )    for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]
        for( j=G.length ; --j >= 0 ; ){
          if( G[j].type != 3 || G[j].seq != k ) continue;
          if( G[j].v1[i] ){
-           outv[i] *= G[j].v1[i]; outs[i] +=2;
+           outv[i] *= G[j].v1[i] +((G[j].v1[i]<0)?100:0);
+           outs[i] += 2;
          }
          if( G[j].v2[i] ){
            v2=G[j].v2[i];
@@ -2495,10 +2535,12 @@ if(k<5 && o==0 )    for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]
      for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]%10))/10;/*整数化*/
    }
 
-   outs[5]++;
-   outs[6]++;
-   outs[7]++;
-   outs[8]++;
+   if( isOuji <= 1 || isOuji >= 7 ){
+     outs[5]++;
+     outs[6]++;
+     outs[7]++;
+     outs[8]++;
+   }
    for( i=outv.length; --i >= 0 ; ) for( ; outs[i] > 0 ; outs[i]-- ){
      outv[i] = (outv[i]-(outv[i]%10))/10;/*整数化*/
    }
@@ -2580,11 +2622,17 @@ if(k<5 && o==0 )    for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]
     }
  
     /*バフ計算*/
-    teams = calcTeams(        /*編成を求める*/
-         calcBuffBlock(flg00,flg01,flg02,flg03,flg04,flg05), /*ブロックのバフ値を求める*/
-         (flg00 == 6 && flg01 == 0 && flg02 == 1 && flg03 == 0 && flg04 == 1 && flg05 == 0) );//isOuji
-    outv = calcBuffer(v);
+    wk=(v[13]==0&&v[14]==0)?0:(flg00 == 6 && flg01 == 0 && flg02 == 1 && flg03 == 0 && flg04 == 1 && flg05 == 0)?1:
+         (flg01 >= 212 && flg01 <=216)?(flg01-210):(flg01 == 202)?7:0; //isOuji/elemental/maju
+    teams = calcTeams(     wk,       /*編成を求める*/
+             calcBuffBlock(wk,flg00,flg01,flg02,flg03,flg04,flg05)); /*ブロックのバフ値を求める*/
+    outv  = calcBuffer(    wk,v);
  
+    inobj[13].visibility=wk?"visible":"hidden";
+    inobj[14].display=wk?"visible":"hidden";
+    //outobj[7].parentNode.style.display=wk?"table-row":"none";
+    inobj[13].parentNode.parentNode.cells[0].innerText=["－","アンナ","ロレッタ","シャオメイ","ハルカ","セノーテ","クラリーチェ","シュシュ"][wk];
+
     /*グループのバフ値*/
     for( i=G.length; --i >= 0 ; ){
       for( j=0 ; j<5 ; j++ ){
