@@ -326,6 +326,7 @@ HP連動と違い、配置ユニット表示ステに反映される
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
 <div>×</div><div class='i'>加護・優待</div>
+<div>×</div><div class='i'>マップ補正</div>
 <div>×</div><div class='i'>編成バフ合計値</div>
 <div>×</div><div class='i'>配置バフ合計値</div>
 <div>×</div><div class='i'>配置バフ(チーム)</div>
@@ -339,30 +340,33 @@ HP連動と違い、配置ユニット表示ステに反映される
 <div>× (HPの場合は＋)</div><div class='i'>スキルバフ(レア指定)</div>
 </div>
 <div>×</div><div class='i'>根性バフ</div>
-<div>×</div><div class='i'>マップ補正</div>
-</span>＋
-<span style='background-color:#fef'>
+</span><span style='border:none;background-color:inherit;vertical-align:top'>＋</span>
+
+<span style='border:none; background-color:inherit; vertical-align:top'>
+
+<div style='padding:5px; border:solid 1px #c0c; background-color:#fef;'>
 <span style='background-color:#dbd;'>
 <div>ダンザー等のステ表記値</div>
 <div class='i'>Lv分の能力値</div>＋
 <div class='i'>好感度ボーナス</div>＋
 <div class='i'>自己強化アピ</div></span>
 <div>×</div><div class='i'>加護・優待</div>
+<div>×</div><div class='i'>マップ補正</div>
 <div>×</div><div class='i'>編成バフ合計値</div>
 <div>×</div><div class='i'>配置バフ合計値</div>
-<div>×</div><div class='i'>ダンサー補正(1/10)</div>
-<div>×</div><div class='i'>スキルバフ(ダンサー)</div>
 <div>×</div>
 
-<div style='padding:5px; border:solid 1px #c0c;background-color:#dbd;'>
 <div class='i'>スキルバフ(射程内)</div>
 <div>×</div><div class='i'>スキルバフ(全体)</div>
 <div>×</div><div class='i'>スキルバフ(属性指定)</div>
 <div>×</div><div class='i'>スキルバフ(レア指定)</div>
 </div>
-<div>×</div><div class='i'><strike>根性バフ</strike></div>
-<div>×</div><div class='i'>マップ補正</div>
+
+<div>×</div><div class='i'>ダンサー補正(1/10)</div>
+<div>×</div><div class='i'>スキルバフ(ダンサー)</div>
+
 </span>
+
 </span>
 <div>×</div><div class='i'>動的バフ</div>
 </span>
@@ -393,6 +397,21 @@ ex)アンナはミヤビバフを受けるが王子への加算に受けた分�
 上書きされたら射程内、両方適用されたら属性指定</li>
 </ul></li>
 <li>ニエルは女性扱い</li>
+</ul>
+<h3>■切捨て</h3>
+PCとiPhoneで値が違うらしいのではっきりしたことは言えない。<br>
+あいとりぷるいーの呪いにかかっているとそもそも追跡できない。<br>
+ということをふまえて.....<br>
+計算の途中で小数点以下切捨てが発生する。箇所は以下の４つ<br>
+<ul>
+<li><b>自己アビ</b><br>
+ステ表示値で、小数点以下は持っていないと思われる（推測）</li>
+<li><b>編成バフ後</b><br>
+配置バフ・スキル系バフに先立って計算され、切り捨てられる</li>
+<li><b>ダンサー系バフ前</b><br>
+ダンサーに対し各種バフ適用した後、<br>ダンサー自身のバフ適用の前で切捨てられる</li>
+<li><b>加算バフの値</b><br>
+ダンサーのバフ値は加算のタイミングでも切り捨てられる</li>
 </ul>
 <br>
 </span>
@@ -2477,7 +2496,7 @@ ex)アンナはミヤビバフを受けるが王子への加算に受けた分�
    for( o=0 ; o<3 ; o++ ) for( m=0 ; m<5 ; m++ ){
      if( o && m != 1 && m != 2 ) continue;
      i=o?(m+2+o*2):m; //01234 56 78
-if(o==0 && m==1) console.log("バフ前["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
+//if(o==0 && m==1) console.log("バフ前["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
      /*****************編成バフ**************************/
      v1=100;
      v2=0;
@@ -2489,8 +2508,8 @@ if(o==0 && m==1) console.log("バフ前["+i+"]"+["HP","ATK","DEF","REG","RNG"][m
      if( v1 != 100 ){ outv[i] *= v1; outs[i] += 2; }
      for( j=0 ; j<outs[i] && v2 ; j++ )  v2 *= 10;
      if( v2 ) outv[i] += v2;
-if(o == 0 && m==1)console.log("編成後["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
-    for( ;o==0 && outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]%10))/10;/*整数化*/
+//if(o == 0 && m==1)console.log("編成後["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
+    for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]%10))/10;/*整数化*/
 
      /*****************配置バフ**************************/
      v1=100;
@@ -2504,7 +2523,7 @@ if(o == 0 && m==1)console.log("編成後["+i+"]"+["HP","ATK","DEF","REG","RNG"][
      for( v1=0 ; v1<outs[i] && v2 ; v1++ )  v2 *= 10;
      if( v2 ) outv[i] += v2;
      for( ; outs[i] > 0 && (outv[i]%10)==0 ; outs[i]-- ) outv[i] /= 10;/*正規化*/
-if(o == 0 && m==1)console.log("配置後["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
+//if(o == 0 && m==1)console.log("配置後["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
 
      /*****************スキルバフ**************************/
      for( k=0 ; k<10 ; k++ ){ /*seq*/
@@ -2520,24 +2539,24 @@ if(o == 0 && m==1)console.log("配置後["+i+"]"+["HP","ATK","DEF","REG","RNG"][
            outv[i] += v2;
          }
          for( ; outs[i] > 0 && (outv[i]%10)==0 ; outs[i]-- ) outv[i] /= 10;/*正規化*/
-if(o == 0 && m==1)console.log("sk["+i+","+k+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
+//if(o == 0 && m==1)console.log("sk["+i+","+k+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
        }
      }
     for( ; outs[i] > 0 && (outv[i]%10)==0 ; outs[i]-- ) outv[i] /= 10;/*正規化*/
-if(o == 0 && m==1)console.log("skil後["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
+//if(o == 0 && m==1)console.log("skil後["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
 
      /*****************ダンサーバフ**************************/
      for( k=0 ; k<10 ; k++ ){ /*seq*/
        for( j=G.length ; --j >= 0 ; ){
          if( G[j].type != 3 || G[j].seq != k ) continue;
          if( G[j].v1[i] ){
+           for( ;outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]%10))/10;/*整数化*/
            outv[i] *= G[j].v1[i] +((G[j].v1[i]<0)?100:0);
            outs[i] += 2;
          }
          if( G[j].v2[i] ){
-           v2=G[j].v2[i];
-           for( v1=0 ; v1<outs[i] && v2 ; v1++ )  v2 *= 10;
-           outv[i] += v2;
+           for( ;outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]%10))/10;/*整数化*/
+           outv[i] += G[j].v2[i];
          }
 //if(m==1)console.log("sk["+i+","+k+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
        }
