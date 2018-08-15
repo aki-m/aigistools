@@ -1,0 +1,410 @@
+﻿<html lang="ja">
+<head>
+ <META http-equiv="Content-Type" content="text/html;"  charset="UTF-8">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+<style>
+th,td{ border: solid 1px #444;  }
+th{ background-color:#dff; }
+tr.on{ background-color:#ff9;}
+table{
+   border-collapse: collapse;
+   border:solid 1px #444;
+}
+</style>
+</head>
+<body>
+<h3>バフの切捨て調査</h3>
+かけるバフが多くなると、順番とか切捨て箇所とかわかりにくくなるので、<br>
+少ない組み合わせから確認し、少しずつ推測していく<br>
+<ul>
+<li>ケース１:編成バフと加算バフ<br>
+ディーナ（攻撃６７７）、キキョウ（A:７％）ウズメ（A:５％）アリア（A:２％）、ミヤビ(B)<br>
+(A)編成バフ：１４％、編成バフのみでは６７７×１．１４＝７７１．７８<br>
+(B)加算バフ：（攻撃４４４×１．１４）×０．１＝５０．６１６<br>
+７７１．７８＋５０．６１６＝８２２．３９６<br>
+実際のステは８２１なので、<u>どちらかor両方が切捨て</u><br>
+<img src="01_01.jpg"></li></ul><ul>
+
+<li>ケース２:配置バフと加算バフ<br>
+ディーナ（攻撃６７７）、レーヴ（B:５％）、ミヤビ(B)<br>
+(A)配置バフ：　５％、配置バフのみでは６７７×１．０５＝７１０．８５<br>
+(B)加算バフ：（攻撃４４４×１．０５）×０．１＝４６．６２<br>
+７１０．８５＋４６．６２＝７５７．４７<br>
+実際のステは７５６なので、<u>どちらかor両方が切捨て</u><br>
+<img src="01_02.jpg"></li></ul><ul>
+
+<li>ケース３:編成バフと配置バフ<br>
+ディーナ（攻撃６７７）、キキョウ（A:７％）ウズメ（A:５％）アリア（A:２％）、レーヴ（B:５％）<br>
+(A)編成バフ：１４％、編成バフのみでは６７７×１．１４＝７７１．７８<br>
+(B)配置バフ：　５％、配置バフのみでは６７７×１．０５＝７１０．８５<br>
+<table>
+<tr><th>1st</th><th>2nd</th><th></th></tr>
+<tr class="on"><td>(A)切捨</td><td>(B)</td><td>７７１×１．０５＝８０９．５５</td></tr>
+<tr class="on"><td>(B)切捨</td><td>(A)</td><td>７１０×１．１４＝８０９．４</td></tr>
+<tr           ><td>(A)　　</td><td>(B)</td><td>６７７＋（１．１４×１．０５）＝６７７×１．１９７＝８１０．３６９</td></tr>
+</table>
+実際のステは８０９なので、<u>どちらかor両方が切捨て</u><br>
+<img src="01_03.jpg"></li></ul><ul>
+<li>∴編成、配置、加算の2つ以上で切捨てがある<br>
+
+<li>ケース４:編成バフと配置バフと加算バフ<br>
+ディーナ（攻撃６７７）、キキョウ（A:７％）ウズメ（A:５％）アリア（A:２％）、レーヴ（B:５％）、ミヤビ(B)<br>
+(A)編成バフ：１４％、編成バフのみでは６７７×１．１４＝７７１．７８<br>
+(B)配置バフ：　５％、配置バフのみでは６７７×１．０５＝７１０．８５<br>
+(CA)加算バフ(中間値：編成)：攻撃４４４×１．１４＝５０６．１６<br>
+(CB)加算バフ(中間値：配置)：攻撃４４４×１．０５＝４６６．２<br>
+加算バフは後回し、２つは切捨てなので以下８通り<br>
+<table>
+<tr><th>1st</th><th>2nd</th><th>3rd</th><th colspan=2>上段：ディーナ、下段ミヤビ</th></tr>
+<tr class="on">
+  <td rowspan=2>(A)切捨</td><td rowspan=2>(B)　　</td><td rowspan=2>(C)切捨</td><td>７７１　　　×１．０５＝８０９．５５  </td><td rowspan=2>計：８６２．５５</td></tr>
+<tr class="on">
+                                                                                <td>５０６　　　×１．０５＝５３１．３    </td></tr>
+<tr>
+  <td rowspan=2>(A)　　</td><td rowspan=2>(B)切捨</td><td rowspan=2>(C)切捨</td><td>７７１．７８×１．０５＝８１０．３６９</td><td rowspan=2>計：８６３</td></tr>
+<tr>
+                                                                                <td>５０６．１６×１．０５＝５３１．４６８</td></tr>
+<tr class="on">
+  <td rowspan=2>(A)切捨</td><td rowspan=2>(B)切捨</td><td rowspan=2>(C)　　</td><td>７７１　　　×１．０５＝８０９．５５  </td><td rowspan=2>計：８６２．１３</td></tr>
+<tr class="on">
+                                                                                <td>５０６　　　×１．０５＝５３１．３    </td></tr>
+<tr class="on">
+  <td rowspan=2>(A)切捨</td><td rowspan=2>(B)切捨</td><td rowspan=2>(C)切捨</td><td>７７１　　　×１．０５＝８０９．５５  </td><td rowspan=2>計：８６２</td></tr>
+<tr class="on">                                                                              <td>５０６　　　×１．０５＝５３１．３    </td></tr>
+<tr class="on">
+  <td rowspan=2>(B)切捨</td><td rowspan=2>(A)　　</td><td rowspan=2>(C)切捨</td><td>７１０　　　×１．１４＝８０９．４    </td><td rowspan=2>計：８６２．４</td></tr>
+<tr class="on">
+                                                                                <td>４６６　　　×１．１４＝５３１．２４  </td></tr>
+<tr>
+  <td rowspan=2>(B)　　</td><td rowspan=2>(A)切捨</td><td rowspan=2>(C)切捨</td><td>７１０．８５×１．１４＝８１０．３６９</td><td rowspan=2>計：８６３</td></tr>
+<tr>                                                                              <td>４６６．２　×１．１４＝５３１．４６８</td></tr>
+<tr>
+  <td rowspan=2>(B)切捨</td><td rowspan=2>(A)切捨</td><td rowspan=2>(C)　　</td><td>７１０　　　×１．１４＝８０９．４    </td><td rowspan=2>計：８６２．１２４</td></tr>
+<tr>
+                                                                                <td>４６６　　　×１．１４＝５３１．２４  </td></tr>
+<tr class="on">
+  <td rowspan=2>(B)切捨</td><td rowspan=2>(A)切捨</td><td rowspan=2>(C)切捨</td><td>７１０　　　×１．１４＝８０９．４    </td><td rowspan=2>計：８６２</td></tr>
+<tr class="on">
+                                                                                <td>４６６　　　×１．１４＝５３１．２４  </td></tr>
+</table>
+実際のステは８６２なので、<u>最初の計算では必ず切捨て</u><br>
+<img src="01_04.jpg"></li></ul><ul>
+
+<li>ケース５:編成バフと配置バフと自己スキル<br>
+ディーナ（攻撃６７７）、キキョウ（A:７％）ウズメ（A:５％）アリア（A:２％）、レーヴ（B:５％）、怪力爆砕鉄球（×２）<br>
+(A)編成バフ：１４％、編成バフのみでは６７７×１．１４＝　７７１．７８<br>
+(B)配置バフ：　５％、配置バフのみでは６７７×１．０５＝　７１０．８５<br>
+(C)自スキル：　×２、自スキルのみでは６７７×２　　　＝１３５４<br>
+<table>
+<tr><th>1st</th><th>2nd</th><th>3rd</th><th>※元が整数の場合(C)で端数は出ない</th></tr>
+<tr           ><td          >(A)    </td><td>(B)    </td><td          >(C)  </td><td          >７７１．１４×１．０５×２＝１６２０．７３８</td></tr>
+<tr class="on"><td rowspan=2>(A)切捨</td><td>(B)    </td><td          >(C)  </td><td rowspan=2>７７１　　　×１．０５×２＝１６１９．１</td></tr>
+<tr class="on">                          <td>(C)※  </td><td          >(B)  </td></tr>
+<tr           ><td rowspan=2>(B)切捨</td><td>(A)    </td><td          >(C)  </td><td rowspan=2>７１０　　　×１．１４×２＝１６１８．８</td></tr>
+<tr           >                          <td>(C)※  </td><td          >(A)  </td></tr>
+<tr           ><td          >(C)※  </td><td>(A)切捨</td><td rowspan=2>(B)  </td><td rowspan=2>７７１．７８×２＝１５４３．５６、１５４３×１．０５＝１６２０．１５</td></tr>
+<tr           ><td          >(A)    </td><td>(C)切捨</td              >     </td></tr>
+<tr class="on"><td          >(C)※  </td><td>(B)切捨</td><td rowspan=2>(A)  </td><td rowspan=2>７１０．８５×２＝１４２１．７　、１４２１×１．１４＝１６１９．９４</td></tr>
+<tr           ><td          >(B)    </td><td>(C)切捨</td              >     </td></tr>
+<tr           ><td          >(A)切捨</td><td>(B)切捨</td><td          >(C)※</td><td>７７１×１．０５＝８０９．５５、８０９×２＝１６１８</td></tr>
+<tr           ><td          >(B)切捨</td><td>(A)切捨</td><td          >(C)※</td><td>７１０×１．１４＝８０９．４　、８０９×２＝１６１８</td></tr>
+</table>
+実際のステは１６１９、はっきりしないので、もう１ケース<br>
+<img src="01_05.jpg"></li></ul><ul>
+
+<li>ケース６:編成バフと配置バフと自己スキル<br>
+レギンクリッサ（攻撃９９７)、キキョウ（A:７％）ウズメ（A:５％）アリア（A:２％）、レーヴ（B:５％）、勝利のルーン（１．８）<br>
+(A)編成バフ：１４％、編成バフのみでは９９７×１．１４＝１１３６．５８<br>
+(B)配置バフ：　５％、配置バフのみでは９９７×１．０５＝１０４６．８５<br>
+(C)自スキル：　×２、自スキルのみでは９９７×１．８　＝１７９４．６<br>
+<table>
+<tr><th>1st</th><th>2nd</th><th>3rd</th><th></th></tr>
+<tr           ><td          >(A)    </td><td>(B)</td><td>(C)</td><td          >１１３６．５８×１．０５×１．８　＝２１４８．１３６２</td></tr>
+<tr class="on"><td rowspan=2>(A)切捨</td><td>(B)</td><td>(C)</td><td rowspan=2>１１３６　　　×１．０５×１．８　＝２１４７．０４</td></tr>
+<tr class="on">                          <td>(C)</td><td>(B)</td></tr>
+<tr           ><td rowspan=2>(B)切捨</td><td>(A)</td><td>(C)</td><td rowspan=2>１０４６　　　×１．１４×１．８　＝２１４６．３９２</td></tr>
+<tr           >                          <td>(C)</td><td>(A)</td></tr>
+<tr           ><td rowspan=2>(C)切捨</td><td>(A)</td><td>(B)</td><td rowspan=2>１７９４　　　×１．１４×１．０５＝２１４７．４１８</td></tr>
+<tr           >                          <td>(B)</td><td>(A)</td></tr>
+
+<tr           ><td>(A)</td><td>(B)切捨</td><td rowspan=2>(C)</td><td rowspan=2>１１３６．５８×１．０５＝１１９３．４０９、１１９３×１．８　＝２１４７．４</td></tr>
+<tr           ><td>(B)</td><td>(A)切捨</td></tr>
+<tr           ><td>(A)</td><td>(C)切捨</td><td rowspan=2>(B)</td><td rowspan=2>１１３６．５８×１．８　＝２０４５．８４４、２０４５×１．０５＝２１４７．２５</td></tr>
+<tr           ><td>(C)</td><td>(A)切捨</td></tr>
+<tr           ><td>(B)</td><td>(C)切捨</td><td rowspan=2>(A)</td><td rowspan=2>１０４６．８５×１．８　＝１８８４．３３　、１８８４×１．１４＝２１４７．７６</td></tr>
+<tr           ><td>(C)</td><td>(B)切捨</td></tr>
+
+<tr           ><td>(A)切捨</td><td>(B)切捨</td><td>(C)</td><td>１１３６×１．０５＝１１９２．８　、１１９２×１．８　＝２１４５．６</td></tr>
+<tr           ><td>(B)切捨</td><td>(A)切捨</td><td>(C)</td><td>１０４６×１．１４＝１１９２．４４、１１９２×１．８　＝２１４５．６</td></tr>
+<tr           ><td>(A)切捨</td><td>(C)切捨</td><td>(B)</td><td>１１３６×１．８　＝２０４４．８　、２０４４×１．０５＝２１４６．２</td></tr>
+<tr           ><td>(C)切捨</td><td>(A)切捨</td><td>(B)</td><td>１７９４×１．１４＝２０４５．１６、２０４５×１．０５＝２１４７．２５</td></tr>
+<tr           ><td>(B)切捨</td><td>(C)切捨</td><td>(A)</td><td>１０４６×１．８　＝１８８２．８　、１８８２×１．１４＝２１４５．４８</td></tr>
+<tr           ><td>(C)切捨</td><td>(B)切捨</td><td>(A)</td><td>１７９４×１．０５＝１８８３．７　、１８８３×１．１４＝２１４６．６２</td></tr>
+</table>
+実際のステは２１４７なので、<u>計算順の最初は編成で切捨て、２番目の何かは切捨て無し</u>。<br>ケース２から<u>ダンサー加算は切捨て</u><br>
+<img src="01_06.jpg"></li></ul><ul>
+
+<li>ケース７:編成バフと自己スキルと範囲スキル<br>
+レギンクリッサ（攻撃９９７)、アリア（２％）、勝利のルーン（×１．８）、破魔の聖樹（×１．４）<br>
+(A)編成バフ：　　２％、編成バフのみでは９９７×１．０２＝１０１６．９４<br>
+(B)自スキル：×１．８、自スキルのみでは９９７×１．８　＝１７９４．６<br>
+(C)範囲バフ：×１．４、範囲バフのみでは９９７×１．４　＝１３９５．８<br>
+
+<table>
+<tr><th>1st</th><th>2nd</th><th>3rd</th><th></th></tr>
+<tr class="on"><td rowspan=2>(A)切捨</td><td>(B)</td><td>(C)</td><td rowspan=2>１０１６×１．８　×１．４＝２５６０．３２</td></tr>
+<tr class="on">                          <td>(C)</td><td>(B)</td></tr>
+<tr           ><td rowspan=2>(B)切捨</td><td>(A)</td><td>(C)</td><td rowspan=2>１７９４×１．０２×１．４＝２５６１．８３２</td></tr>
+<tr           >                          <td>(C)</td><td>(A)</td></tr>
+<tr           ><td rowspan=2>(C)切捨</td><td>(A)</td><td>(B)</td><td rowspan=2>１３９５×１．０２×１．８＝２５６１．２２</td></tr>
+<tr           >                          <td>(B)</td><td>(A)</td></tr>
+
+<tr           ><td>(A)</td><td>(B)切捨</td><td rowspan=2>(C)</td><td rowspan=2>１０１６．９４×１．８＝１８３０．４９２、１８３０×１．４　＝２５６２</td></tr>
+<tr           ><td>(B)</td><td>(A)切捨</td></tr>
+<tr           ><td>(A)</td><td>(C)切捨</td><td rowspan=2>(B)</td><td rowspan=2>１０１６．９４×１．４＝１４２３．７１６、１４２３×１．８　＝２５６１．４</td></tr>
+<tr           ><td>(C)</td><td>(A)切捨</td></tr>
+<tr           ><td>(B)</td><td>(C)切捨</td><td rowspan=2>(A)</td><td rowspan=2>１７９４．６　×１．４＝２５１２．４４　、２５１２×１．０２＝２５６２．２４</td></tr>
+<tr           ><td>(C)</td><td>(B)切捨</td></tr>
+
+<tr           ><td>(A)切捨</td><td>(B)切捨</td><td>(C)</td><td>１０１６×１．８　＝１８２８．８　、１８２８×１．４　＝２５５９．２</td></tr>
+<tr           ><td>(B)切捨</td><td>(A)切捨</td><td>(C)</td><td>１７９４×１．０２＝１８２９．８８、１８２９×１．４　＝２５６０．６</td></tr>
+<tr           ><td>(A)切捨</td><td>(C)切捨</td><td>(B)</td><td>１０１６×１．４　＝１４２２．４　、１４４２×１．８　＝２５５９．６</td></tr>
+<tr           ><td>(C)切捨</td><td>(A)切捨</td><td>(B)</td><td>１３９５×１．０２＝１４２２．９　、１４２２×１．８　＝２５５９．６</td></tr>
+<tr           ><td>(B)切捨</td><td>(C)切捨</td><td>(A)</td><td>１７９４×１．４　＝２５１１．６　、２５１１×１．０２＝２５６１．２２</td></tr>
+<tr           ><td>(C)切捨</td><td>(B)切捨</td><td>(A)</td><td>１３９５×１．８　＝２５１１　　　、２５１１×１．０２＝２５６１．２２</td></tr>
+</table>
+範囲が先にくることはない。やはり２番目は切り捨てない<br>
+<img src="01_07.jpg"></li></ul><ul>
+
+<li>ケース８:編成バフと配置バフと自己スキルと範囲スキル<br>
+最初は編成で切り捨てが確定しているため、残りを調べる。<br>
+編成バフ後(１１３６)＝レギンクリッサ（攻撃９９７)、キキョウ（７％）ウズメ（５％）アリア（２％）<br>
+レーヴ（５％）、勝利のルーン（１．８）、破魔の聖樹（×１．４）<br>
+(A)配置バフ：　　５％、編成バフ＋配置バフのみでは１１３６×１．０５＝１１９２．８<br>
+(B)自スキル：×１．８、編成バフ＋自スキルのみでは１１３６×１．８　＝２０４４．８<br>
+(C)範囲バフ：×１．４、編成バフ＋配置バフのみでは１１３６×１．４　＝１５９０．４<br>
+
+
+<table>
+<tr><th>2nd</th><th>3rd</th><th>4th</th><th></th></tr>
+<tr class="on"><td          >(A)    </td><td>(B)</td><td>(C)</td><td          >１１９２．８×１．８　×１．４＝３００５．８５６</td></tr>
+<tr           ><td rowspan=2>(A)切捨</td><td>(B)</td><td>(C)</td><td rowspan=2>１１９２×１．８　×１．４＝３００３．８４</td></tr>
+<tr           >                          <td>(C)</td><td>(B)</td></tr>
+<tr           ><td rowspan=2>(B)切捨</td><td>(A)</td><td>(C)</td><td rowspan=2>２０４４×１．０５×１．４＝２１４６．２</td></tr>
+<tr           >                          <td>(C)</td><td>(A)</td></tr>
+<tr           ><td rowspan=2>(C)切捨</td><td>(A)</td><td>(B)</td><td rowspan=2>１５９０×１．０５×１．８＝３００５．１</td></tr>
+<tr           >                          <td>(B)</td><td>(A)</td></tr>
+
+<tr class="on"><td>(A)</td><td>(B)切捨</td><td rowspan=2>(C)</td><td rowspan=2>１１９２．８×１．８＝２１４７．０４、２１４７×１．４　＝３００５．８</td></tr>
+<tr class="on"><td>(B)</td><td>(A)切捨</td></tr>
+<tr           ><td>(A)</td><td>(C)切捨</td><td rowspan=2>(B)</td><td rowspan=2>１１９２．８×１．４＝１６６９．９２、１６６９×１．８　＝３００４．２</td></tr>
+<tr           ><td>(C)</td><td>(A)切捨</td></tr>
+<tr class="on"><td>(B)</td><td>(C)切捨</td><td rowspan=2>(A)</td><td rowspan=2>２０４４．８×１．４＝２８６２．７２、２８６２×１．０５＝３００５．１</td></tr>
+<tr class="on"><td>(C)</td><td>(B)切捨</td></tr>
+
+<tr           ><td>(A)切捨</td><td>(B)切捨</td><td>(C)</td><td>１１９２×１．８　＝２１４５．６、２１４５×１．４　＝３００３</td></tr>
+<tr           ><td>(B)切捨</td><td>(A)切捨</td><td>(C)</td><td>２０４４×１．０５＝２１４６．２、２１４６×１．４　＝３００４．４</td></tr>
+<tr           ><td>(A)切捨</td><td>(C)切捨</td><td>(B)</td><td>１１９２×１．４　＝１６６８．８、１６６８×１．８　＝３００２．４</td></tr>
+<tr           ><td>(C)切捨</td><td>(A)切捨</td><td>(B)</td><td>１５９０×１．０５＝１６６９．５、１６６９×１．８　＝３００４．２</td></tr>
+<tr           ><td>(B)切捨</td><td>(C)切捨</td><td>(A)</td><td>２０４４×１．４　＝２８６１．６、２８６１×１．０５＝３００４．０５</td></tr>
+<tr           ><td>(C)切捨</td><td>(B)切捨</td><td>(A)</td><td>１５９０×１．８　＝２８６２　　、２８６２×１．０５＝３００５．１</td></tr>
+</table>
+実際のステは３００５、はっきりしないので、もう１ケース<br>
+<img src="01_08.jpg"></li></ul><ul>
+
+<li>ケース９:配置バフと自己スキルと範囲スキル<br>
+(A)配置バフ：　　５％、配置バフのみでは９９７×１．０５＝１０４６．８５<br>
+(B)自スキル：×１．８、自スキルのみでは９９７×１．８　＝１７９４．６<br>
+(C)範囲バフ：×１．４、配置バフのみでは９９７×１．４　＝１３９５．８<br>
+
+<table>
+<tr><th>1st</th><th>2nd</th><th>3rd</th><th></th></tr>
+<tr class="on"><td          >(A)    </td><td>(B)</td><td>(C)</td><td          >１０４６．８５×１．８　×１．４＝２６３８．０６２</td></tr>
+<tr           ><td rowspan=2>(A)切捨</td><td>(B)</td><td>(C)</td><td rowspan=2>１０４６　　　×１．８　×１．４＝２６３５．９２</td></tr>
+<tr           >                          <td>(C)</td><td>(B)</td></tr>
+<tr           ><td rowspan=2>(B)切捨</td><td>(A)</td><td>(C)</td><td rowspan=2>１７９４　　　×１．０５×１．４＝２６３７．１８</td></tr>
+<tr           >                          <td>(C)</td><td>(A)</td></tr>
+<tr           ><td rowspan=2>(C)切捨</td><td>(A)</td><td>(B)</td><td rowspan=2>１３９５　　　×１．０５×１．８＝２６３６．５５</td></tr>
+<tr           >                          <td>(B)</td><td>(A)</td></tr>
+<tr           ><td>(A)</td><td>(B)切捨</td><td rowspan=2>(C)</td><td rowspan=2>１０４６．８５×１．８＝１８８４．３３、１８８４×１．４　＝２６３７．６</td></tr>
+<tr           ><td>(B)</td><td>(A)切捨</td></tr>
+<tr           ><td>(A)</td><td>(C)切捨</td><td rowspan=2>(B)</td><td rowspan=2>１０４６．８５×１．４＝１４６５．５９、１４６５×１．８　＝２６３７</td></tr>
+<tr           ><td>(C)</td><td>(A)切捨</td></tr>
+<tr           ><td>(B)</td><td>(C)切捨</td><td rowspan=2>(A)</td><td rowspan=2>１７９４．６　×１．４＝２５１２．４４、２５１２×１．０５＝２６３７．６</td></tr>
+<tr           ><td>(C)</td><td>(B)切捨</td></tr>
+</table>
+このうち２つあるいは全部が切り捨てない。(最後にきたものだけ可能性がある)<br>
+<img src="01_09.jpg"><br>
+というわけで分解。どれか１つはまだ可能性があるが、２つは切捨てしない。<br>
+<table>
+<tr><td><img src="01_10.jpg"></td><td><img src="01_11.jpg"></td><td><img src="01_12.jpg"></td></tr>
+<tr>
+<td>１０４６．８５×１．８　＝１８８４．３３<br>(A)(B)１０４６×１．８　＝１８８２．８<br>(B)(A)１７９４×１．０５＝１８８３．７</td>
+<td>１７９４．６　×１．４　＝２５１２．４４<br>(B)(C)１７９４×１．４　＝２５１１．６<br>(C)(B)１３９５×１．８　＝２５１１</td>
+<td>１０４６．８５×１．４　＝１４６５．８５<br>(A)(C)１０４６×１．４　＝１４６４．４<br>(C)(A)１３９５×１．０５＝１４６４．７５</td></tr>
+</table>
+</li></ul><ul>
+
+<li>ケース１０:自己スキルと全体スキルと属性スキル<br>
+勝利のルーン（１．８）、奇問遁甲（×１．３）、聖なるヴェール（×１．２５）<br>
+(A)自己スキル：×１．８　、自己スキルのみでは９９７×１．８　＝１７９４．６<br>
+(B)全体スキル：×１．３　、全体スキルのみでは９９７×１．３　＝１２９６．１<br>
+(C)属性スキル：×１．２５、属性スキルのみでは９９７×１．２５＝１２４６．２５<br>
+
+<table>
+<tr><th>1st</th><th>2nd</th><th>3rd</th><th></th></tr>
+<tr class="on"><td          >(A)    </td><td>(B)</td><td>(C)</td><td          >１７９４．６×１．３　×１．２５＝２９１６．２２５</td></tr>
+<tr           ><td rowspan=2>(A)切捨</td><td>(B)</td><td>(C)</td><td rowspan=2>１７９４　　×１．３　×１．２５＝２９１５．２５</td></tr>
+<tr           >                          <td>(C)</td><td>(B)</td></tr>
+<tr class="on"><td rowspan=2>(B)切捨</td><td>(A)</td><td>(C)</td><td rowspan=2>１２９６　　×１．８　×１．２５＝２９１６</td></tr>
+<tr class="on">                          <td>(C)</td><td>(A)</td></tr>
+<tr           ><td rowspan=2>(C)切捨</td><td>(A)</td><td>(B)</td><td rowspan=2>１２４６　　×１．８　×１．３　＝２９１５．６４</td></tr>
+<tr           >                          <td>(B)</td><td>(A)</td></tr>
+<tr           ><td>(A)</td><td>(B)切捨</td><td rowspan=2>(C)</td><td rowspan=2>１７９４．６×１．３　＝２３３２．９８　、２３３２×１．２５＝２９１５</td></tr>
+<tr           ><td>(B)</td><td>(A)切捨</td></tr>
+<tr           ><td>(A)</td><td>(C)切捨</td><td rowspan=2>(B)</td><td rowspan=2>１７９４．６×１．２５＝２２４３．２５　、２２４３×１．３　＝２９１５．９</td></tr>
+<tr           ><td>(C)</td><td>(A)切捨</td></tr>
+<tr class="on"><td>(B)</td><td>(C)切捨</td><td rowspan=2>(A)</td><td rowspan=2>１２９６．１×１．２５＝１６２０．１２５、１６２０×１．８　＝２９１６</td></tr>
+<tr class="on"><td>(C)</td><td>(B)切捨</td></tr>
+<tr           ><td>(B)切捨</td><td>(A)切捨</td><td      >(C)</td><td          >１２９６　　×１．８　＝２３３２．８、２３３２×１．２５＝２９１５</td></tr>
+<tr class="on"><td>(B)切捨</td><td>(C)切捨</td><td      >(A)</td><td          >１２９６　　×１．２５＝１６２０　　、１６２０×１．８　＝２９１６</td></tr>
+</table>
+この状態にレーヴ（５％）で切捨て無しとわかる。(厳密には最終を除く)<br>
+２９１６×１．０５＝３０６１．８、２９１６．２２５×１．０５＝３０６２．０３６２５<br>
+<table><tr><td><img src="01_13.jpg"></td><td><img src="01_14.jpg"></td></tr></table></li></ul><ul>
+</li></ul><ul>
+
+<li>ケース１１:王子バフ盛り<br>
+<table style="border:none">
+<tr><td colspan=2                                  >                       </td><td>　ＨＰ  </th><td>　攻撃    </td><td>防御    </dh><td>魔耐</td>
+<td rowspan=18><img src="02_01.jpg"></td></tr>
+<tr><td colspan=2                                  >ギス王子               </td><td>２６００</td><td>５４０      </td><td>７００</td><td>２０</td></tr>
+<tr><td colspan=2                                  >マーニー               </td><td>１１５２</td><td>３３３      </td><td>４５８</td><td>１０</td></tr>
+<tr><td colspan=2                                  >水着アンナ             </td><td>１４２５</td><td>２９４      </td><td>１９７</td><td>    </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >編成バフ               </th><th>        </th><th>  １２％    </th><th>      </th><th>    </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>キキョウ    </td><td>        </td><td>　　７％    </td><td>      </td><td>    </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>ウズメ      </td><td>        </td><td>　　５％    </td><td>      </td><td>    </td></tr>
+<tr><th colspan=2                                  >編成バフ後マーニー　   </th><th>１３２４</th><th>３７２．９６</th><th>４５８</th><th>１０</th></tr>
+<tr><th colspan=2                                  >編成バフ後水着アンナ   </th><th>１６３８</th><th>３２９．２８</th><th>１９７</th><th>    </th></tr>
+<tr><th colspan=2 style="border-bottom:none"       >編成バフ（王子のみ）   </th><th>　１５％</th><th>　５２％    </th><th>２５％</th><th>    </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>(上記共通分)</td><td>        </td><td>　１２％    </td><td>      </td><td>    </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>ジークリンデ</td><td>        </td><td>　１０％    </td><td>      </td><td>    </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>カグラ      </td><td>        </td><td>　　５％    </td><td>      </td><td>    </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>ゴルドー    </td><td>        </td><td>　　５％    </td><td>　５％</td><td>    </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>マツリ      </td><td>　　５％</td><td>　　５％    </td><td>　５％</td><td>    </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>セーラ      </td><td>　１０％</td><td>　１０％    </td><td>１０％</td><td>    </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>サンディ    </td><td>        </td><td>　　５％    </td><td>　５％</td><td>    </td></tr>
+<tr><th colspan=2                                  >編成バフ後ギス王子　   </th><th>２９９０</th><th>８２０．８　</th><th>８７５</th><th>２０</th></tr>
+<tr><th colspan=7 style="border:none;background-color:inherit">↓</td></tr>
+
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ               </th><th>        </th><th>　２８％    </th><th>２８％</th><th>　３</th>
+<td rowspan=21><img src="02_02.jpg"></td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>王子        </td><td>        </td><td>　２０％      </td><td>２０％      </td><td>  </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>レーヴ      </td><td>        </td><td>　　５％      </td><td>　５％      </td><td>  </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>アルティア  </td><td>        </td><td>　　３％      </td><td>　３％      </td><td>３</td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値マーニー　       </th><th>        </th><th>　４７        </th><th>　５８      </th><th>  </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>（加算前）  </td><td>        </td><td>４７６．１６  </td><td>５８６．２４</td><td>  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値水着アンナ       </th><th>        </th><th>５０５．３４４</th><th>３０２．５９２</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>（加算前）  </td><td>        </th><td>４２１．１２  </th><td>２５２．１６</td><td>  </td></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>究極サポート</th><td>        </td><td>×１２        </td><td>×１２      </td><td>  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ（王子のみ）   </th><th>        </th><th>　８１％      </th><th>７１％      </th><th>３</th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>(上記共通分)</td><td>        </td><td>　２８％      </td><td>２８％      </td><td>３</td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>アマンダ    </td><td>        </td><td>　１０％      </td><td>            </td><td>  </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>シンシア    </td><td>        </td><td>　１３％      </td><td>１３％      </td><td>  </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>ゴルドー    </td><td>        </td><td>　１５％      </td><td>１５％      </td><td>  </td></tr>
+<tr><th style="border-top:none; "                  >　</th><td>サンディ    </td><td>        </td><td>　１５％      </td><td>１５％      </td><td>  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >属性バフ               </th><th>        </th><th>　×１．５    </th><th>×１．５    </th><th>  </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>セーラ      </th><td>        </td><td>　×１．５    </td><td>×１．５    </td><td>  </td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>サンディ    </td><td>        </td><td>　×１．２    </td><td>×１．２    </td><td>  </td></tr>
+<tr><th colspan=2                                  >加算前ギス王子　       </th><th>２９９０</th><th>２２２６．３  </th><th>２２４４．３７５</th><th>２３</th></tr>
+<tr><th colspan=2                                  >加算後ギス王子　       </th><th>２９９０</th><th>２７７８．６４４</th><th>２６０４．９６７</th><th>２３</th></tr>
+<tr><td colspan=6>とりあえずアンナは切捨ててない</td></tr>
+<tr><th colspan=7 style="border:none;background-color:inherit">↓</td></tr>
+
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ               </th><th>        </th><th>　２８％      </th><th>２８％      </th><th>３</th>
+<td rowspan=16><img src="02_03.jpg"></td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >範囲スキル             </th><th>        </th><th>　×１．５    </th><th></th><th>×１．４</th>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>Ｄテリトリー</th><td>        </td><td>　×１．５    </td><td></td><td>×１．４</td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値マーニー　       </th><th>        </th><th>　７１        </th><th>　５８        </th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>（加算前）  </td><td>        </td><td>７１４．２４  </td><td>５８６．２４  </td><td></td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値水着アンナ       </th><th>        </th><th>７５８．０１６<br>→７５７．２</th><th>３０２．５９２<br>→３０２．４</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>（加算前）  </td><td>        </th><td>６３１．６８<br>→６３１  </th><td>２５２．１６<br>→２５２</td><td></td></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>究極サポート</th><td>        </td><td>×１２        </td><td>×１２        </td><td></td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ（王子のみ）   </th><th>        </th><th>　８１％      </th><th>７１％      </th><th>３</th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >属性バフ               </th><th>        </th><th>　×１．５    </th><th>×１．５    </th><th>  </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2                                  >加算前ギス王子　       </th><th>２９９０</th><th>３３３９．４５</th><th>２２４４．３７５</th><th>３２．２</th></tr>
+<tr><th colspan=2                                  >加算後ギス王子　       </th><th>２９９０</th><th>４１６８．４６６<br>→４１６７．６５</th><th>２６０４．９６７<br>→２６０４．７７５</th><th>３２．２</th></tr>
+<tr><td colspan=6>究極サポート前で切捨てと仮定<br>（加算値切捨て後究極サポートは６３×１２＝７５６となってしまう)<br>アンナ加算値は切捨ての可能性あり</td></tr>
+<tr><th colspan=7 style="border:none;background-color:inherit">↓</td></tr>
+
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ               </th><th>        </th><th>　２８％      </th><th>２８％      </th><th>３</th>
+<td rowspan=16><img src="02_04.jpg"></td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >範囲スキル             </th><th>        </th><th>　×１．５    </th><th></th><th>×１．４</th>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値マーニー　       </th><th>        </th><th>９２８<br>→９２８</th><th>７６２<br>→７６１</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>（加算前）  </td><td>        </td><td>７１４．２４<br>→７１４</td><td>５８６．２４<br>→５８６</td><td></td></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>エスカレ最終</th><td>        </td><td>×１３        </td><td>×１３        </td><td></td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値水着アンナ       </th><th>        </th><th>７５７．２    </th><th>３０２．５９２</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ（王子のみ）   </th><th>        </th><th>　８１％      </th><th>７１％      </th><th>３</th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >属性バフ               </th><th>        </th><th>　×１．５    </th><th>×１．５    </th><th>  </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2                                  >加算前ギス王子　       </th><th>２９９０</th><th>３３３９．４５</th><th>２２４４．３７５</th><th>３２．２</th></tr>
+<tr><th colspan=2                                  >加算後ギス王子　       </th><th>２９９０</th><th>５０２４．６５</th><th>３３０８．９６７<br>→３３０７．９６７</th><th>３２．２</th></tr>
+<tr><td colspan=6>エスカレートスッテップ前で切捨てと仮定<br>（加算値切捨て後エスカレは７１×１３＝９２３となってしまう)<br>アンナ加算値は切捨ての可能性あり</td></tr>
+<tr><th colspan=7 style="border:none;background-color:inherit">↓</td></tr>
+
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ               </th><th>        </th><th>　２８％      </th><th>２８％      </th><th>３</th>
+<td rowspan=19><img src="02_05.jpg"></td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >範囲スキル             </th><th>        </th><th>　×１．５    </th><th></th><th>×１．４</th>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >範囲スキル             </th><th>        </th><th>　×１．３    </th><th></th><th>        </th>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>猛火の陣最終</th><td>        </td><td>　×１．３    </td><td></td><td>        </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値マーニー　       </th><th>        </th><th>１２０６      </th><th>７６１</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>（加算前）  </td><td>        </td><td>９２８．５１２<br>→９２８</td><td>５８６．２４<br>→５８６</td><td></td></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>エスカレ最終</th><td>        </td><td>×１３        </td><td>×１３        </td><td></td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値水着アンナ       </th><th>        </th><th>９８５．２    </th><th>３０２．５９２</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>（加算前）  </td><td>        </th><td>８２１．１８４<br>→８２１  </th><td>２５２．１６<br>→２５２</td><td></td></tr>
+<tr><th style="border-top:none; border-bottom:none"></th>　<td>究極サポート</th><td>        </td><td>×１２        </td><td>×１２        </td><td></td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ（王子のみ）   </th><th>        </th><th>　８１％      </th><th>７１％      </th><th>３</th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >属性バフ               </th><th>        </th><th>　×１．５    </th><th>×１．５    </th><th>  </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2                                  >加算前ギス王子　       </th><th>２９９０</th><th>４３４１．２８５</th><th>２２４４．３７５</th><th>３２．２</th></tr>
+<tr><th colspan=2                                  >加算後ギス王子　       </th><th>２９９０</th><th>６５３２．４８５</th><th>３３０７．９６７</th><th>３２．２</th></tr>
+<tr><td colspan=6>アンナ加算値は切捨ての可能性あり</td></tr>
+<tr><th colspan=7 style="border:none;background-color:inherit">↓</td></tr>
+
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ               </th><th>        </th><th>　２８％      </th><th>２８％      </th><th>３</th>
+<td rowspan=19><img src="02_06.jpg"></td></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >範囲スキル             </th><th>        </th><th>　×１．５    </th><th></th><th>×１．４</th>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >範囲スキル             </th><th>        </th><th>　×１．３    </th><th></th><th>        </th>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値マーニー　       </th><th>        </th><th>１２０６      </th><th>７６１</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >加算値水着アンナ       </th><th>        </th><th>９８５．２<br>→９８５</th><th>３０２．５９２<br>→３０２</th><th></th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >配置バフ（王子のみ）   </th><th>        </th><th>　８１％      </th><th>７１％      </th><th>３</th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >属性バフ               </th><th>        </th><th>　×１．５    </th><th>×１．５    </th><th>  </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td colspan=5>上記に同じ  </td></tr>
+<tr><th colspan=2 style="border-bottom:none"       >自己バフ               </th><th>        </th><th>　×１．５    </th><th>×１．５    </th><th>  </th></tr>
+<tr><th style="border-top:none; border-bottom:none">　</th><td>アイギス神器</th><td>        </td><td>　×３        </td><td>×３        </td><td>        </td></tr>
+<tr><th colspan=2                                  >加算前ギス王子　       </th><th>２９９０</th><th>１３０２３．８５５</th><th>６７３３．１２５</th><th>３２．２</th></tr>
+<tr><th colspan=2                                  >加算後ギス王子　       </th><th>２９９０</th><th>１５２１５．０５５<br>→１５２１４．８５５</th><th>７７９６．７１７<br>→７７９６．１２５</th><th>３２．２</th></tr>
+<tr><td colspan=6>アンナ加算値は切捨て</td></tr>
+
+</table>
+</li>
+</ul>
+</body>
+</html>
