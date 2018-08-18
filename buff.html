@@ -2358,7 +2358,9 @@ console.log("chr:"+in_a[7][i]);
     }
     setTimeout(function(){ /*後回しでいい処理*/
       var i,j,k,n,w,s="";
-      for(j=0; j<M.length ; j++ ) if( Array.isArray(M[j])  && M[j][0] == 99 ) M[j]==new GMember(M[j]);
+      GMembersCore.prototype={name:"その他", idx:99, member:[] };
+      GMember.prototype=new GMembersCore(); /*メンバのプロトタイプをコアに向かせる*/
+      for(j=0; j<M.length ; j++ ) if( Array.isArray(M[j]) && M[j][0] == 99 ) M[j] = new GMember(M[j]);
       for( i=0 ; i<inobj[15].children.length ; i++ ){
          n=uni000[inobj[15].children[i].value];
          if( ! n ) continue;
@@ -2375,7 +2377,7 @@ console.log("chr:"+in_a[7][i]);
              +"</td><td >"+n.skill[j].__proto__.name
              +"</td><td>";
            k=n.skill[j].name.indexOf("(");
-           if(k && (n.skill[j].type == TYPE_DYNAM || n.skill[j].type == TYPE_KONJO))
+           if(k > 0 && (n.skill[j].type == TYPE_DYNAM || n.skill[j].type == TYPE_KONJO))
                  s+=n.skill[j].name.slice(0,k)+"</td><td colspan=4>"+n.skill[j].name.slice(k);
            else  s+=n.skill[j].name+"</td><td colspan=4>";
            for(k=0;k<5;k++){
