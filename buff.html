@@ -33,11 +33,9 @@ TIPS
 -->
  <style>
 h4{ margin:5px 0px 0px 0px; }
-td{ padding: 3px 0px 2px 0px; }
 select,div>span{ font-size:18px; height:100%; margin:0px; }
 select{ background-color: yellow; padding:0px 0px 4px 04px; }
 .x-b input { font-size:16px;}
-table td[is="x-d"] { text-align:center; }
 span.x-b{margin:1px; border:none; background-color:darkgray; display:inline-block; }
 span.nw{ border:none; white-space:nowrap; }
 span.w{ border:none; white-space:normal; }
@@ -52,38 +50,32 @@ table{
  -o-user-select:none;
  cursor:default;
 }
-td{ border: solid 1px #00f;  }
+td{ padding: 3px 0px 2px 0px; border: solid 1px #00f;  }
+table td[is="x-d"] { text-align:center; }
 #t tr.bufftype{ border-style:solid; border-color:#00f; border-width: 1px 1px 0px 1px;}
-#t tr    > td{  color:#888; }
+#t tr                 > td{  color:#888; }
 #t tr:nth-child(even) > td{ background:#eeffff; }
 #t tr:nth-child(odd)  > td{ background:#e8ffff; }
-#t tr:hover           > td.REA6{ background:#909090; color:white; }
-#t tr:hover           > td.REA5{ background:#e0e0e0; color:black; }
-#t tr:hover           > td.REA4{ background:#d0ffff; color:black; }
-#t tr:hover           > td.REA3{ background:#ffffb0; color:black; }
-#t tr:hover           > td.REA2{ background:#b0b0b0; color:black; }
-#t tr.on              > td     { background:#afb; color:black; }
-#t tr.on              > td.REA6{ background:#afb; color:black; }
-#t tr.on              > td.REA5{ background:#afb; color:black; }
-#t tr.on              > td.REA4{ background:#afb; color:black; }
-#t tr.on              > td.REA3{ background:#afb; color:black; }
-#t tr.on              > td.REA2{ background:#afb; color:black; }
-#t.m tr               > td.REA6{ background:#909090; color:white; }
-#t.m tr               > td.REA5{ background:#e0e0e0; color:black; }
-#t.m tr               > td.REA4{ background:#d0ffff; color:black; }
-#t.m tr               > td.REA3{ background:#ffffb0; color:black; }
-#t.m tr               > td.REA2{ background:#b0b0b0; color:black; }
-#t.m tr.on              > td     { background:#afb; color:black; }
-#t.m tr.on              > td.REA6{ background:#afb; color:black; }
-#t.m tr.on              > td.REA5{ background:#afb; color:black; }
-#t.m tr.on              > td.REA4{ background:#afb; color:black; }
-#t.m tr.on              > td.REA3{ background:#afb; color:black; }
-#t.m tr.on              > td.REA2{ background:#afb; color:black; }
+#t tr:hover > td.REA6,#t.m tr   > td.REA6{ background:#909090; color:white; }
+#t tr:hover > td.REA5,#t.m tr   > td.REA5{ background:#e0e0e0; color:black; }
+#t tr:hover > td.REA4,#t.m tr   > td.REA4{ background:#d0ffff; color:black; }
+#t tr:hover > td.REA3,#t.m tr   > td.REA3{ background:#ffffb0; color:black; }
+#t tr:hover > td.REA2,#t.m tr   > td.REA2{ background:#b0b0b0; color:black; }
+#t tr.on  > td     , #t.m tr.on   > td     { background:#9fd; color:black;  }
+#t tr.on  > td.REA6, #t.m tr.on   > td.REA6{ background:#9fd; color:black;  }
+#t tr.on  > td.REA5, #t.m tr.on   > td.REA5{ background:#9fd; color:black;  }
+#t tr.on  > td.REA4, #t.m tr.on   > td.REA4{ background:#9fd; color:black;  }
+#t tr.on  > td.REA3, #t.m tr.on   > td.REA3{ background:#9fd; color:black;  }
+#t tr.on  > td.REA2, #t.m tr.on   > td.REA2{ background:#9fd; color:black;  }
 
-#t th,#t tr.t > th.csw,#t tr.f > th.csw,#t tr.f>th.ssw{ background-color: steelblue; color:white; }
-#t tr.f > th,#t tr.f > td{background-color:honeydew; color:#163; border-bottom:solid 1px blue; }
-#t tr.t > th{ background-color:#fd6; color:#632; }
-#t tr.t > td{ font-size:20px; font-weight:600; background-color:#fed; color:black; }
+#t tr   > th    { background-color: #005aa5; color:white; font: bold normal 18px cursive; text-shadow: 2px 2px 3px #000404; }
+#t tr.f > th    { background-color:honeydew; color:#163;  border-bottom:solid 1px blue; text-shadow:none; }
+#t tr.f > th.csw{ background-color: #005aa5; color:white; font: bold normal 18px cursive;}
+#t tr.f > th.ssw{ background-color: #005aa5; color:white; font: bold normal 18px cursive;}
+#t tr.f > td    { background-color:honeydew; color:#163;  border-bottom:solid 1px blue; }
+#t tr.t > th    { background-color: #fd6;    color:#632;  blue; text-shadow:none; }
+#t tr.t > th.csw{ background-color: #005aa5; color:white; font: bold normal 18px cursive;}
+#t tr.t > td    { background-color: #fed;    color:black; font: 600 normal 20px cursive; }
 #help table tr > th{ border: solid 1px #608; background:#e0d0e0; }
 #help table tr > td{ border: solid 1px #608; background:#f0e0f0; }
 #help table        { border: solid 1px #608; border-collapse: collapse;}
@@ -93,10 +85,19 @@ td{ border: solid 1px #00f;  }
 
 #help>center>span span{ display:inline-block;padding:7px; border:solid 1px #c0c; background-color:#dbd;}
 #help>center div.i{border:solid 1px #c0c; background-color:#ede;}
-#list{ padding:5px; display:none; font-size:16px;position:absolute;top:0px; background:#00d;}
-#list td{ padding:1px 4px;}
+#list{
+ padding:5px;
+ display:none;
+ position:absolute;
+ top:0px;
+ background:#00d;
+ text-shadow: 2px 2px 3px #000404;
+ letter-spacing:2px;
+
+}
+#list td{ padding:1px 4px; font: bold normal 24px cursive;}
 #list tr.u>td.u{ border-bottom:none;}
-#list tr.s>td{ background-color:#007;}
+#list tr.s>td{ background-color:#007; text-shadow:none; font-weight:normal;}
 #list tr.s>td.s{background-color:inherit;border-top:none; border-bottom:none;}
 input[type="number"] {  text-align:center; font-size:18px; width:100%;}
 input[type="button"] {
@@ -243,21 +244,43 @@ input.chk { display:inline; background-color:#90ffcf; }
 「神剣フロッティ」、ダリューン/関羽アビの条件、および<br>
 神官がヒールでなく殴りだしたりするアレ。<br>
 ブロック数0と遠距離ユニットでは発生しない。</li>
-<li>ターゲティングに対する状態(いわゆる隠密)<br>
-トラバサミ、砲撃ポイント、ミミックは常時隠密、<br>
+<li>遠距離攻撃の優先ターゲットになる状態(いわゆる引き付け)<br>
+助けを呼ぶ、見切り、鉄壁の挑発、魅惑の舞など。多い<br>
+遠距離敵から見て複数いた場合は不明。(後から対象になったもの？)</li>
+<li>遠距離攻撃のターゲットにならない状態(いわゆる隠密)<br>
+天狗・ぬらりひょん特性、天狗のかくれみの、隠者の聖域、絶影。<br>
+罠トークン(トラバサミ、砲撃ポイント、ミミック)は常時隠密、<br>
 なのでマーセナリーのように遠距離避雷針にできない。</li>
+<li>攻撃無効化に対する状態<br>
+シールドエフェクトの発生するアレ。<br>
+１００％無効化は真竜の覚醒、パーフェクトガードのみ。<br>
+オラクル特性、見えざる鎧、八卦の陣は確立。<br>
+罠トークンは攻撃が発生すると消えるので、無敵化の意味はない</li>
+<li>攻撃回避に対する状態<br>
+一瞬透明化するエフェクトのアレ。<br>
+１００％回避はアルタキエラのみ。<br>
+モンク・ローグ・妖狐特性、常勝の宴、見切り、忍術などは確立</li>
+<li>ＨＰが０にならない状態<br>
+神剣ティルフィング、不滅の闘魂、黒き魔獣の復讐。<br>
+爆風で死なない真の無敵。</li>
 <li>避禍予見の鏡影よりジャックランタン/帝国騎士(護衛隊)が、<br>
 身代わりトークンより復活アビが、<br>
 死亡/死亡回避より仮死が優先される<br>
-
 <ul>
 <li>魔人も身代わりトークンを消費するが、<br>
-ウェンディ、ラキュアは消費しない</li>
+ウェンディ、ラキュア、ダルクは消費しない</li>
 <li>身代わり発動時は死亡撤退アビ(ボム)は発動しない</li>
 <li>奇問遁甲より身代わりが先に反応する</li>
-<li>ウェンディ・ラキュアは、奇問遁甲で<br>配置換えできないが、神秘の聖角では可能</li>
+<li>ウェンディ・ラキュア、ダルクは、奇問遁甲で<br>
+配置換えできないが、神秘の聖角では可能</li>
 </ul></li>
-∴ 帝国出身の場合、護衛＞鏡影＞奇問遁甲 となる。
+∴ 帝国出身の場合、護衛＞鏡影＞奇問遁甲 となる。<br>
+トークンは死亡/撤退ではなく消滅。身代わりなどの対象外。<br>
+スキルで補充できるものもある。</li>
+<li>優先攻撃と特攻は異なる。バフも別々。<br>
+優先はターゲットを決めるときの条件。<br>
+優先ダメUPはターゲッティングのおまけ。<br>
+特攻ダメUPはターゲット決定後、対象の属性が参照され決まる。<br>
 </ul>
 
 <h3>■ミッション特性</h3>
@@ -342,10 +365,12 @@ HP連動と違い、配置ユニット表示ステに反映される
 <div>×</div>
 
 <div style='padding:5px; border:solid 1px #c0c; background-color:#dbd;'>
+スキルバフ（他者より）<br>
+攻防は以下４つに分かれる<br>
 <div class='i'>スキルバフ(射程内)</div>
-<div>× (HPの場合は＋)</div><div class='i'>スキルバフ(全体)</div>
-<div>× (HPの場合は＋)</div><div class='i'>スキルバフ(属性指定)</div>
-<div>× (HPの場合は＋)</div><div class='i'>スキルバフ(レア指定)</div>
+<div>× </div><div class='i'>スキルバフ(全体)</div>
+<div>× </div><div class='i'>スキルバフ(属性指定)</div>
+<div>× </div><div class='i'>スキルバフ(レア指定)</div>
 </div>
 <div>×</div><div class='i'>根性バフ</div>
 </span><span style='border:none;background-color:inherit;vertical-align:top'>＋</span>
@@ -386,11 +411,16 @@ ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と�
 ただし、他からの加算バフは自身の加算に及ばない<br>
 ex)アンナはミヤビバフを受けるが王子への加算に受けた分は乗らない</li>
 <li>編成バフは条件に合うものは全て加算。ただし、<br>
-同じもの(同名のもの)はいくつあっても１つ分しか適用されない</li>
+同じもの(同名のもの)はいくつあっても１つ分しか適用されない<br>
+初動時間短縮は、おそらく加算ではなく上書きと思われる。<br>
+結果、実装の新しいものが有効になる。<br>
+</li>
 <li>配置バフは条件に合うものは全て加算。ただし、<br>
 同じもの(同名のもの)はいくつあっても１つ分しか適用されない</li>
-<li>配置バフのうちチームはこの枠組みに入らず独立して乗算される<br>
-<li>編成バフ・配置バフ以外は各グループそれぞれで、<br>
+<li>スキルバフ(自己以外)でＨＰは条件に合うものは全て加算。ただし、<br>
+同じもの(同名のもの)はいくつあっても１つ分しか適用されない</li>
+<li>配置バフのうちチームはこの枠組みに入らず独立して乗算される</li>
+<li>その他は各グループそれぞれで、<br>
 条件に合うものから一番効果の高いものだけが適用される。</li>
 <li>チャーミィの「闇の代償」は以下の組み合わせ<br>
 　初期の攻防半減・・・－５０％の配置バフ(対象＝自分)<br>
@@ -1254,8 +1284,10 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
  [ 9,"堕天使封印解除"                   ,  0, 200, 200,     0,    200,["ソフィー"               ]],
  [ 9,"ギガブラスターモード"             ,  0, 180,   0,     0,2500000,["ウェンディ"             ]],
  [ 9,"拡散ギガブラスター"               ,  0, 170, -50,     0,2500000,["ウェンディ"             ]],
- [ 9,"一斉射撃"                         ,  0, 170,   0,     0,2000000,["イブキ"                 ]],
+ [ 9,"一斉射撃"                         ,  0, 170,   0,     0,      0,["イブキ"                 ]],
+ [ 9,"一斉射撃＋職：ドレッドノート"     ,  0, 255,   0,     0,    120,["イブキ"                 ]],
  [ 9,"大口径連装艦砲射撃"               ,  0, 300,   0,     0,2000000,["イブキ"                 ]],
+ [ 9,"大口径連装艦砲射撃＋<br>職：ドレッドノート",0,450, 0, 0,2400000,["イブキ"                 ]],
  [ 9,"妖狐覚醒"                         ,200, 200, 200,     0,      0,["カヨウ","キュウビ","イナリ"]],
  [ 9,"大炎上"                           ,  0, 200, 200,     0,      0,["カヨウ"                 ]],
  [ 9,"一尾の解放"                       ,120, 120, 120,     0,      0,["キュウビ"               ]],
@@ -1371,7 +1403,7 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
  [ 9,"防御力強化Ⅳ"                     ,  0,   0, 200,     0,      0,["ジェリウス","アリシア","コジュウロウ"]],
  [ 9,"クイックショットⅠ"               ,  0, 150,   0,     0,      0,["エリザベート","レイチェル"           ]],
  [ 9,"クイックショットⅡ"               ,  0, 190,   0,     0,      0,["エリザベート","レイチェル","オスカー"]],
- [ 9,"スレッジハンマー"                 ,400,   0,   0,     0,      0,["ミランダ"               ]],
+ [ 9,"スレッジハンマー"                 ,  0, 400,   0,     0,      0,["ミランダ"               ]],
  [ 9,"ジェットハンマー"                 ,  0, 550,   0,     0,      0,["ミランダ"               ]],
  [ 9,"リースシールド"                   ,200,   0, 200,     0,      0,["聖鈴の大盾ベルニス"     ]],
  [ 9,"黒槍重突進"                       ,  0, 260, -50,   200,      0,["ダリア"                 ]],
@@ -1422,7 +1454,8 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
  [ 9,"魔法剣・聖誕祭"                   ,  0, 150,   0,     0,    130,["聖夜の魔剣シャルロット" ]],
  [ 9,"魔法剣・大暴走"                   ,  0,   0,   0,     0,    150,["聖夜の魔剣シャルロット" ]],
  [ 9,"神罰の天弓"                       ,  0, 140,   0,     0,      0,["ミルノ"                 ]],
- [ 9,"鎮圧用散弾"                       ,  0, 140,   0,     0,2000000,["ビエラ"                 ]],
+ [ 9,"鎮圧用散弾"                       ,  0, 210,   0,     0,2000000,["ビエラ"                 ]],
+ [ 9,"鎮圧用散弾＋職：ドレッドノート"   ,  0, 315,   0,     0,2400000,["ビエラ"                 ]],
  [ 9,"ソードピストル"                   ,  0, 130,   0,     0,2000000,["リーンベル"             ]],
  [ 9,"ステルスフルショット"             ,  0, 190,   0,     0,2000000,["アメリ"                 ]],
  [ 9,"霊刀　子狐丸"                     ,250, 250, 250,     0,      0,["イナリ"                 ]],
@@ -1638,7 +1671,8 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
  [ 9,"エグゼスソード"                   ,  0, 200, 200,     0,      0,["アネモネ"               ]],
  [ 9,"ヘッドバレル"                     ,  0, 150,   0,     0,      0,["ボリス"                 ]],
  [ 9,"ハイパワーショット"               ,  0, 240,   0,     0,      0,["マリエ"                 ]],
- [ 9,"ファーストアサルト"               ,  0, 150,   0,     0,      0,["フレイ"                 ]],
+ [ 9,"ファーストアサルト"               ,  0, 220,   0,     0,2000000,["フレイ"                 ]],
+ [ 9,"ファーストアサルト＋<br>職：ドレッドノート",0,330,0,  0,2400000,["フレイ"                 ]],
  [ 9,"セイクリッドメイス"               ,  0,   0,   0,     0,    150,["エレット"               ]],
  [ 9,"ワンダーメイス"                   ,  0, 130, -50,     0,    300,["エレット"               ]],
  [ 9,"ファイアーボール"                 ,  0, 150,   0,     0,      0,["ライチ"                 ]],
@@ -1930,6 +1964,8 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
 /*16="動的バフ(優先)"*/
  [16,"射撃優先(対遠距離)"                       ,  0, 105,   0,     0,      0,["バシラ","リコラ","ヴェロッテ","カズハ" ]],
  [16,"魔法優先(対魔法)"                         ,  0, 105,   0,     0,      0,["ヴィクトリア","ダニエラ"               ]],
+ [16,"セレーネ"                                 ,  0, 160,   0,     0,      0,["ナナリー","アーシェラ","白浴衣の弓乙女ナナリー","ヴィクトリア","スピカ","ファランギース","ストレイ","シャオ","新春の弓巫女ソーマ"               ]],
+ [16,"ラピッドシューター"                       ,  0, 140,   0,     0,      0,["ナナリー","アーシェラ","白浴衣の弓乙女ナナリー","バシラ","リタ","オスカー"               ]],
 /*17="動的バフ(特攻)"*/
  [17,"対聖魔弾(対悪魔,天使)"                    ,  0, 130,   0,     0,      0,["ソシエ"                                ]],
  [17,"聖魔殲滅弾ラグナレク(対悪魔,天使)"        ,  0, 160,   0,     0,      0,["ソシエ"                                ]],
@@ -1974,6 +2010,8 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
  [17,"大剛剣ミームング(対ゴーレム)"             ,  0, 400,   0,     0,      0,["ティール"                              ]],
  [17,"封印剣ミームング(対ゴーレム)"             ,  0, 150,   0,     0,      0,["ティール"                              ]],
  [17,"アンデッドキラー(対不死)"                 ,  0, 180,   0,     0,      0,["スー","エリザベート","フラン","ルマリア","ヴィンセント","ヒューナ","海辺の彩り狩人フーリ" ]],
+ [17,"職：アドミラル(対魚人)"                   ,  0, 150,   0,     0,      0,["イブキ"                                ]],
+ [17,"職：ドレッドノート(対魚人)"               ,  0, 150,   0,     0,      0,["イブキ"                                ]],
 /*18="動的バフ(確立)"*/
  [18,"魔剣覚醒(20% or 対天使)"                  ,  0, 180,   0,     0,      0,["シビラ"                                ]],
  [18,"浄化の光(10% or 対不死)"                  ,  0, 300,   0,     0,      0,["フラメル"                              ]],
@@ -2010,15 +2048,25 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
  [20,"黒髪の勇将(ブロック時)"                   ,  0, 120,   0,     0,      0,["関羽"                                  ]],
  [20,"無双の美髪公(ブロック時)"                 ,  0, 140,   0,     0,      0,["関羽"                                  ]],
 /*99=未使用のもの*/
- [99,"回復Ⅰ"                                   ,   ,    ,    ,      ,       ,["ミーシャ","ドワイド"                            ]],
- [99,"回復Ⅱ"                                   ,   ,    ,    ,      ,       ,["キュテリ"                                       ]],
- [99,"回復Ⅲ"                                   ,   ,    ,    ,      ,       ,["キュテリ","年賀の祝盾レアン","ロアナ","クリッサ"]],
- [99,"回復Ⅳ"                                   ,   ,    ,    ,      ,       ,["クリッサ","ドラニア"                            ]],
- [99,"忍術Ⅰ"                                   ,   ,    ,    ,      ,       ,["カゲロウ"                                       ]],
- [99,"忍術Ⅲ"                                   ,   ,    ,    ,      ,       ,["サキ","アザミ"                                  ]],
- [99,"ダブルショット"                           ,   ,    ,    ,      ,       ,["ミゲル","カズハ","ストレイ","フウカ","バシラ"   ]],
- [99,"トリプルショット"                         ,   ,    ,    ,      ,       ,["バシラ","サブリナ","リオン","ナナリー"          ]],
- [99,"ラッシュ！"                               ,   ,    ,    ,      ,       ,["ダン","ジーナ","ウル"                           ]]];
+ [99,"見えざる鎧"            ,,,, ,,["ディーナ"                                       ]],
+ [99,"グレートシールド"      ,,,, ,,["ディーネ"                                       ]],
+ [99,"炎の戦槍"              ,,,, ,,["クリッサ"                                       ]],
+ [99,"極・非情の刃"          ,,,, ,,["ベルナ"                                         ]],
+ [99,"霧分身"                ,,,, ,,["シルヴィア"                                     ]],
+ [99,"サクリファイス"        ,,,, ,,["純白の花嫁カルマ"                               ]],
+ [99,"身代わりジャック"      ,,,, ,,["ミサ"                                           ]],
+ [99,"真竜の覚醒"            ,,,, ,,["ヴルム"                                         ]],
+
+
+ [99,"回復Ⅰ"                ,,,, ,,["ミーシャ","ドワイド"                            ]],
+ [99,"回復Ⅱ"                ,,,, ,,["キュテリ"                                       ]],
+ [99,"回復Ⅲ"                ,,,, ,,["キュテリ","年賀の祝盾レアン","ロアナ","クリッサ"]],
+ [99,"回復Ⅳ"                ,,,, ,,["クリッサ","ドラニア"                            ]],
+ [99,"忍術Ⅰ"                ,,,, ,,["カゲロウ"                                       ]],
+ [99,"忍術Ⅲ"                ,,,, ,,["サキ","アザミ"                                  ]],
+ [99,"ダブルショット"        ,,,, ,,["ミゲル","カズハ","ストレイ","フウカ","バシラ"   ]],
+ [99,"トリプルショット"      ,,,, ,,["バシラ","サブリナ","リオン","ナナリー"          ]],
+ [99,"ラッシュ！"            ,,,, ,,["ダン","ジーナ","ウル"                           ]]];
 
 /*
   プロパティ名がかぶってなければメンバーからグループを参照できる,name,idxはかぶってる
@@ -2562,15 +2610,15 @@ console.log("chr:"+in_a[7][i]);
          if( b.perB[m] == 0 && b.addB[m] == 0 ) continue; /*値なし*/
          for( o=0 ; o<3 ; o++ ){ /*自身,ダンサー,アンナ*/
            if( o && m !=1 && m != 2 ) continue; /*ダンサー,アンナは攻防のみ*/
-           if( o != 0 && (G[i].flg&2) != 0 ) continue; /*自己対象*/
-           if( G[i].type == TYPE_ADD ){
+           if( o != 0 && (G[i].flg&2) != 0 ) continue; /*自己強化スキルはダンサーにかからない*/
+           if( G[i].type == TYPE_ADD ){ /*ダンサーバフ*/
              if( G[i].seq+1 != o ) continue; /*ダンサーの自己バフは他にかからない*/
-             if( o != 1 && b.chkMask( flg[0] ) ==0 ) continue; /*加算バフの場合は対象でチェック*/
+             if( o != 1 && b.chkMask( flg[0] ) ==0 ) continue; /*アンア、魔獣の主人をチェック*/
            }else{
-             if( b.chkMask( flg[o] ) == 0 ) continue; /*[対象/ダンサー/アンア等]で適合チェック*/
+             if( b.chkMask( flg[o] ) == 0 ) continue; /*通常バフは[対象/ダンサー/アンア等]で適合チェック*/
            }
            k = o?(m+2+o*2):m;//01234 56 78
-           if( (G[i].flg & 4) == 0 ){ /*加算型*/
+           if( (G[i].flg & 4) == 0 || (m == 0 && G[i].type == TYPE_S_HOKA) ){ /*加算型*/
              G[i].v1[k] += b.perB[m];
              G[i].v2[k] += b.addB[m];
              if( r[r.length-1] != j*100+i ) r[r.length]=j*100+i;/*有効な加算バフINDEX*/
@@ -2588,14 +2636,14 @@ console.log("chr:"+in_a[7][i]);
    /*HPのスキルを足し合わせる*/
    for( i=0 ; i < G.length ; i++  ) if( G[i].type == TYPE_S_HOKA ) break;
    if( i < G.length  ){
-     if( G[i].v1[0] > 100 ) G[i].v1[0]-=100;/*加算分に変換*/
      for( j=i+1; j<G.length ; j++ ) if( G[j].type == TYPE_S_HOKA ){
-       G[i].v1[0] += (G[j].v1[0]>100) ? (G[j].v1[k]-100) : G[j].v1[0];
+       G[i].v1[0] += G[j].v1[0];
        G[i].v2[0] +=  G[j].v2[0];
-       G[j].v1[0]=0;
-       G[j].v2[0]=0;
+       if( G[i].v1[3] == 0 || G[i].v1[3] < G[j].v1[3] ) G[i].v1[3] = G[j].v1[3];
+       if( G[i].v2[3] == 0 || G[i].v2[3] < G[j].v2[3] ) G[i].v2[3] = G[j].v2[3];
+       G[j].v1[0] = G[j].v2[0] = G[j].v1[3] = G[j].v2[3] = 0;
      }
-     if( G[i].v1[0] ) G[i].v1[0]+=100;/*乗算分に変換*/
+     G[i].v1[0]+=100;/*乗算分に変換*/
    }
 
    /*最大値となったものをマージする*/
