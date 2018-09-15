@@ -38,7 +38,7 @@ var loopback_audio_stream  = null;
        chrome.windows.getCurrent( null, function(w){
            if( w.id != sender.tab.windowId ) return; //何故かリサイズしていないバック画面でリサイズイベントが発生する
            var rect=null;
-           if( /play\/aigis/.test(   sender.url) ) rect=[ -41, -61 ,960,640];
+           if( /play\/aigis/.test(   sender.url) ) rect=[ -44, -61 ,960,640];
            if( /play\/oshirore/.test(sender.url) ) rect=[  -3,-128,1280,720];
            if( /play\/kamipror/.test(sender.url) ) rect=[-150, -89, 960,640];
            if( /play\/kanpani/.test( sender.url) ) rect=[ -41, -61, 960,590];
@@ -128,7 +128,8 @@ var saveMedia=function(ev){
                            "maxHeight":   tab.height,
                            "minFrameRate":   29,
                            "maxFrameRate":   30
-                    }}},function(stream){
+                        }
+                    }},function(stream){
                         var atrks = stream.getAudioTracks();
                         console.log("cap-stream a:"+atrks.length+" v:"+stream.getVideoTracks().length );
                         if( atrks.length < 1 ){ setTimeout( startRec,100); return ; }
