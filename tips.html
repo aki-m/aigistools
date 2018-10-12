@@ -1,0 +1,280 @@
+﻿<html lang="ja">
+<head>
+ <META http-equiv="Content-Type" content="text/html;"  charset="UTF-8">
+ <META http-equiv="Content-Script-Type" content="text/javascript">
+ <META http-equiv="Content-Style-Type" content="text/css">
+ <title>千年戦争アイギス　いろいろメモ</title>
+
+ <style>
+h4{ margin:5px 0px 0px 0px; }
+
+table{
+ border:solid 1px blue;
+ border-collapse: collapse;
+ user-select:none;
+ -webkit-user-select:none;
+ -moz-user-select:none;
+ -ms-user-select:none;
+ -o-user-select:none;
+ cursor:default;
+}
+th,td{ padding:2px 4px; border: solid 1px #00f;  }
+table td[is="x-d"] { text-align:center; }
+
+table tr > th{ border: solid 1px #608; background:#e0d0e0; color:black; }
+table tr > td{ border: solid 1px #608; background:#f0e0f0; color:black; }
+table        { border: solid 1px #608; border-collapse: collapse;}
+center>span  { display:inline-block;}
+center>span>span,#help>center>span>div.i{ color:black; }
+center>span>span>span,#help>center>span>span>span>span>span{ background-color:#fef;}
+
+center>span span{ display:inline-block;padding:7px; border:solid 1px #c0c; background-color:#dbd;}
+center div.i{border:solid 1px #c0c; background-color:#ede; color:black; }
+ </style>
+</head>
+<body style="padding:5px; font-size:16px;position:absolute;top:0px; background:#300020;color:white;">
+<h3>■ユニット状態</h3>
+<table >
+<tr><th colspan=4>編成外</th><td>編成されずに兵舎／虫籠にいる状態</td></tr>
+<tr><th rowspan=10>編成</th><th rowspan=6>出撃</th><th colspan=2>未配置</th><td>
+デッキ（マップ下のアイコン）の状態。
+配置可能になるとハイライトされる。<br>
+再出撃スキル・アビは撤退時に未配置へ戻す</td></tr>
+
+<tr><th rowspan=5 >配置</th><th>非スキル</th><td>スキル発動の時間がきていない or[スキルOK] or スキルを使い切った状態</td></tr>
+<tr><th>スキル中</th><td>ユニットを選択すると発動中と表示される、オーラエフェクトのでている状態</td></tr>
+<tr><th>弱麻痺</th><td>防御力半減、スキル強制解除、攻撃不可</td></tr>
+<tr><th>強麻痺</th><td>弱麻痺に加え、ブロック数０</td></tr>
+
+<tr><th>仮死</th><td>HP0で死亡/撤退せず居座っている状態。
+ターゲットにならないがマス/配置数は消費。<br>
+トークンの身代わり発動中、および復活アビ</td></tr>
+<tr><th colspan=3>死亡</th><td>HP0になって居なくなり、星を落とす状態。ユニットをロストするわけではない</td></tr>
+<tr><th rowspan=3>撤退</th>
+<th colspan=2>死亡回避</th><td>HP0になって居なくなったが、スキル・アビで死亡扱いにならないもの<br></td></tr>
+<tr>
+<th colspan=2>手動撤退</th><td>配置ユニットを選択し「戦場から撤退」したもの。奇問遁甲の再出撃対象外</td></tr>
+<tr><th colspan=2>強制撤退</th><td>スキルやマップ変化で撤退したもの。再出撃とセットの為、未配置へ戻る</td></tr>
+</table>
+
+<ul>
+<li>ブッロックに対する状態(いわゆるキャッチ)<br>
+「神剣フロッティ」、ダリューン/関羽アビの条件、および神官がヒールでなく殴りだしたりするアレ。<br>
+ブロック数0と遠距離ユニットでは発生しない。</li>
+<li>遠距離攻撃の優先ターゲットになる状態(いわゆる引き付け)<br>
+助けを呼ぶ、見切り、鉄壁の挑発、魅惑の舞など。多い<br>
+遠距離敵から見て複数いた場合は不明。(後から対象になったもの？)</li>
+<li>遠距離攻撃のターゲットにならない状態(いわゆる隠密)<br>
+天狗・ぬらりひょん特性、天狗のかくれみの、隠者の聖域、絶影。<br>
+罠トークン(トラバサミ、砲撃ポイント、ミミック)は常時隠密、なのでマーセナリーのように遠距離避雷針にできない。</li>
+<li>攻撃無効化に対する状態<br>
+シールドエフェクトの発生するアレ。１００％無効化は真竜の覚醒、パーフェクトガードのみ。<br>
+オラクル特性、見えざる鎧、八卦の陣は確立。罠トークンは攻撃が発生すると消えるので、無敵化の意味はない</li>
+<li>攻撃回避に対する状態<br>
+一瞬透明化するエフェクトのアレ。１００％回避はアルタキエラのみ。<br>
+モンク・ローグ・妖狐特性、常勝の宴、見切り、忍術などは確立</li>
+<li>ＨＰが０にならない状態<br>
+神剣ティルフィング、不滅の闘魂、黒き魔獣の復讐。爆風/DOTで死なない真の無敵。</li>
+<li>避禍予見の鏡影よりジャックランタン/帝国騎士(護衛隊)が、<br>
+身代わりトークンより復活アビが、死亡/死亡回避より仮死が優先される<br>
+<ul>
+<li>魔人も身代わりトークンを消費するが、ウェンディ、ラキュア、ダルクは消費しない</li>
+<li>身代わり発動時は死亡撤退アビ(ボム)は発動しない</li>
+<li>奇問遁甲より身代わりが先に反応する</li>
+<li>ウェンディ・ラキュア、ダルクは、奇問遁甲で配置換えできないが、神秘の聖角では可能</li>
+</ul></li>
+∴ 帝国出身の場合、護衛＞鏡影＞奇問遁甲 となる。<br>
+トークンは死亡/撤退ではなく消滅。身代わりなどの対象外。スキルで補充できるものもある。</li>
+<li>優先攻撃と特攻は異なる。バフも別々。<br>
+優先はターゲットを決めるときの条件。優先ダメUPはターゲッティングのおまけ。<br>
+特攻ダメUPはターゲット決定後、対象の属性が参照され決まる。<br>
+</ul>
+
+<h3>■ターゲティング</h3>
+<table>
+<tr><th colspan=2>周囲を攻撃</th><td>周辺範囲内の条件に合うもの全てを攻撃するもの</td></tr>
+<tr><th rowspan=2>近/遠</th><th>ブロック相手を攻撃(優先:高)</th><td>先にブロックしたものから数だけ攻撃</td></tr>
+<tr><th>射程内の相手を攻撃(優先:低)</th><td>射程内の優先敵(優先が同じものは拠点に近いもの)から数だけ攻撃、<br>
+      敵側は後から配置したものを狙ってくる</td></tr>
+<tr><th colspan=2>DOT</th> <td>攻撃モーションを伴わない周囲継続ダメージ。隠密も攻撃。<br>
+     ユニットが居なくなるまで継続。たぶん身代わり発動中も攻撃。</td></tr>
+<tr><th colspan=2>十字剣</th><td>対象が特殊なもの</td></tr>
+</table><br>
+<ul>
+<li>ブロックできるのはアンデッドの一部を除く地上敵。近/遠は関係ない</li>
+<li>ユニットサイズは、おおよそ足元の影の範囲。射程範囲接触やブロックの判定で使われる。</li>
+<li>敵キャラは、「(A)攻撃準備モーションから攻撃モーションの間」は移動を止め、<br>
+「(B)攻撃後から次の攻撃準備モーションまで」は、ブロックされていなければ移動を再開する。<br>
+(A)が長く飛行でも移動を一時停止するもの：ドラゴンのブレス、フライデーモンのニードル、天馬、天狗<br>
+(A)が短く停止していないように見えるもの：ゲイザー、フルフルの眷属<br>
+(B)が短く、ほぼ動かないように見えるもの：黒ゴブ弓、ジャックランタン</li>
+<li>自キャラは、スキル攻撃操作でモーションがキャンセルされる。</li>
+</ul>
+
+<h3>■ミッション特性</h3>
+<ul>
+<li>ミッション説明に記載されているものや、(未クリア)ミッション内で説明が表示されるもの<br>
+<ul>
+<li>毒・熱・魔界などのマップ補正</li>
+<li>砂塵・豪雨・吹雪・濃霧などの天候</li>
+<li>収集アイテムの特性等。主に敵強化、地形変動</li>
+<li>ストミ＆曜日1.5倍やストミ消費半減</li>
+</ul>
+</ul>
+
+<h3>■バフ適用のタイミング</h3>
+バフは、かける側が条件・タイミング・効果を握る。<br>
+受ける側は計算時に指定条件に合うものが適用される。<br>
+<ul>
+<li><b>編成外でも常時適用</b>
+<ul>
+<li>条件の無いアビ(自己強化アビ)</li>
+<li>「兵舎、聖霊預かり所にいるだけで」「所持しているだけで」となっているアビ</li>
+<li>女神の加護(＝ショップブースト)</li>
+</ul></li>
+<li><b>編成すると適用（編成バフ）</b><br>
+<ul>
+<li>「出撃メンバーにいるだけで」等となっているアビ・クラスアビ(GG/GG+、シーフ特性等も同様)</li>
+<li>アビのうちクリア報酬UP系のもの。年賀の祝い袋,金運招来,豊穣の杖,大商人の才覚</li>
+</ul>
+ミッション開始時に適用、またはwave開始時に再計算される。(waveをまたぐ敵のHPを除く)<br>
+トークンに編成バフはかからない。(編成に居ない為)<br>
+撤退およびホリーでの復活で変化なし。(効果は継続)
+</li>
+<li><b>配置中適用（配置バフ）</b><br>
+<ul>
+<li>「配置中」等となっているアビ・クラスアビ</li>
+</ul>
+配置、死亡、撤退、消滅、回収毎に計算される。<br>
+ダンサー系は加算バフとして別枠で計算される。
+</li>
+<li><b>スキル時、スキル中適用（スキルバフ）</b><br>
+<ul>
+<li>スキル欄に記載されているもの</li>
+<li>「スキル中」等となっているアビ・クラスアビ</li>
+</ul>
+スキル発動時、終了時に計算される。<br>
+スキル時間無限は回収や麻痺で効果が切れる。<br>
+永続強化スキルはミッション中継続。
+</li>
+<li><b>ダークナイト能力（根性バフ）</b><br>
+何故かスキルと同列で扱われる酷いネーミングのバフ。<br>
+HPの増減(ダメージと回復)で計算される。<br>
+HP連動と違い、配置ユニット表示ステに反映される
+</li>
+<li><b>特定条件で適用（動的バフ）</b><br>
+<ul>
+<li>特定の敵、天候、キャッチ、確立などで発動するもの</li>
+</ul>
+主に攻防時に判断・計算されるもの。<br>
+</li>
+</ul>
+<h3>■バフ順序</h3>
+
+<center><span>
+<span>
+<span>
+<span>
+<div>対象キャラのステ表記値</div>
+<div class='i'>Lv分の能力値</div>＋
+<div class='i'>好感度ボーナス</div>＋
+<div class='i'>自己強化アピ</div></span>
+<div>×</div><div class='i'>加護・優待</div>
+<div>×</div><div class='i'>マップ補正</div>
+<div>×</div><div class='i'>編成バフ合計値</div>
+<div>×</div><div class='i'>配置バフ合計値</div>
+<div>×</div><div class='i'>配置バフ(チーム)</div>
+<div>×</div><div class='i'>スキルバフ(自己)</div>
+<div>×</div>
+
+<div style='padding:5px; border:solid 1px #c0c; background-color:#dbd;'>
+スキルバフ（他者より）<br>
+攻防は以下４つに分かれる<br>
+<div class='i'>スキルバフ(射程内)</div>
+<div>× </div><div class='i'>スキルバフ(全体)</div>
+<div>× </div><div class='i'>スキルバフ(属性指定)</div>
+<div>× </div><div class='i'>スキルバフ(レア指定)</div>
+</div>
+<div>×</div><div class='i'>根性バフ</div>
+</span><span style='border:none;background-color:inherit;vertical-align:top'>＋</span>
+
+<span style='border:none; background-color:inherit; vertical-align:top'>
+
+<div style='padding:5px; border:solid 1px #c0c; background-color:#fef;'>
+<span style='background-color:#dbd;'>
+<div>ダンザー等のステ表記値</div>
+<div class='i'>Lv分の能力値</div>＋
+<div class='i'>好感度ボーナス</div>＋
+<div class='i'>自己強化アピ</div></span>
+<div>×</div><div class='i'>加護・優待</div>
+<div>×</div><div class='i'>マップ補正</div>
+<div>×</div><div class='i'>編成バフ合計値</div>
+<div>×</div><div class='i'>配置バフ合計値</div>
+<div>×</div>
+
+<div class='i'>スキルバフ(射程内)</div>
+<div>×</div><div class='i'>スキルバフ(全体)</div>
+<div>×</div><div class='i'>スキルバフ(属性指定)</div>
+<div>×</div><div class='i'>スキルバフ(レア指定)</div>
+</div>
+
+<div>×</div><div class='i'>ダンサー補正(1/10)</div>
+<div>×</div><div class='i'>スキルバフ(ダンサー)</div>
+
+</span>
+
+</span>
+<div>×</div><div class='i'>動的バフ</div>
+</span>
+</center>
+<ul>
+<li>ダンサー等加算バフは、ダンサーへのバフまでが加味される<br>
+ex)堕姫配置にて、王子はデバフされ、アンナバフは増える<br>
+ex)ちゃん様盛る為深層行っても白黒ダンザーは半減で銀と大差ない<br>
+ただし、他からの加算バフは自身の加算に及ばない<br>
+ex)アンナはミヤビバフを受けるが王子への加算に受けた分は乗らない</li>
+<li>編成バフは条件に合うものは全て加算。ただし、<br>
+同じもの(同名のもの)はいくつあっても１つ分しか適用されない<br>
+初動時間短縮は、おそらく加算ではなく上書きと思われる。<br>
+結果、実装の新しいものが有効になる。<br>
+</li>
+<li>配置バフは条件に合うものは全て加算。ただし、<br>
+同じもの(同名のもの)はいくつあっても１つ分しか適用されない</li>
+<li>スキルバフ(自己以外)でＨＰは条件に合うものは全て加算。ただし、<br>
+同じもの(同名のもの)はいくつあっても１つ分しか適用されない</li>
+<li>配置バフのうちチームはこの枠組みに入らず独立して乗算される</li>
+<li>その他は各グループそれぞれで、<br>
+条件に合うものから一番効果の高いものだけが適用される。</li>
+<li>チャーミィの「闇の代償」は以下の組み合わせ<br>
+　初期の攻防半減・・・－５０％の配置バフ(対象＝自分)<br>
+　初回スキル時・・・・２倍の永続強化スキルバフ<br>
+「吸精の双剣」時は1.8倍(スキル中) × 2倍(永続) ＝ 3.6倍</li>
+<li>ヘレナのスキルは属性指定扱い。<br>
+<li>王子の士気高揚は無限射程の範囲スキルバフ扱い。<br>
+<li>骨はメメントスキル中は射程内スキルバフを受けれない。<br>
+グループが、属性指定なのか射程内なのかは不明<br>
+<ul>
+<li>射程内3.1倍以上のバフキャラが追加され<br>
+上書きされたら射程内、両方適用されたら属性指定</li>
+</ul></li>
+<li>ニエル、霧分身、鏡花水月、プリズムミラー、金光聖菩(分身)は女性扱い</li>
+</ul>
+<h3>■切捨て</h3>
+PCとiPhoneで値が違うらしいのではっきりしたことは言えない。<br>
+あいとりぷるいーの呪いにかかっているとそもそも追跡できない。<br>
+ということをふまえて.....(<a href='round/round.html' target='_blank'>→調査の軌跡</a>)<br>
+計算の途中で小数点以下切捨てが発生する。箇所は以下の４つ<br>
+<ul>
+<li><b>自己アビ</b><br>
+ステ表示値で、小数点以下は持っていないと思われる（推測）</li>
+<li><b>編成バフ後</b><br>
+配置バフ・スキル系バフに先立って計算され、切り捨てられる</li>
+<li><b>ダンサー系バフ前</b><br>
+ダンサーに対し各種バフ適用した後、<br>ダンサー自身のバフ適用の前で切捨てられる</li>
+<li><b>加算バフの値</b><br>
+ダンサーのバフ値は加算のタイミングでも切り捨てられる</li>
+</ul>
+<h3>■近接の射程</h3>
+
+
+</body>
