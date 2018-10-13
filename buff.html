@@ -168,7 +168,7 @@ input.chk { display:inline; background-color:#90ffcf; }
   <td is="x-d" id="out04"></td>
 </tr>
 <tr class="f" >
-  <th colspan=3 rowspan=2> ダンサー</th>
+  <th colspan=3 rowspan=2><select id="in16"></select></th>
   <td rowspan=2></td>
   <td ><input type="number" id="in11" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in12" min=0 max=9999 size=4 /></td>
@@ -2515,7 +2515,7 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
 
     for( j in uni000 ) uni000[j].name = j; 
 
-    setTimeout( function makePullList(){
+    (function makePullList(){
       var list15=new Array(uni000.length);
       var list15sz=0;
       for( j in uni000 ) list15[list15sz++]=uni000[j]; 
@@ -2536,8 +2536,15 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
         n.innerText=lbl[0][0][ list15[i].rea]+"："+list15[i].name;
         n.setAttribute("num",i);
         inobj[15].add(n);
+        if( list15[i].class == 115 ){
+          n=document.createElement("OPTION");
+          n.value=list15[i].name;
+          n.innerText=lbl[0][0][ list15[i].rea]+"："+list15[i].name;
+          n.setAttribute("num",i);
+          inobj[16].add(n);
+        }
       }
-    },100);
+    })();
 
     /*グループとメンバを組み立てる*/
     for( i=0 ; i < G.length ; i++ ) {
@@ -2857,11 +2864,11 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
  *    flg0* [レア、クラス、種族、近遠、性別、出身]
  * ret [選択されたバフINDEX*100+グループ]の配列
  */
- function calcBuffBlock(isOuji,flg00,flg01,flg02,flg03,flg04,flg05){
+ function calcBuffBlock(isOuji,flg00,flg01,flg02,flg03,flg04,flg05 ,flg06,flg07,flg08,flg09,flg10,flg11){
    var i,j,k,o,m,b;
    var r=[];
    var flg = [ [flg00,flg01,flg02,flg03,flg04,flg05],/*対象                                */
-               [5,115,1,1,0,0],                      /*ダンサー。ミヤビは6だが気にしない   */
+               [flg06,flg07,flg08,flg09,flg10,flg11],/*ダンサー。ミヤビは6だが気にしない   */
               [[0,  0,0,0,0,0],                      /*その他                              */
                [6,100,1,1,0,0],                      /*王子  のときはアンナ      でバフ計算*/
                [5,130,1,1,0,0],                      /*火エレのときはロレッタ    でバフ計算*/
@@ -2876,12 +2883,12 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
      for( j=G[i].v2.length; --j >= 0 ;) G[i].v2[j]=0;/*initialize*/
      if( flg01 == 202 && G[i].type == TYPE_ADD && G[i].seq == 1 ) G[i].v1[7]=G[i].v1[8]=-100; /*魔獣で加算バフは0倍スタート*/
      for( j=0 ; j < G[i].member.length ; j++ ){
-       if( flg01 >= 200 && G[i].type == TYPE_HENSEI ) continue; /*トークンに編成バフは乗らない*/
        b=G[i].member[j];
        if( ! b.bon ) continue; /*非選択*/
        for( m=0 ; m<5 ; m++ ){
          if( b.perB[m] == 0 && b.addB[m] == 0 ) continue; /*値なし*/
          for( o=0 ; o<3 ; o++ ){ /*自身,ダンサー,アンナ*/
+           if( o == 0 && flg01 >= 200 && G[i].type == TYPE_HENSEI ) continue; /*トークンに編成バフは乗らない*/
            if( o && m !=1 && m != 2 ) continue; /*ダンサー,アンナは攻防のみ*/
            if( o != 0 && (G[i].flg&2) != 0 ) continue; /*自己強化スキルはダンサーにかからない*/
            if( G[i].type == TYPE_ADD ){ /*ダンサーバフ*/
@@ -3041,7 +3048,10 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
   * 更新メイン
   */
   function doUpdate(uodateChar){
-    var i,j,v,teams,outv,wk,flg00,flg01,flg02,flg03,flg04,flg05;
+    var i,j,v,teams,outv,wk;
+    var flg00,flg01,flg02,flg03,flg04,flg05; //レア、クラス、種族、近遠、性別、出身 ： 本人
+    var flg06,flg07,flg08,flg09,flg10,flg11; //レア、クラス、種族、近遠、性別、出身 ： ダンサー
+
     /*選択連動をさきに更新(ステ値)*/
     if( uodateChar && uodateChar.stat.length == 5 ){
         v = [ uodateChar.stat[0],
@@ -3085,12 +3095,19 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
       flg04 = inobj[ 9].getV()  ;
       flg05 = inobj[10].getV()  ;
     }
- 
+    wk = uni000[inobj[16].getV()];
+    flg06 = wk.rea;
+    flg07 = wk.class;
+    flg08 = wk.type;
+    flg09 = wk.flg & 1;
+    flg10 = (wk.flg &  6)/2;
+    flg11 = (wk.flg & 24)/8;
+
     /*バフ計算*/
     wk=(v[13]==0&&v[14]==0)?0:(flg00 == 6 && flg01 == 0 && flg02 == 1 && flg03 == 0 && flg04 == 1 && flg05 == 0)?1:
          (flg01 >= 212 && flg01 <=216)?(flg01-210):(flg01 == 202)?7:0; //isOuji/elemental/maju
     teams = calcTeams(     wk,       /*編成を求める*/
-             calcBuffBlock(wk,flg00,flg01,flg02,flg03,flg04,flg05)); /*ブロックのバフ値を求める*/
+             calcBuffBlock(wk,flg00,flg01,flg02,flg03,flg04,flg05 ,flg06,flg07,flg08,flg09,flg10,flg11 )); /*ブロックのバフ値を求める*/
     outv  = calcBuffer(    wk,v);
  
     inobj[13].visibility=wk?"visible":"hidden";
@@ -3272,104 +3289,6 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
     return r;
   }
 
-/*
-  function getMAX( in_char,in_type,isOtherStatus ){
-    var i,j;
-    var flg0 = [  in_char.rea       
-               ,  in_char.class     
-               ,  in_char.type      
-               , (in_char.flg& 1)   
-               , (in_char.flg& 2)/2 
-               , (in_char.flg&12)/4 ];
-    var v = [ in_char.stat[(isOtherStatus && in_char.stat>=9)?5:0],
-              in_char.stat[(isOtherStatus && in_char.stat>=9)?6:1],
-              in_char.stat[(isOtherStatus && in_char.stat>=9)?7:2],
-              in_char.stat[(isOtherStatus && in_char.stat>=9)?8:3],
-              in_char.stat[(isOtherStatus && in_char.stat>=9)?9:4],
-              inobj[11].getV() /1,
-              inobj[12].getV() /1,
-              inobj[13].getV() /1,
-              inobj[14].getV() /1];
-
-    inobj[ 0].setV( v[0]    );
-    inobj[ 1].setV( v[1]    );
-    inobj[ 2].setV( v[2]    );
-    inobj[ 3].setV( v[3]    );
-    inobj[ 4].setV( v[4]    );
-    inobj[ 5].setV( flg0[0] );
-    inobj[ 6].setV( flg0[1] );
-    inobj[ 7].setV( flg0[2] );
-    inobj[ 8].setV( flg0[3] );
-    inobj[ 9].setV( flg0[4] );
-    inobj[10].setV( flg0[5] );
-    for( i=0 ; i<G.length ; i++ ) for( j=0 ; j<G[i].member.length ; j++ ) G[i].member[j].bon =0; //clear
-
-    var max=-1;
-    var maxset=null;
-    var bg=function(){
-      var k,l,n,teams,outv,scan_rec,b;
-      var i=0;
-      var j=-1;
-      var non=-1;
-      var maxnon=-1;
-      while(true){
-        j++;
-        if( j >= G[i].member.length ){
-          i++;
-          if( i >= G.length ) break;
-          j=-1;
-          continue;
-        }
-        b=G[i].member[j];
-        if( b.bon == 1){b.bon = 0; non--; continue; } //繰り上がり
-        if( b.perB[in_type] == 0 && b.addB[in_type] == 0 ) continue;
-        if( G[i].flg & 1 ){ //single
-          for( k=j+1 ; k < G[i].member.length && G[i].member[k].bon == 0; k++ );
-          if( k < G[i].member.length ) continue;
-        }
-        if( G[i].flg & 2 ){ //連動
-          for( k=0 ; k < G[i].member[j].chr.length && in_char != G[i].member[j].chr[k] ;k++);
-          if( k >= G[i].member[j].chr.length ) continue;
-        }
-        if( b.chkMask( flg0 ) == 0 ) continue; //限定時の対象でない
-
-        G[i].member[j].bon = 1; non++;
-        if( non >= maxnon ){ maxnon=non; break; }
-      }
-
-      if( i >= G.length ){
-        for( i=0 ; i<G.length ; i++ ) for( j=0 ; j<G[i].member.length ; j++ ) G[i].member[j].bon =0; //clear
-        for( i=0 ; i<maxset.length ; i++ ) maxset[i].bon=1;
-        doUpdate(null);
-        return;
-      }
-      //バフ計算
-      scan_rec = calcBuffBlock(flg0); //ブロックのバフ値を求める
-      outv = calcBuffer(flg0,v);//計算
-console.log("["+i+","+j+"]v="+outv[10+in_type]+" ,max="+max);
-      if( max >= outv[10+in_type] ){ setTimeout(bg,0); return; }
-
-      teams = calcTeams( scan_rec, flg0 );
-      for( k=0 ; k < teams.length ; k++ ){
-        if( Object.keys(teams[k]).length > 15 ) continue;
-        n=0; for( l in teams[k] ) if( teams[k][l] == 2 ) n++;
-        if( n > 12 ) continue;
-        break;
-      }
-      if( k >= teams.length ){
-console.log("["+i+","+j+"]out of num:"+Object.keys(teams[0]).length+","+outv);
-        setTimeout(bg,0);
-        return; //人数オーバー
-      }
-
-      max=outv[10+in_type];
-      maxset=getSelects();
-      setTimeout(bg,0);
-    }
-    bg();
-  }
-*/
-
   document.body.onload=function b_onload(olev){
     var j;
     j=location["search"];
@@ -3392,23 +3311,35 @@ console.log("["+i+","+j+"]out of num:"+Object.keys(teams[0]).length+","+outv);
   };
 
   document.body.addEventListener( "change", function b_change(ev){
-    if( ev.target.id == "in06" ){
-      if( ev.target.getV() < 100 ){ /* 近接職 */
-        inobj[ 8].setV( 0 );
-      }else if( ev.target.getV() < 200 ){ /* 遠距離職 */
-        inobj[ 8]/setV( 1 );
-      }else{ /*<="トークン選択時" */
-        inobj[ 7].setV( 0 );
-        inobj[ 8].setV( (ev.target.getV()>=300)?1:0);
-        inobj[ 9].setV( 2 );
-        inobj[10].setV( 0 );
-      }
+    switch( ev.target.id ){
+      case "in06": /*クラス選択*/
+        if( ev.target.getV() < 100 ){ /* 近接職 */
+          inobj[ 8].setV( 0 );
+        }else if( ev.target.getV() < 200 ){ /* 遠距離職 */
+          inobj[ 8]/setV( 1 );
+        }else{ /*<="トークン選択時" */
+          inobj[ 7].setV( 0 );
+          inobj[ 8].setV( (ev.target.getV()>=300)?1:0);
+          inobj[ 9].setV( 2 );
+          inobj[10].setV( 0 );
+        }
+        doUpdate(null);
+        break;
+      case "in07": /*種族選択*/
+        doUpdate(null);
+        break;
+      case "in15": /*名前で表示をしぼりこみ*/
+        filterName(ev.target.getV());
+        inobj[15].setV( "default" );
+        break;
+      case "in16": /*ダンサー*/
+        if(uni000[ev.target.getV()].stat[1]) inobj[11].setV( uni000[ev.target.getV()].stat[1] );
+        if(uni000[ev.target.getV()].stat[2]) inobj[12].setV( uni000[ev.target.getV()].stat[2] );
+        doUpdate(null);
+        break;
+      default:  /*復活の呪文*/
+        break;
     }
-    if( ev.target == inobj[15] ){
-      filterName(ev.target.getV());
-      inobj[15].setV( "default" );
-    }
-    if( ev.target.id != "in20" ) doUpdate(null);
   });
 
   function cancelEv(ev){
