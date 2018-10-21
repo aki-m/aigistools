@@ -68,16 +68,18 @@ table td[is="x-d"] { text-align:center; }
 #xt tr.on  > td.REA3, #t.m tr.on   > td.REA3{ background:#9fd; color:black;  }
 #xt tr.on  > td.REA2, #t.m tr.on   > td.REA2{ background:#9fd; color:black;  }
 
-#t tr   > th    { background-color: #005aa5; color:white; font: bold normal 18px cursive; text-shadow: 2px 2px 3px #000404; }
-#t tr.f > th    { border-bottom:solid 1px blue; text-shadow:none; text-align:center; font-size:10pt;}
-#t tr.f > th.csw{ background-color: #005aa5; color:white; font: bold normal 18px cursive;}
-#t tr   span.ssw{background-color: #005aa5; color:white; text-shadow: 2px 2px 3px #000404; padding: 0px 5px; font: bold normal 18px cursive;}
-#t tr.t > th    { background-color: #fd6;    color:#632;  blue; text-shadow:none; border:none; position:relative; }
-#t tr.t > th.csw{ background-color: #005aa5; color:white; font: bold normal 18px cursive;}
-#t tr.f > td .h { background-color: #005aa5; color:white;  padding: 0px 5px; text-align:left; vertival-align:middle; font:bold normal 10pt cursive; }
-#t tr.t > td    { background-color: #fed;    color:black; font: 600 normal 20px cursive; }
-#t tr>th>span.x-b { display:inline-block; position:absolute; top:0px; bottom:0px; left:0px; right:0px;}
-#t tr>th>span.x-b>input{ width:90% }
+#t tr   > th                { background-color: #005aa5; color:white; font: bold normal 18px cursive; text-shadow: 2px 2px 3px #000404; white-space:nowrap; }
+#t tr.f > th                { border-bottom:solid 1px blue; text-shadow:none; text-align:center; font-size:10pt;}
+#t tr.f > th.vert           { position:relative; }
+#t tr.f > th.vert> span     { background-color: #005aa5; color:white; font-size:10pt; top:0px; left:0px; bottom: 0px; position:absolute; white-space:nowrap;
+                              writing-mode:vertical-lr; -webkit-writing-mode:vertical-lr; -ms-writing-mode:vertical-lr; text-align:center;   }
+#t tr              span.ssw { background-color: #005aa5; color:white; text-shadow: 2px 2px 3px #000404; padding: 0px 5px; font: bold normal 18px cursive;}
+#t tr.t > th                { background-color: #fd6;    color:#632;  blue; text-shadow:none; position:relative; text-align:left; }
+#t tr.f > td .h             { background-color: #005aa5; color:white;  padding: 0px 5px; text-align:left; vertival-align:middle; font:bold normal 10pt cursive; }
+#t tr.t > td                { background-color: #fed;    color:black; font: 600 normal 20px cursive; }
+#t tr   > th     > span.x-b { background-color:inherit; display:inline-block; position:absolute; top:0px; bottom:0px; left:0px; right:0px;}
+#t tr   > th     > span.x-b>input{ background-color:#007cc7; width:90% }
+#t tr   > th     > span.x-b>input.bon{ background-color:#80ffff; }
 #help table tr > th{ border: solid 1px #608; background:#e0d0e0; }
 #help table tr > td{ border: solid 1px #608; background:#f0e0f0; }
 #help table        { border: solid 1px #608; border-collapse: collapse;}
@@ -116,8 +118,8 @@ input[type="button"] {
  -o-user-select: none;
 }
 input.bon { background-color: #ff4; }
-input.chk { display:inline; background-color:#90ffcf; }
-#in15{ background:inherit; }
+#in15{ background:inherit; color:inherit; text-shadow:inherit; font:bold normal 11px cursive;
+       position:absolute; bottom:0px; left:0px; border:solid 1px #ffffc0; padding:0px; }
 
  </style>
 </head>
@@ -129,13 +131,9 @@ input.chk { display:inline; background-color:#90ffcf; }
 
 
 <tr class="f"><!--
-  --><th nowrap rowspan=4 ><span style="writing-mode:vertical-lr; text-align:center; font-size:10pt">対象ユニット</span></th><!--
-  --><td nowrap colspan=2 style="border-bottom:none; "><select id="in17"></select>または</td><!--
-  --><th style="position:relative"><span class="x-b" id="in18" value=1><input type="button" value="ＨＰ" class="bon"></span></th><!--
-  --><th style="position:relative"><span class="x-b" id="in19" value=1><input type="button" value="攻撃" class="bon"></span></th><!--
-  --><th style="position:relative"><span class="x-b" id="in20" value=1><input type="button" value="防御" class="bon"></span></th><!--
-  --><th style="position:relative"><span class="x-b" id="in21" value=1><input type="button" value="魔耐" class="bon"></span></th><!--
-  --><th style="position:relative"><span class="x-b" id="in22" value=1><input type="button" value="射程" class="bon"></span></th><!--
+  --><th rowspan=4 class="vert"><span>対象ユニット</span></th><!--
+  --><td colspan=2 style="border-bottom:none; "><select id="in17"></select>または</td><!--
+  --><th colspan=5 >上段：ステ値、下段：計算値</td><!--
   --><td rowspan=10 style="position:relative"><div id="out09"style="position:absolute; left:0px; top:0px; bottom:0px; right:0px; overflow-y:scroll;" ></div></td><!--
 --></tr><!--
 
@@ -171,10 +169,8 @@ input.chk { display:inline; background-color:#90ffcf; }
   <td is="x-d" id="out04"></td>
 </tr>
 <tr class="f" >
-  <th rowspan=2 nowrap style="position:relative;"><span style="position:absolute; top:0px; left:0px; bottom: 0px; background-color:#005aa5; writing-mode:vertical-lr; text-align:center; font-size:10pt">ダンサー</span></th>
-  <td rowspan=2 style="border-right:0px;"></td>
-  <td rowspan=2 style="border-left:0px;"><select id="in16"></select>
-  </td>
+  <th rowspan=2 class="vert"><span>ダンサー</span></th>
+  <td rowspan=2 colspan=2 style="text-align:center;"><select id="in16"></select></td>
   <td rowspan=2></td>
   <td ><input type="number" id="in11" min=0 max=9999 size=4 /></td>
   <td ><input type="number" id="in12" min=0 max=9999 size=4 /></td>
@@ -185,9 +181,8 @@ input.chk { display:inline; background-color:#90ffcf; }
   <td is="x-d" id="out06"></td>
 </tr>
 <tr class="f" >
-  <th rowspan=2 nowrap style="position:relative"><span style="position:absolute;top:0px; left:0px; bottom:0px; background-color:#005aa5; writing-mode:vertical-lr; text-align:center; font-size:10pt">政務官<br>精霊使い<br>魔物使い</span></th>
-  <td rowspan=2 style="border-right-width:0px;"></td>
-  <td rowspan=2 style="border-left-width:0px;"><span id="out20" ></span></td>
+  <th rowspan=2 class="vert"><span>政務官<br>精霊使い<br>魔物使い</span></th>
+  <td rowspan=2 colspan=2 style="text-align:center;"><span id="out20" ></span></td>
 
   <td rowspan=2></td>
   <td ><input type="number" id="in13" min=0 max=9999 size=4 /></td>
@@ -199,16 +194,15 @@ input.chk { display:inline; background-color:#90ffcf; }
   <td is="x-d" id="out08"></td>
 </tr>
 <tr class="t">
-  <th colspan=2 rowspan=2 style="position:relative; text-align:left;"><!--
+  <th colspan=3 rowspan=2 ><!--
       --><span  class="ssw" >★</span><!--
-      --><span style="white-space:nowrap; font-size:12px;">☜全バフ表示</span><br><!--
-      --><span style="white-space:nowrap; position:absolute; left:0px; bottom: 0px; font-size:11px;">☟非表示/表示戻し(■:一括)(±÷:個別)</span>
+      --><span style="position:absolute; right:10px">バフ後</span><!--
+      --><span style="font-size:12px;">☜全バフ表示</span><br><!--
+      --><span style="position:absolute; left:0px; bottom: 0px; font-size:11px;">☟表示折畳み(■:一括)(±÷:個別)</span>
 
-    <select id="in15" style="position:absolute; bottom:0px; left:0px; white-space:nowrap; border:solid 1px #ffffc0; padding:0px; font-size:12px; display:none"></select>
 
-  </th>
-  <th nowrap rowspan=2 style="position:relative">バフ後
-    <span style="position:absolute; right:0px; bottom:0px; white-space:nowrap; font-size:12px">(確立等込み)<span>
+
+    <span style="position:absolute; right:0px; bottom:0px; font-size:12px">(確立等込み)<span>
 </th>
   <td is="x-d" id="out10"></td>
   <td is="x-d" id="out11"></td>
@@ -227,14 +221,16 @@ input.chk { display:inline; background-color:#90ffcf; }
 
 <tr>
  <th class="csw" style="font-siz:16px; ">■</th>
- <th nowrap>キャラ</th>
- <th nowrap>アビ・スキル</th>
- <th style="min-width:88px;">ＨＰ</th>
- <th style="min-width:88px;">攻撃</th>
- <th style="min-width:88px;">防御</th>
- <th style="min-width:88px;">魔耐</th>
- <th style="min-width:88px;">射程</th>
- <th style="min-width:218px;">条件</th>
+ <th style="position:relative" >
+    <select id="in15"></select>
+ </th>
+ <th nowrap>アビ・スキル</th><!--
+  --><th style="min-width:88px;position:relative"><span class="x-b" id="in18" value=1><input type="button" value="■ ＨＰ" class="bon"></span></th><!--
+  --><th style="min-width:88px;position:relative"><span class="x-b" id="in19" value=1><input type="button" value="■ 攻撃" class="bon"></span></th><!--
+  --><th style="min-width:88px;position:relative"><span class="x-b" id="in20" value=1><input type="button" value="■ 防御" class="bon"></span></th><!--
+  --><th style="min-width:88px;position:relative"><span class="x-b" id="in21" value=1><input type="button" value="■ 魔耐" class="bon"></span></th><!--
+  --><th style="min-width:88px;position:relative"><span class="x-b" id="in22" value=1><input type="button" value="■ 射程" class="bon"></span></th><!--
+  --><th style="min-width:218px;">条件</th>
 </tr>
 
 </table>
@@ -513,7 +509,7 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
 "アンジェリーネ":{        rea:7, class:5  , type:1 , flg:0+0+8, stat:[2903, 917, 686,25,  0   ] },
 "シルヴィア":{            rea:7, class:5  , type:8 , flg:0+0+0, stat:[5187, 810, 894,15,  0   ] },
 "純白の花嫁カルマ":{      rea:7, class:5  , type:8 , flg:0+0+0, stat:[5040,1011, 478,10,  0   ] },
-"南瓜祭の花嫁カルマ":{    rea:7, class:5  , type:8 , flg:0+0+0, stat:[                        ] },
+"南瓜祭の花嫁カルマ":{    rea:7, class:5  , type:8 , flg:0+0+0, stat:[5586,1044, 458,15,  0   ] },
 "ミサ":{                  rea:7, class:5  , type:0 , flg:0+0+0, stat:[4455, 863, 770,25,  0   ] },
 "アマンダ":{              rea:7, class:6  , type:1 , flg:0+0+0, stat:[5544,1475, 220, 0,  0   ] },
 "ドラニア":{              rea:7, class:7  , type:2 , flg:0+2+0, stat:[1820, 325, 390, 0,  0   ] },
@@ -705,7 +701,7 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
 "リシェルテ":{            rea:6, class:26 , type:1 , flg:0+0+0, stat:[3395, 816, 401, 0,  0] },
 "アリシア":{              rea:6, class:27 , type:1 , flg:0+0+0, stat:[                     ] },
 "ネフティ":{              rea:6, class:27 , type:1 , flg:0+0+24,stat:[                     ] },
-"ファー":{                rea:6, class:28 , type:11, flg:0+0+0, stat:[3164, 742,1288,10,  0] },
+"ファー":{                rea:6, class:28 , type:11, flg:0+0+0, stat:[3795, 884,1680,10,  0] },
 "太公望":{                rea:6, class:28 , type:11, flg:0+0+0, stat:[                     ] },
 "竜吉公主":{              rea:6, class:28 , type:11, flg:0+0+0, stat:[                     ] },
 "バロウス":{              rea:6, class:29 , type:7 , flg:0+0+0, stat:[4490, 684, 400,20,  0] },
@@ -2573,7 +2569,7 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
           inobj[16].add(n);
         }
       }
-      inobj[15].innerHTML="<option value='default'>名前で表示を絞り込み</option>"+v;
+      inobj[15].innerHTML="<option value='default'>キャラ(かける側)</option>"+v;
       inobj[17].innerHTML="<option value='default'>計算対象ユニ</option>"+v;
     })();
 
@@ -3386,14 +3382,15 @@ PCとiPhoneで値が違うらしいのではっきりしたことは言えない
         if( e.target.parentNode.className == "x-b" ){
           if( e.target.parentNode.getAttribute("type") == "radio" ){
             e.target.parentNode.setV( e.target.getAttribute("num")/1 );
+            if( inobj[17].getV() != "default" ){
+              inobj[17].setV("default");
+            }else{
+              openUniq( -1 );
+              doUpdate(null);
+            }
           }else{ /*rotate-toggle*/
             e.target.parentNode.setV( e.target.parentNode.getV()+1 );
-          }
-          if( inobj[17].getV() != "default" ){
-            inobj[17].setV("default");
-          }else{
             openUniq( -1 );
-            doUpdate(null);
           }
           break;
         }
