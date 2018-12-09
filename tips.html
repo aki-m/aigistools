@@ -282,12 +282,69 @@ HPの増減(ダメージと回復)で計算される。<br>
 <ul><li>配置バフで最も効果の高いもの</li><li>他(アビ、クラスアビ、スキル)で最も効果の高いもの</li></ul>
 </li>
 <li>攻撃回避に対する状態<br>
-一瞬透明化するエフェクトのアレ。<br>
-1攻撃で以下２つがそれぞれ判定される(推測)
+一瞬透明化するエフェクトのアレ。以下、人様の検証からの推測。<br>
 <ul>
-<li>自キャラ能力での回避(スキル・アビ・職アビの合計)</li>
-<li>他キャラ能力での回避(範囲・全体)で最も効果の高いもの</li>
+<li>100%回避をもつユニットは別枠判定、その影響で<br>
+花嫁リンネの未覚醒スキルも別枠側扱いになっていると思われる。</li>
+<li>明鏡止水＆飛燕の舞は加算だが、フェイの範囲内では片方が上書きされる。<br>
+イナリ、ベストラ、リーザ、おそらくシプリアの天輪撃も同じと思われる。</li>
+<li>たぶん、リリカは(グループの)設定をミスってる。</li>
 </ul>
+<table>
+<tr><th rowspan=8>(A)</th>
+    <td>オリヴィエ</td><td>自身　　　　　</td><td>スキル</td><td>聖剣アルタキエラ　　</td><td>１００％</td></tr>
+<tr><td>セーラ　　</td><td>自身　　　　　</td><td>スキル</td><td>宮廷槍斧術・攻守の型</td><td>１００％</td></tr>
+<tr><td>セブン　　</td><td>自身　　　　　</td><td>スキル</td><td>不意打ち　　　　　　</td><td>１００％</td></tr>
+<tr><td>ミヤビ　　</td><td>自身　ひきつけ</td><td>スキル</td><td>舞巫女の守護霊　　　</td><td>１００％</td></tr>
+<tr><td rowspan=2>紅牡丹　　</td><td rowspan=2>自身　ひきつけ</td><td rowspan=2>スキル</td><td>必見大立ち回り</td><td>１００％</td></tr>
+<tr><td>秘舞　赤獅子　　　　</td><td>１００％</td></tr>
+<tr><td rowspan=2>花嫁リンネ</td><td rowspan=2>範囲内</td><td rowspan=2>スキル</td><td>刻詠の祝詞</td><td>　５０％</td></tr>
+<tr><td>永年の祈り　　　　　</td><td>１００％</td></tr>
+<tr><td colspan=6 style="background-color:inherit; color:inherit">↑↓どちらか大きい方</td></tr>
+<tr><th rowspan=11>(B)</th>
+    <td>ベストラ</td><td>自身　</td><td>スキル</td><td>ステップラッシュ　</td><td>２０％　　　</td></tr>
+<tr><td>シプリア</td><td>自身　</td><td>スキル</td><td>我流操槍術・天輪撃</td><td>４０％　　　</td></tr>
+<tr><td>ミーシャ</td><td>自身　</td><td>アビ　</td><td>物理攻撃回避　　　</td><td>３０％　　　</td></tr>
+<tr><td>ロロネ　</td><td>自身　</td><td>アビ　</td><td>物理攻撃回避　　　</td><td>３０％　　　</td></tr>
+<tr><td>イロハ　</td><td>自身　</td><td>アビ　</td><td>物理攻撃回避　　　</td><td>３０％　　　</td></tr>
+<tr><td>サンドラ</td><td>自身　</td><td>アビ　</td><td>物理攻撃回避　　　</td><td>３０％　　　</td></tr>
+<tr><td>ワルツ　</td><td>自身　</td><td>アビ　</td><td>ミラージュダンス　</td><td>５０％　　　</td></tr>
+<tr><td>シュウカ</td><td>自身　</td><td>アビ　</td><td>飛燕の舞　　　　　</td><td>３０％　　　</td></tr>
+<tr><td>イナリ　</td><td>自身　</td><td>アビ　</td><td>狐化かし　　　　　</td><td>２５％　　　</td></tr>
+<tr><td>リーザ　</td><td>自身　</td><td>アビ　</td><td>クイックステップ　</td><td>１５、３０％</td></tr>
+<tr><td>リリカ　</td><td>自身　</td><td>職特性</td><td>魔導操殻【封緘】　</td><td>７０％　　　</td></tr>
+<tr><th colspan=6>＋</td></tr>
+<tr><th rowspan=29>(C)</th>
+    <td>リズリー　　</td><td>範囲内　　　　</td><td>スキル</td><td>ミスディレイション</td><td>５０％　　　</td></tr>
+<tr><td>フェイ　　　</td><td>範囲内　　　　</td><td>スキル</td><td>刻詠の業　　　　　</td><td>３０～５０％</td></tr>
+<tr><td rowspan=2>リンネ</td><td rowspan=2>範囲内</td><td rowspan=2>スキル</td><td>刻詠の業　　　　　</td><td>３０～５０％</td></tr>
+<tr><td>刻詠の宿業　　　　</td><td>３０％　　　</td></tr>
+<tr><td rowspan=2>サーシャ</td><td rowspan=2>範囲内</td><td rowspan=2>スキル</td><td>幻惑の秘術　　　　</td><td>５０％？　　</td></tr>
+<tr><td>アクセルミラージュ</td><td>５０％？　　</td></tr>
+<tr><td rowspan=2>ティアル</td><td rowspan=2>自身</td><td rowspan=2>スキル</td><td>フライトモード　　</td><td>４０％　　　</td></tr>
+<tr><td>ガンシップモード　</td><td>３０％　　　</td></tr>
+<tr><td>シュウカ　　</td><td>自身　　　　　</td><td>スキル</td><td>明鏡止水　　　　　</td><td>３０％　　　</td></tr>
+<tr><td>ロザリー　　</td><td>自身　　　　　</td><td>スキル</td><td>心眼　　　　　　　</td><td>５０％　　　</td></tr>
+<tr><td rowspan=2>アカネ</td><td rowspan=2>自身</td><td rowspan=2>スキル</td><td>心眼　　　　　　　</td><td>５０％　　　</td></tr>
+<tr><td>神速抜刀術　　　　</td><td>９０％　　　</td></tr>
+<tr><td>ヒナ　　　　</td><td>自身　　　　　</td><td>スキル</td><td>忍法・ヒナ分身の術</td><td>５０％　　　</td></tr>
+<tr><td>ナキア　　　</td><td>自身　ひきつけ</td><td>スキル</td><td>常闇の宴　　　　　</td><td>９０％　　　</td></tr>
+<tr><td>チグリ　　　</td><td>自身　ひきつけ</td><td>スキル</td><td>見切り　　　　　　</td><td>６０～８０％</td></tr>
+<tr><td>ピッキー　　</td><td>自身　ひきつけ</td><td>スキル</td><td>見切り　　　　　　</td><td>６０～８０％</td></tr>
+<tr><td rowspan=2>チズル</td><td rowspan=2>自身　ひきつけ</td><td rowspan=2>スキル</td><td>見切り　　　　　　</td><td>６０～８０％</td></tr>
+<tr><td>我流　真空剣　　　</td><td>８０％　　　</td></tr>
+<tr><td>シルヴィア　</td><td>自身　　　　　</td><td>アビ　</td><td>霧化　　　　　　　</td><td>５０％　　　</td></tr>
+<tr><td>エデン　　　</td><td>自身　　　　　</td><td>アビ　</td><td>霧化　　　　　　　</td><td>５０％　　　</td></tr>
+<tr><td>ジュリア　　</td><td>自身　　　　　</td><td>アビ　</td><td>ゴージャスドレス　</td><td>５０％　　　</td></tr>
+<tr><td rowspan=2>水着エレイン</td><td rowspan=2>自身</td><td rowspan=2>アビ</td><td>騎兵服[夏仕様]　　</td><td>５０％　　　</td></tr>
+<tr><td>渚の我儘騎兵　　　</td><td>５０％　　　</td></tr>
+<tr><td>　　　　　　</td><td>自身　　　　　</td><td>職特性</td><td>ナイトアサシン　　</td><td>６０％　　　</td></tr>
+<tr><td>　　　　　　</td><td>自身　　　　　</td><td>職特性</td><td>他ローグ系　　　　</td><td>５０％　　　</td></tr>
+<tr><td>　　　　　　</td><td>自身　　　　　</td><td>職特性</td><td>モンク系　　　　　</td><td>５０％　　　</td></tr>
+<tr><td>　　　　　　</td><td>自身　　　　　</td><td>職特性</td><td>妖狐系　　　　　　</td><td>５０％　　　</td></tr>
+<tr><td>　　　　　　</td><td>自身　　　　　</td><td>職特性</td><td>グリフォン系　　　</td><td>５０％　　　</td></tr>
+<tr><td>　　　　　　</td><td>自身　　　　　</td><td>職特性</td><td>ケットシー　　　　</td><td>９０％　　　</td></tr>
+<tr><td colspan=6>その他</td></tr></table>
 </li>
 <li>ＨＰが０にならない状態<br>
 神剣ティルフィング、不滅の闘魂、黒き魔獣の復讐。<br>爆風/DOTで死なない真の無敵。</li>
@@ -309,7 +366,8 @@ HPの増減(ダメージと回復)で計算される。<br>
 <tr><th colspan=2>周囲を攻撃するタイプ</th><td>周辺範囲内の条件に合うもの全てを攻撃するもの</td></tr>
 <tr><th rowspan=2>通常<br>タイプ<br>(近/遠)</th><th>ブロック相手を攻撃(優先:高)</th><td>先にブロックしたものから数だけ攻撃</td></tr>
 <tr><th>射程内の相手を攻撃(優先:低)</th><td>射程内の優先敵(優先が同じものは拠点に近いもの)から<br>
-      数だけ攻撃、敵側は後から配置したものを狙ってくる</td></tr>
+      数だけ攻撃、ヒールは一番体力の少ない者になる。<br>
+      敵側は後から配置したものを狙ってくる</td></tr>
 <tr><th colspan=2>継続攻撃タイプ</th> <td>デモサモ、鼠、アモンなどの攻撃モーションを伴わない<br>
      DOTダメージ。射程内なら地上、空中、隠密も攻撃。<br>
      麻痺中も攻撃、たぶん身代わり発動中も攻撃。<br>
