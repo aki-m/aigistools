@@ -148,8 +148,8 @@ input.bon { background-color: #ff4; }
   </tr><tr class="f">
   <td nowrap  colspan=2 style="border-top:none; border-bottom:none; position:relative;">
     <span style="position:absolute; left:0px; top:0px; text-align:left">
-          <select id="in07"></select>
-          <span class="x-b" id="in08" type="radio"></span>
+          <select id="in07"></select><!-- 種族 -->
+          <span class="x-b" id="in08" type="radio"></span><!-- 遠近 -->
     </span>
     <span id="in23" class="ssw" style="position:absolute; top:0px; right:0px;">⇔</span>
   </td>
@@ -162,9 +162,10 @@ input.bon { background-color: #ff4; }
 </tr>
 <tr class="f" >
       <td nowrap colspan=2 style="border-top:none;">
-          <span class="x-b" id="in05" type="radio"></span>
-          <span class="x-b" id="in09" type="radio"></span><br>
-          <span class="x-b" id="in10" type="radio"></span>
+          <span class="x-b" id="in05" type="radio"></span><!-- レア -->
+          <span class="x-b" id="in09" type="radio"></span><!-- 性別 -->
+          <br>
+          <span class="x-b" id="in10" type="radio"></span><!-- 出身 -->
       </td>
   <td is="x-d" id="out00"></td>
   <td is="x-d" id="out01"></td>
@@ -176,7 +177,7 @@ input.bon { background-color: #ff4; }
   <th rowspan=2 class="vert"><span>ダンサー</span></th>
   <td rowspan=2 colspan=2 style="text-align:center;"><select id="in16"></select></td>
   <td rowspan=2></td>
-  <td ><input type="number" id="in11" min=0 max=9999 size=4 /></td>
+  <td ><input type="number" id="in11" min=0 max=9999 size=4 /></td><!-- ダンサーAtk -->
   <td ><input type="number" id="in12" min=0 max=9999 size=4 /></td>
   <td rowspan=2></td><td rowspan=2></td>
 </tr>
@@ -832,9 +833,9 @@ input.bon { background-color: #ff4; }
 "風エレメント":{          rea:0, class:214, type:0 , flg:0+4+0, stat:[1343, 142,  61, 0,  0] },
 "水エレメント":{          rea:0, class:215, type:0 , flg:0+4+0, stat:[1555, 658, 291, 0,  0] },
 "闇エレメント":{          rea:0, class:216, type:0 , flg:0+4+0, stat:[ 486, 335,  34, 0,  0] },
-"トラバサミ":{            rea:0, class:217, type:0 , flg:0+4+0, stat:[ 965, 841, 157, 0,  0] },
-"ミミック":{              rea:0, class:218, type:0 , flg:0+4+0, stat:[2000,1500, 500, 0,  0] },
-"砲撃ポイント":{          rea:0, class:219, type:0 , flg:0+4+0, stat:[   1,1300,   1, 0,  0] },
+"雷エレメント":{          rea:0, class:217, type:0 , flg:0+4+0, stat:[ 700, 155,  48, 0,  0] },
+"トラバサミ":{            rea:0, class:218, type:0 , flg:0+4+0, stat:[ 965, 841, 157, 0,  0] },
+"ミミック":{              rea:0, class:219, type:0 , flg:0+4+0, stat:[2000,1500, 500, 0,  0] },
 "鏡花水月":{              rea:0, class:220, type:0 , flg:0+0+0, stat:[3640, 756, 729, 0,  0] },//不死？
 "屍導士":{                rea:0, class:221, type:0 , flg:0+4+0, stat:[2500,1200, 250, 0,  0] },
 "帝国騎士(護衛隊)":{      rea:0, class:222, type:0 , flg:0+4+0, stat:[1705, 583, 429, 0,  0] },
@@ -842,6 +843,7 @@ input.bon { background-color: #ff4; }
 "改良型設置爆弾":{        rea:0, class:224, type:0 , flg:0+4+0, stat:[  20, 782,   0, 0,  0] },
 "パンプキンナイト":{      rea:0, class:225, type:0 , flg:0+4+0, stat:[                     ] },
 "鬼刃衆":{                rea:0, class:226, type:0 , flg:0+4+0, stat:[                     ] },
+"砲撃ポイント":{          rea:0, class:227, type:0 , flg:0+4+0, stat:[   1,1300,   1, 0,  0] },
 "生命の木":{              rea:0, class:300, type:0 , flg:1+4+0, stat:[1050, 960,  85, 0,  0] },
 "避禍予見の鏡影":{        rea:0, class:301, type:0 , flg:1+4+0, stat:[1000,   0, 100, 0,  0] },
 "プリズムミラー":{        rea:0, class:302, type:0 , flg:1+0+0, stat:[1739, 594, 147,15,  0] },
@@ -1966,6 +1968,7 @@ input.bon { background-color: #ff4; }
  [16,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["ハルカ"                                ],["X214XXXXX"]],
  [16,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["セノーテ"                              ],["X215XXXXX"]],
  [16,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["クラリーチェ"                          ],["X216XXXXX"]],
+ [16,"エレメンタルマスター"                     ,  0,1000,1000,     0,      0,["ジルヴァ"                              ],["X217XXXXX"]],
 */
 
 /*17="動的バフ(優先)"*/
@@ -2846,6 +2849,7 @@ input.bon { background-color: #ff4; }
                [5,130,1,1,0,0],                      /*風エレのときはハルカ      でバフ計算*/
                [6,130,1,1,0,0],                      /*水エレのときはセノーテ    でバフ計算*/
                [6,130,1,1,0,0],                      /*闇エレのときはクラリーチェでバフ計算*/
+               [6,130,1,1,0,0],                      /*雷エレのときはジルヴァ    でバフ計算*/
                [6,123,5,1,0,0] ][isOuji] ];          /*魔獣  のときはシュシュ    でバフ計算*/
    var single_select = new Array(G.length*5*3);
    for( i=single_select.length; --i >= 0 ; ) single_select[i]=-1; /*ダミー*/
@@ -3001,7 +3005,7 @@ input.bon { background-color: #ff4; }
 
    outs[5]++;
    outs[6]++;
-   if( isOuji <= 1 || isOuji >= 7 ){
+   if( isOuji <= 1 || isOuji >= 8 ){ /*王子と魔獣*/
      outs[7]++;
      outs[8]++;
    }
@@ -3093,7 +3097,7 @@ input.bon { background-color: #ff4; }
 
     /*バフ計算*/
     wk=(flg00 == 7 && flg01 == 0 && flg02 == 1 && flg03 == 0 && flg04 == 1 && flg05 == 0)?1: /*王子は１*/
-         (flg01 >= 212 && flg01 <=216)?(flg01-210):(flg01 == 202)?7:0; //エレメントは2から6,魔獣は7
+         (flg01 >= 212 && flg01 <=217)?(flg01-210):(flg01 == 202)?8:0; //エレメントは2から7,魔獣は8
     teams = calcTeams(     wk,       /*編成を求める*/
              calcBuffBlock(wk,flg00,flg01,flg02,flg03,flg04,flg05 ,flg06,flg07,flg08,flg09,flg10,flg11 )); /*ブロックのバフ値を求める*/
     outv  = calcBuffer(    wk,v);
@@ -3101,7 +3105,7 @@ input.bon { background-color: #ff4; }
     inobj[13].visibility=wk?"visible":"hidden";
     inobj[14].display=wk?"visible":"hidden";
     //outobj[7].parentNode.style.display=wk?"table-row":"none";
-    outobj[20].innerText=["－","アンナ","ロレッタ","シャオメイ","ハルカ","セノーテ","クラリーチェ","シュシュ"][wk];
+    outobj[20].innerText=["－","アンナ","ロレッタ","シャオメイ","ハルカ","セノーテ","クラリーチェ","ジルヴァ","シュシュ"][wk];
 
     /*グループのバフ値*/
     for( i=G.length; --i >= 0 ; ){
@@ -3113,7 +3117,7 @@ input.bon { background-color: #ff4; }
         else                           v  ="";
         if(       G[i].v2[j  ]       ) v +="+"+  G[i].v2[j  ];
         if( (j == 1 || j == 2)&&(G[i].v1[j]!=G[i].v1[j+4] || G[i].v2[j]!=G[i].v2[j+4] || ((G[i].v1[j]!=G[i].v1[j+6] || G[i].v2[j]!=G[i].v2[j+6])) && wk) ){
-	  if( v == "" ) v="0";
+          if( v == "" ) v="0";
           if(     G[i].v1[j+4] < 0   ) v +=":x"+((G[i].v1[j+4]+100)/100);
           else if(G[i].v1[j+4] > 100 ) v +=":x"+( G[i].v1[j+4]/100);
           else if(G[i].v1[j+4]       ) v +=":+"+( G[i].v1[j+4])+"%";
@@ -3504,8 +3508,6 @@ input.bon { background-color: #ff4; }
     inobj[23].style.visibility="hidden";
     inobj[11].setV( uni000[inobj[16].getV()].stat[1] );
     inobj[12].setV( uni000[inobj[16].getV()].stat[2] );
-    //inobj[11].setV(444);  /* d-atk */
-    //inobj[12].setV(444);  /* d-def */
     inobj[13].setV(294);  /* a-atk */
     inobj[14].setV(197);  /* a-def */
     doUpdate( uni000[j] );
