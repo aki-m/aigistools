@@ -129,7 +129,7 @@ input.bon { background-color: #ff4; }
 </head>
 <body>
 <div><b>千年戦争アイギス　バフ試算表　</b>
-<span style="white-space:nowrap; font-size:12px"><a href="tips.html" target="_blank">重複とかわからんので教えろください</a>　<a href="#" onclick="document.getElementById('list').style.display='inline-block'">(ユニ一覧)</a>　<a href="https://github.com/aki-m/aigistools/issues" target="_blank">バグ報告</a></span></div>
+<span style="white-space:nowrap; font-size:12px"><a href="tips.html" target="_blank">重複とかわからんので教えろください</a>　<a href="#" onclick="document.getElementById('list').style.display='inline-block'">(ユニ一覧)</a>　<a href="https://github.com/aki-m/aigistools/issues" target="_blank">バグ(報告は要GHアカウント)</a></span></div>
 <div><span>復活の呪文<input type="text" size=85 style="font-family:monospace;" id="in24"/><input type="button" id="restoreB" value="復活" /></span></div>
 <table  id="t">
 
@@ -382,10 +382,10 @@ input.bon { background-color: #ff4; }
 "リーゼロッテ":{          rea:6, class:1  , type:1 , flg:0+0+8, stat:[3045, 744, 432, 0,  0] },
 "ジェイク":{              rea:6, class:1  , type:1 , flg:0+2+0, stat:[2415, 723, 499,10,  0] },
 "年賀の教官ケイティ":{    rea:6, class:1  , type:1 , flg:0+0+64,stat:[2862, 671, 548, 0,  0] },
-"ジェリウス":{            rea:6, class:2  , type:1 , flg:0+2+0, stat:[4627, 382, 829,10,  0] },
-"マリーベル":{            rea:6, class:2  , type:1 , flg:0+0+0, stat:[3325, 403, 544, 0,  0] },
-"ミランダ":{              rea:6, class:2  , type:1 , flg:0+0+0, stat:[3913, 505, 793, 0,  0] },
-"聖鈴の大盾ベルニス":{    rea:6, class:2  , type:1 , flg:0+0+32,stat:[3709, 495, 939, 0,  0] },
+"ジェリウス":{            rea:6, class:2  , type:1 , flg:0+2+0, stat:[5340, 389,1231,25,  0] },
+"マリーベル":{            rea:6, class:2  , type:1 , flg:0+0+0, stat:[3968, 584, 664, 0,  0] },
+"ミランダ":{              rea:6, class:2  , type:1 , flg:0+0+0, stat:[4319, 774, 898, 0,  0] },
+"聖鈴の大盾ベルニス":{    rea:6, class:2  , type:1 , flg:0+0+32,stat:[4140, 773,1047, 0,  0] },
 "テティス":{              rea:6, class:3  , type:1 , flg:0+0+0, stat:[2539, 675, 452,10,  0] },
 "ダリア":{                rea:6, class:3  , type:1 , flg:0+0+0, stat:[3614, 823, 432,25,  0] },
 "エミリア":{              rea:6, class:3  , type:1 , flg:0+0+0, stat:[2543, 493, 338,10,  0] },
@@ -2300,8 +2300,16 @@ input.bon { background-color: #ff4; }
   G[n]:{
          idx   :0 ,
          name  :"",
-         flg   :0+0+0 ,
-         type  :0 ,
+         flg   :0+0+0 ,: ( 4:最大値型F, 2:変更連動F(自己強化), 1:単一選択F), 
+         type  :0 , 
+                 TYPE_HENSEI=0;
+                 TYPE_HAICHI=1;
+                 TYPE_TERM  =2;
+                 TYPE_KONJO =3;
+                 TYPE_S_SELF=4;
+                 TYPE_S_HOKA=5;
+                 TYPE_ADD   =6;
+                 TYPE_DYNAM =7;
          seq   :1 ,
          obj   :DOM ,
          v1    :[0,0,0,0,0 ,0,0 ,0,0] ,
@@ -2314,7 +2322,7 @@ input.bon { background-color: #ff4; }
          perB :[0,0,0,0,0]
          addB :[0,0,0,0,0]
          chr  :[uni000[x]...]
-         mask :[[-1,-1-,1-,1-,1-,1]...]or GMember
+         mask :[[-1,-1-,1-,1-,1-,1]...]or unit-name
          obj  :DOM
          bon  :0
          __proto__.chkMask  : function
@@ -2369,7 +2377,6 @@ input.bon { background-color: #ff4; }
           l=s.substr(7,1); this.mask[i][4] = ( l != "X"   )? l/1 : -1;
           this.mask[i][5] = this.mask[i][6] = -1;
           if( (l=s.substr(8,1)) != "X" ){
-            l=s.substr(9,1);
             if( l <=3 ) this.mask[i][5] = l;
             else        this.mask[i][6] = l-3;
           }
@@ -2407,6 +2414,7 @@ input.bon { background-color: #ff4; }
         }
         return 0;
       };
+
       this.onoff=function onoff( in_v ){
         var k,l,m,bl;
         var v=(in_v<0)?(1-this.bon):(in_v?1:0);
@@ -2435,8 +2443,94 @@ input.bon { background-color: #ff4; }
                                                 && this.name        == this.member[l].name ) this.member[l].bon = v?1:0;
         return  ((this.flg & 2) != 0 && this.chr.length == 1)?this.chr[0]:null ;
       };
+
+    this.calcBufM=function calcBufM( flg0  ){
+      var m,o;
+      var r=0;
+      if( ! this.bon ) return r; /*非選択*/
+      for( m=0 ; m<5 ; m++ ){
+        if( this.perB[m] == 0 && this.addB[m] == 0 ) continue; /*値なし*/
+        for( o=0 ; o<3 ; o++ ){ /*自身,ダンサー,アンナ*/
+          if( o == 0 && flg01 >= 200 && this.type == TYPE_HENSEI ) continue; /*トークンに編成バフは乗らない*/
+          if( o && m !=1 && m != 2 ) continue; /*ダンサー,アンナは攻防のみ*/
+          if( o != 0 && ( this.flg & 2 ) != 0 ) continue; /*自己強化スキルはダンサーにかからない*/
+          if( this.type == TYPE_ADD ){ /*ダンサーバフ*/
+            if( this.seq+1 != o ) continue; /*そのダンサーの加算値*だけ*を強化。他にはかからない*/
+          }else if( this.chkMask( null,flg[o][0],flg[o][1],flg[o][2],flg[o][3],flg[o][4],flg[o][5] ) == 0 ) continue; /*通常バフは[対象/ダンサー/アンナ等]で適合チェック*/
+
+          k = o?(m+2+o*2):m;//01234 56 78
+          if( (this.flg & 4) == 0 || (m == 0 && this.type == TYPE_S_HOKA) ){ /*加算型*/
+            this.v1[k] += this.perB[m];
+            this.v2[k] += this.addB[m];
+            r=1;
+          }else if( ( this.v1[k] == 0 && this.perB[m] ) || this.v1[k] < this.perB[m] ){ /*スキルバフは最大値*/
+            this.v1[k] = this.perB[m];
+            this.single_select[m*3+o]=j*100+i;/*MAXとなったものを控える*/
+          }else if( ( this.v2[k] == 0 && this.addB[m] ) || this.v2[k] < this.addB[m] ){ /*スキルバフは最大値*/
+            this.v2[k] = this.addB[m];
+            this.single_select[m*3+o]=j*100+i;/*MAXとなったものを控える*/
+          }
+        }
+      }
+      return r;
+    };
+  };
+
+  function GCore(r){
+    this.d2flg = [[0,  0,0,0,0,0],                      /*その他                              */
+                  [7,100,1,1,0,0],                      /*王子  のときはアンナ      でバフ計算*/
+                  [6,130,1,1,0,0],                      /*火エレのときはロレッタ    でバフ計算*/
+                  [6,130,1,1,0,0],                      /*土エレのときはシャオメイ  でバフ計算*/
+                  [5,130,1,1,0,0],                      /*風エレのときはハルカ      でバフ計算*/
+                  [6,130,1,1,0,0],                      /*水エレのときはセノーテ    でバフ計算*/
+                  [6,130,1,1,0,0],                      /*闇エレのときはクラリーチェでバフ計算*/
+                  [6,130,1,1,0,0],                      /*雷エレのときはジルヴァ    でバフ計算*/
+                  [6,123,5,1,0,0] ];                    /*魔獣  のときはシュシュ    でバフ計算*/
+    this.single_select = new Array(5*3);
+    this,flg=[new Array(6),new Array(6),null];
+    this.calcPre=function calcPre(flg00,flg01,flg02,flg03,flg04,flg05,flg06,flg07,flg08,flg09,flg10,flg11,flg12,flg13){
+      var r= (flg00 == 7 && flg01 == 0 && flg02 == 1 && flg03 == 0 && flg04 == 1 && flg05 == 0)?1: /*王子は１*/
+             (flg01 >= 212 && flg01 <=217)?(flg01-210):(flg01 == 202)?8:0; //エレメントは2から7,魔獣は8
+      this.flg[0][0]=flg00; /*対象  */
+      this.flg[0][1]=flg01;
+      this.flg[0][2]=flg02;
+      this.flg[0][3]=flg03;
+      this.flg[0][4]=flg04;
+      this.flg[0][5]=flg05;
+      this.flg[0][6]=flg06;
+      this.flg[1][0]=flg07; /*ダンサー  */
+      this.flg[1][1]=flg08;
+      this.flg[1][2]=flg09;
+      this.flg[1][3]=flg10;
+      this.flg[1][4]=flg11;
+      this.flg[1][5]=flg12;
+      this.flg[1][6]=flg13;
+      this.flg[3]=d2flg[r]; /*政務官、エレメント、魔獣*/
+      return r;
     };
 
+    this.calcBufG=function calcBufG( r ){
+      var i,j;
+      for( i=this.single_select.length; --i >= 0 ; ) this.single_select[i]=-1; /*ダミー*/
+      for( j=this.v1.length; --j >= 0 ;) this.v1[j]=0;/*initialize*/
+      for( j=this.v2.length; --j >= 0 ;) this.v2[j]=0;/*initialize*/
+      if( flg01 == 202 && this.type == TYPE_ADD && this.seq == 1 ) this.v1[7]=this.v1[8]=-100; /*魔獣で加算バフは0倍スタート*/
+      if( this.type == TYPE_ADD /*ダンサーバフ*/
+         && this.chkMask( null,flg00,flg01,flg02,flg03,flg04,flg05,flg06 ) ==0 ) return; /* 主人かどうかチェック*/
+      /*計算*/
+      for( j=0 ; j < this.member.length ; j++ ){
+        if( this.member[j].calcBufM(flg) == 0 ) continue;
+        if( r.lrngth < 1 || r[r.length-1] != j*100+i ) r[r.length]=j*100+i;/*有効な加算バフINDEX*/
+      }
+      /*最大値となったものをマージする*/
+      for( i=this.single_select.length ; --i >= 0 ; ){
+        if( this.single_select[i] < 0 ) continue;
+        for( j=0 ; j < r.length && r[j] != this.single_select[i]; j++);
+        r[j]=this.single_select[i];
+      }
+
+    };
+  };
 
   (function initializer(){
     var lbl=[ /*<=ボタンなど*/
@@ -2462,6 +2556,7 @@ input.bon { background-color: #ff4; }
     var t=document.getElementById("t");
 
     /*in/out項目のDOM取得、set/get設定*/
+    /*本当はinobj/outobjではなくプロパティにしたほうが良いのだろうが、復活の呪文のための手抜き*/
     for( i=2;--i>=0; ) for( j=(i?outobj:inobj).length ; --j>=0 ; ) (i?outobj:inobj)[j]= (function(id_prefix,idx){
       function cnvN(v){ return ( v >= 0 ) ? (( v >= 1000 ) ? cnvN( (v-(v%1000))/1000 )+","+(""+(1000+(v%1000))).substr(1) : (""+v)) : ("-"+cnvN(-v)) }
       var obj=document.getElementById(id_prefix+((idx<10)?"0":"")+idx);
@@ -2492,7 +2587,7 @@ input.bon { background-color: #ff4; }
       return obj;
     })((i?"out":"in"),j );
 
-    /*条件の選択子の設定*/
+    /*条件の選択子の設定。lblからDOMへ */
     for( i=0 ; i< lbl.length ; i++ ) for( j=l=0 ; j<lbl[i].length ; j++ ) for( k=0 ; k<lbl[i][j].length ; k++ ){
       n=document.createElement( (i==1 || i==2 )?"OPTION":"INPUT" );
       n.value=(i==1 || i==2)? (k+j*100) : lbl[i][j][k];
@@ -2505,8 +2600,10 @@ input.bon { background-color: #ff4; }
       }
     }
 
+    /* 連想配列の値OBJからINDEXを引けるようにする */
     for( j in uni000 ) uni000[j].name = j; 
 
+    /* ユニット選択Pulldownにソートしたユニット名をセット */
     (function makePullList(){
       var list15=new Array(uni000.length);
       var list15sz=0;
@@ -2538,7 +2635,7 @@ input.bon { background-color: #ff4; }
       inobj[17].innerHTML="<option value='default'>計算対象ユニ</option>"+v;
     })();
 
-    /*グループとメンバを組み立てる*/
+    /*バフObject、グループとメンバを組み立てる*/
     for( i=0 ; i < G.length ; i++ ) {
       for(n=0,j=M.length; --j >= 0 ; ) if( M[j][0] == i ) n++;
       G[i].idx = i;
@@ -2553,7 +2650,7 @@ input.bon { background-color: #ff4; }
       }
     }
 
-    /*データをＤＯＭへ展開*/
+    /*バフデータをＤＯＭへ展開*/
     for( k=0 ; k<G.length ; k++ ){
       G[k].obj = t.insertRow(-1);
       G[k].obj.innerHTML = "<th class='csw'>－</th><th colspan=2 id='h01' nowrap>"
@@ -2705,9 +2802,11 @@ input.bon { background-color: #ff4; }
       }
       document.getElementById("list").children[0].innerHTML=s;
     },100);
-  })();
+  })(); /*ここまで初期化処理*/
 
-
+  /*
+   * 復活の呪文
+   */
   var saveword={
     charmap:"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.",
     addS:function addS(n,v,l){
@@ -3119,7 +3218,7 @@ input.bon { background-color: #ff4; }
     //outobj[7].parentNode.style.display=wk?"table-row":"none";
     outobj[20].innerText=["－","アンナ","ロレッタ","シャオメイ","ハルカ","セノーテ","クラリーチェ","ジルヴァ","シュシュ"][wk];
 
-    /*グループのバフ値*/
+    /*グループごとのバフ値表示*/
     for( i=G.length; --i >= 0 ; ){
       for( j=0 ; j<5 ; j++ ){
         /*本人*/
@@ -3147,7 +3246,7 @@ input.bon { background-color: #ff4; }
         G[i].obj.cells[2+j].innerText=v;
       }
     }
-    /*バフ後の値の更新*/
+    /*バフ後の計算した値を表示*/
     for( i=outv.length ; --i >= 0 ; ) if( outv[i] >= 0 ) outobj[i].setV( outv[i] );
     /*選択状態の画面への更新*/
     for( i=M.length; --i >= 0 ; ){
@@ -3155,7 +3254,7 @@ input.bon { background-color: #ff4; }
         k = b.bon ? "on" : "";
         if(b.obj) if( b.obj.className != k ) b.obj.className = k;
     }
-    /*編成*/
+    /*編成の表示*/
     outv="";
     for( i=teams.length; --i >= 0 ; ){
       wk="";
@@ -3172,6 +3271,7 @@ input.bon { background-color: #ff4; }
       outv += "<section><h4>●編成"+(i+1)+"<span class='nw'>["+v+"人配置]／("+Object.keys(teams[i]).length+"人編成)</h4>"+wk+"</section>";
     }
     outobj[9].innerHTML=outv;
+    /*復活の呪文*/
     saveword.backupstr();
   }
 
