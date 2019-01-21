@@ -264,6 +264,7 @@ input.bon { background-color: #ff4; }
 "王子(砂漠)":{            rea:7, class:0  , type:1 , NF:0,MF:1,FM:0,SSN:0, stat:[2200, 680, 420,10,  0   ] },
 "王子(獣装)":{            rea:7, class:0  , type:1 , NF:0,MF:1,FM:0,SSN:0, stat:[3200, 720, 640, 0,  0   ] },
 "王子(巨像)":{            rea:7, class:0  , type:1 , NF:0,MF:1,FM:0,SSN:0, stat:[6200,1360, 280, 0,  0   ] },
+"王子(風護)":{            rea:7, class:0  , type:1 , NF:0,MF:1,FM:0,SSN:0, stat:[1820, 550, 480, 0,  0   ] },
 "白の皇帝":{              rea:7, class:0  , type:1 , NF:0,MF:1,FM:1,SSN:0, stat:[2200, 572, 696, 0,  0   ] },
 "アルティア":{            rea:7, class:1  , type:1 , NF:0,MF:0,FM:0,SSN:0, stat:[2609, 744, 489, 0,  0,  2961, 835, 576,0,0] },
 "ディーナ":{              rea:7, class:2  , type:1 , NF:0,MF:0,FM:0,SSN:0, stat:[5040, 744,1301,15,  0,  4845,1083,1043,0,0] },
@@ -1010,6 +1011,7 @@ input.bon { background-color: #ff4; }
  [ 4,"戦意高揚【砂漠】"                 ,  0,  20,  20,     0,      0,["王子(砂漠)"         ]],
  [ 4,"戦意高揚【獣】"                   ,  0,  20,  20,     0,      0,["王子(獣装)"         ]],
  [ 4,"戦意高揚【巨像】"                 ,  0,  20,  20,     0,      0,["王子(巨像)"         ]],
+ [ 4,"戦意高揚【風護】"                 ,  0,  18,  18,     0,      0,["王子(風護)"         ]],
  [ 4,"戦意高揚【小】"                   ,  0,  10,  10,     0,      0,["王子【幼少】"       ]],
  [ 4,"幸せの記憶"                       ,  0,   5,   5,     0,      0,["レーヴ"             ]],
  [ 4,"魔眼の加護"                       ,  0,   0,   5, 50000,      0,["バロウス"           ]],
@@ -1149,6 +1151,7 @@ input.bon { background-color: #ff4; }
  [10,"獅子刀スルフィカール"             ,  0, 150,   0,     0,      0,["王子(砂漠)"             ]],
  [10,"巨獣の牙槌"                       ,  0, 700,   0,     0,      0,["王子(獣装)"             ]],
  [10,"天仇の崩岩"                       ,  0, 250,-100,     0,      0,["王子(巨像)"             ]],
+ [10,"暴嵐の双刃"                       ,  0,   0,   0,     0,    150,["王子(風護)"             ]],
  [10,"守護者の神盾"                     ,  0,   0, 200,     0,      0,["アルティア","ジェイク"  ]],
  [10,"援軍要請・撃滅"                   ,  0, 200,   0,     0,      0,["アルティア"             ]],
  [10,"怪力爆砕鉄球"                     ,  0, 200, 200,     0,      0,["ディーナ"               ]],
@@ -2507,6 +2510,7 @@ input.bon { background-color: #ff4; }
             if( bl.chr.length == 1 && this.chr[0].name == bl.chr[0].name && this.name == bl.name ) bl.bon=1; /*"同一のもON"*/
         } }
         if( this.sw & 1 ) for( l=0 ; l<this.member.length ; l++ ) this.member[l].bon=0;  /* "１つのみ" */
+        else if( this.chr.length == 1 ) for( l=0 ; l<this.member.length ; l++ ) if( this.member[l].chr.length == 1 && this.chr[0].name == this.member[l].chr[0].name ) this.member[l].bon = 0;
       }
       this.bon = v?1:0;
       for( l=this.member.length ; --l >= 0;) if( this.chr.length  == this.member[l].chr.length
