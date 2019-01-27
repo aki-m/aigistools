@@ -269,7 +269,7 @@ input.bon { background-color: #ff4; }
   <a href="maskmake.html">...簡易マスクコラ</a>
 </div>
 <script> 
-  var inobj  = new Array(27); 
+  var inobj  = new Array(29); 
   var outobj = new Array(21);
   var uni000={
                                                                                 /*HP   ATK DEF MAG RNG無回付引隠dAdDdMdR */
@@ -475,7 +475,7 @@ input.bon { background-color: #ff4; }
 "ビエラ":{                rea:6, class:18 , type:1 , NF:0,MF:0,FM:0,SSN:0, stat:[2000, 449, 326, 0,  0,0,0,0,0,0,0,0,0,0] },
 "リーンベル":{            rea:6, class:18 , type:1 , NF:0,MF:0,FM:0,SSN:0, stat:[2202, 557, 492, 0,  0,0,0,0,0,0,0,0,0,0] },
 "アメリ":{                rea:6, class:18 , type:1 , NF:0,MF:0,FM:0,SSN:0, stat:[2483, 630, 394, 0,  0,0,0,0,0,0,0,0,0,0] },
-"イナリ":{                rea:6, class:19 , type:6 , NF:0,MF:0,FM:0,SSN:0, stat:[1886, 611, 334, 5,  0,0,0,0,0,0,0,0,0,0] },
+"イナリ":{                rea:6, class:19 , type:6 , NF:0,MF:0,FM:0,SSN:0, stat:[1886, 611, 334, 5,  0,0,25,0,0,0,0,0,0,0] },
 "堕姫":{                  rea:6, class:19 , type:6 , NF:0,MF:0,FM:0,SSN:0, stat:[1984, 574, 299, 5,  0,0,0,0,0,0,0,0,0,0] },
 "イズナ":{                rea:6, class:19 , type:6 , NF:0,MF:0,FM:0,SSN:0, stat:[2051, 630, 286, 5,  0,0,0,0,0,0,0,0,0,0] },
 "フラメル":{              rea:6, class:20 , type:1 , NF:0,MF:0,FM:0,SSN:0, stat:[2100, 521, 550,10,  0,0,0,0,0,0,0,0,0,0] },
@@ -2843,14 +2843,14 @@ v+="<td><!-- 付与のバフ --></td>";
             +"</td><td>"+lbl[4][0][(n.MF)/2]
             +"</td><td>"+((n.FM)?lbl[5][0][(n.FM)/8]:"") /*+SSN*/
             +"</td></tr>";
-         if(n.stat.length > 12 ){
+         if(n.stat.length > 14 ){
            s+="<tr class='s'><td class='s'></td><td colspan=8 class='s'>[ＨＰ："+n.stat[0] 
              +"][攻撃："+n.stat[1] +"][防御："+n.stat[2] +"][魔耐："+n.stat[3] +"][射程："+n.stat[4]
              +"]</td></tr>"
-             +"<tr class='s'><td class='s'></td><td colspan=8 class='s'>[ＨＰ："+n.stat[5] 
-             +"][攻撃："+n.stat[6] +"][防御："+n.stat[7] +"][魔耐："+n.stat[8] +"][射程："+n.stat[9]
+             +"<tr class='s'><td class='s'></td><td colspan=8 class='s'>[ＨＰ："+n.stat[14] 
+             +"][攻撃："+n.stat[15] +"][防御："+n.stat[16] +"][魔耐："+n.stat[17] +"][射程："+n.stat[18]
              +"]</td></tr>";
-         }else if( n.stat.length >= 12 ){
+         }else if( n.stat.length >= 14 ){
            s+="<tr class='s'><td class='s'></td><td colspan=8 class='s'>[ＨＰ："+n.stat[0]
              +"][攻撃："+n.stat[1] +"][防御："+n.stat[2] +"][魔耐："+n.stat[3] +"][射程："+n.stat[4]
              +"]</td></tr>";
@@ -3190,7 +3190,7 @@ v+="<td><!-- 付与のバフ --></td>";
     /*編成を求める*/
     teams = calcTeams( isOuji,active );
     /*バフ計算*/
-    outv  = ( uodateChar && uodateChar.stat.length >= 5 && uodateChar.stat.length < 12)
+    outv  = ( uodateChar && uodateChar.stat.length >= 5 && uodateChar.stat.length < 14)
           ? calcBuffer( isOuji,
               uodateChar.stat[0],
               uodateChar.stat[1],
@@ -3459,24 +3459,28 @@ v+="<td><!-- 付与のバフ --></td>";
         if( e.target.className == "ssw" ){ /*⇔*/
           if( (b=inobj[17].getV()) != "default" ){
             b=uni000[b];
-            if( b.stat.length > 12
+            if( b.stat.length > 14
              && inobj[0].getV()/1 == b.stat[0]
              && inobj[1].getV()/1 == b.stat[1]
              && inobj[2].getV()/1 == b.stat[2]
              && inobj[3].getV()/1 == b.stat[3]
              && inobj[4].getV()/1 == b.stat[4] ){
-              inobj[0].setV( b.stat[5] );
-              inobj[1].setV( b.stat[6] );
-              inobj[2].setV( b.stat[7] );
-              inobj[3].setV( b.stat[8] );
-              inobj[4].setV( b.stat[9] );
+              inobj[ 0].setV( b.stat[14] );
+              inobj[ 1].setV( b.stat[15] );
+              inobj[ 2].setV( b.stat[16] );
+              inobj[ 3].setV( b.stat[17] );
+              inobj[ 4].setV( b.stat[18] );
+              inobj[27].setV( b.stat[19] );
+              inobj[28].setV( b.stat[20] );
               doUpdate(null);
             }else if( b.stat.length >= 5 ){
-              inobj[0].setV( b.stat[0] );
-              inobj[1].setV( b.stat[1] );
-              inobj[2].setV( b.stat[2] );
-              inobj[3].setV( b.stat[3] );
-              inobj[4].setV( b.stat[4] );
+              inobj[ 0].setV( b.stat[ 0] );
+              inobj[ 1].setV( b.stat[ 1] );
+              inobj[ 2].setV( b.stat[ 2] );
+              inobj[ 3].setV( b.stat[ 3] );
+              inobj[ 4].setV( b.stat[ 4] );
+              inobj[27].setV( b.stat[ 5] );
+              inobj[28].setV( b.stat[ 6] );
               doUpdate(null);
             }
           }
@@ -3576,8 +3580,10 @@ v+="<td><!-- 付与のバフ --></td>";
             inobj[ 2].setV( uni000[ev.target.getV()].stat[2] );
             inobj[ 3].setV( uni000[ev.target.getV()].stat[3] );
             inobj[ 4].setV( uni000[ev.target.getV()].stat[4] );
+            inobj[27].setV( uni000[ev.target.getV()].stat[5] );
+            inobj[28].setV( uni000[ev.target.getV()].stat[6] );
           }
-          inobj[23].style.visibility=( uni000[ev.target.getV()].stat.length > 12 )?"visible":"hidden";
+          inobj[23].style.visibility=( uni000[ev.target.getV()].stat.length > 14 )?"visible":"hidden";
           doUpdate( uni000[ev.target.getV()] );
         }
         break;
@@ -3628,6 +3634,8 @@ v+="<td><!-- 付与のバフ --></td>";
     inobj[ 2].setV( uni000[j].stat[2] );
     inobj[ 3].setV( uni000[j].stat[3] );
     inobj[ 4].setV( uni000[j].stat[4] );
+    inobj[27].setV( uni000[j].stat[5] );
+    inobj[28].setV( uni000[j].stat[6] );
     inobj[23].style.visibility="hidden";
     inobj[ 5].setV( uni000[inobj[26].getV()].stat[1] );
     inobj[ 6].setV( uni000[inobj[26].getV()].stat[2] );
