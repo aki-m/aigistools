@@ -138,7 +138,7 @@ input.bon { background-color: #ff4; }
   --><th rowspan=5 class="vert"><span>対象ユニット</span></th><!--
   --><td colspan=2 nowrap style="border-bottom:none; "><select id="in17"></select>または</td>
   <th colspan=8 rowspan=2>上段：ステ値、下段：計算値</th>
-  <td rowspan=11 style="position:relative"><div id="out09" style="position:absolute; left:0px; top:0px; bottom:0px; right:0px; overflow-y:scroll;" ></div></td>
+  <td rowspan=11 style="position:relative"><div id="out29" style="position:absolute; left:0px; top:0px; bottom:0px; right:0px; overflow-y:scroll;" ></div></td>
 </tr>
 
 <tr class="f">
@@ -188,6 +188,9 @@ input.bon { background-color: #ff4; }
   <td class="x-d" id="out02"></td>
   <td class="x-d" id="out03"></td>
   <td class="x-d" id="out04"></td>
+  <td class="x-d" id="out05"></td>
+  <td class="x-d" id="out06"></td>
+  <td class="x-d" id="out07" style="display:none"></td>
   <td ></td>
   <td ></td>
 </tr>
@@ -200,12 +203,12 @@ input.bon { background-color: #ff4; }
   <td rowspan=2></td><td rowspan=2></td><td rowspan=2></td><td rowspan=2></td><td rowspan=2></td>
 </tr>
 <tr class="f" >
-  <td class="x-d" id="out05"></td>
-  <td class="x-d" id="out06"></td>
+  <td class="x-d" id="out08"></td>
+  <td class="x-d" id="out09"></td>
 </tr>
 <tr class="f" >
   <th rowspan=2 class="vert"><span>政務官<br>精霊使い<br>魔物使い</span></th>
-  <td rowspan=2 colspan=2 style="text-align:center;"><span id="out20" ></span></td>
+  <td rowspan=2 colspan=2 style="text-align:center;"><span id="out30" ></span></td>
 
   <td rowspan=2></td>
   <td ><input type="number" id="in07" min=0 max=9999 size=4 /></td><!-- a-ATK -->
@@ -213,8 +216,8 @@ input.bon { background-color: #ff4; }
   <td rowspan=2></td><td rowspan=2></td><td rowspan=2></td><td rowspan=2></td><td rowspan=2></td>
 </tr>
 <tr class="f" >
-  <td class="x-d" id="out07"></td>
-  <td class="x-d" id="out08"></td>
+  <td class="x-d" id="out10"></td>
+  <td class="x-d" id="out11"></td>
 </tr>
 <tr class="t">
   <th colspan=2 rowspan=2 ><!--
@@ -223,22 +226,25 @@ input.bon { background-color: #ff4; }
       --><span style="position:absolute; left:0px; bottom: 0px; font-size:11px;">☟表示折畳み(■:一括)(±÷:個別)</span>
  </th>
  <th style="text-align:right;">バフ後</th>
-  <td class="x-d" id="out10"></td>
-  <td class="x-d" id="out11"></td>
-  <td class="x-d" id="out12"></td>
   <td class="x-d" id="out13"></td>
   <td class="x-d" id="out14"></td>
-  <td rowspan=2><!--無効化の表示 --></td>
-  <td rowspan=2><!--回避の表示 --></td>
-  <td rowspan=2><!--付与の表示 --></td>
-</tr>
-<tr class="t">
-  <th style="text-align:right;"><span style="font-size:12px">(確立等込み)</span></th>
   <td class="x-d" id="out15"></td>
   <td class="x-d" id="out16"></td>
   <td class="x-d" id="out17"></td>
   <td class="x-d" id="out18"></td>
   <td class="x-d" id="out19"></td>
+  <td class="x-d" id="out20"></td><!--付与の表示 -->
+</tr>
+<tr class="t">
+  <th style="text-align:right;"><span style="font-size:12px">(確立等込み)</span></th>
+  <td class="x-d" id="out21"></td>
+  <td class="x-d" id="out22"></td>
+  <td class="x-d" id="out23"></td>
+  <td class="x-d" id="out24"></td>
+  <td class="x-d" id="out25"></td>
+  <td class="x-d" id="out26"></td>
+  <td class="x-d" id="out27"></td>
+  <td class="x-d" id="out28"></td>
 </tr>
 
 <tr>
@@ -270,7 +276,7 @@ input.bon { background-color: #ff4; }
 </div>
 <script> 
   var inobj  = new Array(29); 
-  var outobj = new Array(21);
+  var outobj = new Array(31);
   var uni000={
                                                                                 /*HP   ATK DEF MAG RNG無 回付引隠dAdDdMdR */
 "王子":{                  rea:7, class:0  , type:1 , NF:0,MF:1,FM:0,SSN:0, stat:[1300, 340, 240, 0,  0, 0, 0,0,0,0,0,0,0,0   ] },
@@ -1925,6 +1931,7 @@ input.bon { background-color: #ff4; }
  [12,"奇問遁甲"                                 ,  0, 130,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["諸葛亮"                 ]],
  [12,"バイタルリンク"                           , 30,   0,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["ルメディア"             ]],
  [12,"ヒールリンク"                             , 40,   0,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["ルメディア"             ]],
+ [12,"赤太陽の恩寵"                             ,  0,  10,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["ダルフィア"             ]],
  [12,"酒呑の御神酒"                             , 20,   0,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["年賀の着衣始　鬼刃姫"   ]],
  [12,"大厄払い"                                 , 40,   0,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["年賀の着衣始　鬼刃姫"   ]],
  [12,"八卦の陣"                                 ,  0,   0,   0,  0,      0, 75,  0,0,0,0,0,0,0,0,["レオナ"                 ]],
@@ -1991,7 +1998,6 @@ input.bon { background-color: #ff4; }
  [13,"狐借虎威(1回目)"                          ,  0, 110,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["イズナ"                 ],["XXXX6 XXX"]],/*妖怪*/
  [13,"狐借虎威(2回目)"                          ,  0, 130,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["イズナ"                 ],["XXXX6 XXX"]],/*妖怪*/
  [13,"狐借虎威(最終)"                           ,  0, 150,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["イズナ"                 ],["XXXX6 XXX"]],/*妖怪*/
- [13,"赤太陽の恩寵"                             ,  0, 110,   0,  0,      0,  0,  0,0,0,0,0,0,0,0,["ダルフィア"             ]],
 /*14="スキルバフ(レア指定)"*/
  [14,"ダモクレスの剣"                           ,  0, 120, 120,  0,      0,  0,  0,0,0,0,0,0,0,0,["ロゼット"               ],["3XXXXXXXX"]],
 /*15="ステ加算値バフ(ダンサー)"*/
@@ -2721,8 +2727,8 @@ input.bon { background-color: #ff4; }
       G[i].prototype = i ? G[0].prototype : new GCore();
       G[i].idx = i;
       G[i].obj = null;
-      G[i].v1  = [0,0,0,0,0 ,0,0 ,0,0];
-      G[i].v2  = [0,0,0,0,0 ,0,0 ,0,0];
+      G[i].v1  = [0,0,0,0,0,0,0,0 ,0,0 ,0,0];
+      G[i].v2  = [0,0,0,0,0,0,0,0 ,0,0 ,0,0];
       G[i].member = new Array(n);
       GMembersCore.prototype=G[i]; /*コアのプロトタイプをグループに向かせる*/
       GMember.prototype=new GMembersCore(); /*メンバのプロトタイプをコアに向かせる*/
@@ -3026,14 +3032,21 @@ v+="<td><!-- 付与のバフ --></td>";
  *    inv  [画面の入力数値 HP,ATK,DEF,TRG,RNG,D-ATK,D-DEF,A-ATK,A-DEF]
  *  ret [計算結果outobjの0～19に相当する値
  */
- function calcBuffer(isOuji,inv0,inv1,inv2,inv3,inv4,inv5,inv6,inv7,inv8 ){
+ function calcBuffer(isOuji,inHP,inATK,inDEF,inMGR,inRNG,inCAN,inSWP,inENC,inDATK,inDDEF,inAATK,inADEF ){
    var i,j,k,m,o,v1,v2;
-   var outv = [ inv0,inv1,inv2,inv3,inv4, inv5,inv6, isOuji?inv7:0,isOuji?inv8:0, -1, 0,0,0,0,0, 0,0,0,0,0];
-   var outs = [0,0,0,0,0, 0,0, 0,0, 0,0,0,0,0,0, 0,0,0,0,0];
+               //0    1     2     3     4    5      6     7      8      9       10              11              12 1314151617181920 2122232425
+   var outv = [ inHP,inATK,inDEF,inMGR,inRNG,inCAN,inSWP,inENC, inDATK,inDDEF, isOuji?inAATK:0,isOuji?inADEF:0, -1, 0,0,0,0,0,0,0,0, 0,0,0,0,0];
+   var outs = [0,0,0,0,0,0,0,0, 0,0, 0,0, 0,0,0,0,0,0, 0,0,0,0,0];
+
+   /******************回避*****************************/
+   for( j=G.length ; --j >= 0; ){
+     if( G[j].v1[6]       > outv[6]               ) outv[6] = G[j].v1[6];
+     if( G[j].v1[6]+inSWP > outv[6] && inSWP < 50 ) outv[6] = G[j].v1[6] + inSWP ;
+   }
 
    for( o=0 ; o<3 ; o++ ) for( m=0 ; m<5 ; m++ ){
      if( o && m != 1 && m != 2 ) continue;
-     i=o?(m+2+o*2):m; //01234 56 78
+     i=o?(m+5+o*2):m; //01234 89 AB
 //if(o==0 && m==1) console.log("バフ前["+i+"]"+["HP","ATK","DEF","REG","RNG"][m]+":"+["自身","ダンサー","アンナ"][o]+":"+outv[i]+" , "+outs[i]);
      /*****************編成バフ**************************/
      v1=100;
@@ -3114,30 +3127,34 @@ v+="<td><!-- 付与のバフ --></td>";
     for( ; outs[i] > 0 && (outv[i]%10)==0 ; outs[i]-- ) outv[i] /= 10;/*正規化*/
    }
 
-   outs[5]++;
-   outs[6]++;
+   outs[8]++;
+   outs[9]++;
    if( isOuji <= 1 || isOuji >= 8 ){ /*王子と魔獣*/
-     outs[7]++;
-     outs[8]++;
+     outs[10]++;
+     outs[11]++;
    }
    for( i=outv.length; --i >= 0 ; ) for( ; outs[i] > 0 ; outs[i]-- ) outv[i] = (outv[i]-(outv[i]%10))/10;/*整数化*/
 
    /*****************ダンサー加算**************************/
-   outv[10] = outv[15] = outv[0];
-   outv[11] = outv[16] = outv[1] + outv[5] + outv[7];
-   outv[12] = outv[17] = outv[2] + outv[6] + outv[8];
-   outv[13] = outv[18] = outv[3];
-   outv[14] = outv[19] = outv[4];
+   outv[13] = outv[21] = outv[0];
+   outv[14] = outv[22] = outv[1] + outv[ 8] + outv[ 9];
+   outv[15] = outv[23] = outv[2] + outv[10] + outv[11];
+   outv[16] = outv[24] = outv[3];
+   outv[17] = outv[25] = outv[4];
+   outv[18] =  outv[5];
+   outv[19] =  outv[6];
+   outv[20] =  outv[7];
+
 
    for( i=0 ; i<5 ; i++ ){
      /*****************動的バフ**************************/
      for( j=G.length ; --j >= 0 ; ){
        if( G[j].type != TYPE_DYNAM ) continue;
-       if( G[j].v1[i] ){ outv[15+i] *= G[j].v1[i]; outs[15+i] += 2; }
+       if( G[j].v1[i] ){ outv[18+i] *= G[j].v1[i]; outs[18+i] += 2; }
        if( G[j].v2[i] ){
          v2=G[j].v2[i];
-         for( v1=0 ; v1<outs[15+i] && v2 ; v1++ )  v2 *= 10;
-         outv[15+i] += v2;
+         for( v1=0 ; v1<outs[18+i] && v2 ; v1++ )  v2 *= 10;
+         outv[18+i] += v2;
        }
      }
    }
@@ -3202,25 +3219,33 @@ v+="<td><!-- 付与のバフ --></td>";
     /*バフ計算*/
     outv  = ( uodateChar && uodateChar.stat.length >= 5 && uodateChar.stat.length < 14)
           ? calcBuffer( isOuji,
-              uodateChar.stat[0],
-              uodateChar.stat[1],
-              uodateChar.stat[2],
-              uodateChar.stat[3],
-              uodateChar.stat[4],
-              inobj[ 5].getV() /1,
-              inobj[ 6].getV() /1,
-              inobj[ 7].getV() /1,
-              inobj[ 8].getV() /1 )
+              uodateChar.stat[0],   /* HP  */
+              uodateChar.stat[1],   /* ATK */
+              uodateChar.stat[2],   /* DEF */
+              uodateChar.stat[3],   /* MAG */
+              uodateChar.stat[4],   /* RNG */
+              uodateChar.stat[27],  /* CAN  */
+              uodateChar.stat[28],  /* SWP */
+              uodateChar.stat[7]+   /* ENC */
+              uodateChar.stat[8]*4+ /* atract */
+              uodateChar.stat[8]*8, /* secrecy */
+              inobj[ 5].getV() /1,  /* DANCER-A  */
+              inobj[ 6].getV() /1,  /* DANCER-D */
+              inobj[ 7].getV() /1,  /* ANNA-A */
+              inobj[ 8].getV() /1 ) /* ANNA-D */
           : calcBuffer( isOuji,
-              inobj[ 0].getV()/1,
-              inobj[ 1].getV()/1,
-              inobj[ 2].getV()/1,
-              inobj[ 3].getV()/1,
-              inobj[ 4].getV()/1,
-              inobj[ 5].getV()/1,
-              inobj[ 6].getV()/1,
-              inobj[ 7].getV()/1,
-              inobj[ 8].getV()/1 );
+              inobj[ 0].getV()/1,  /* HP  */
+              inobj[ 1].getV()/1,  /* ATK */
+              inobj[ 2].getV()/1,  /* DEF */
+              inobj[ 3].getV()/1,  /* MAG */
+              inobj[ 4].getV()/1,  /* RNG */
+              inobj[27].getV()/1,  /* CAN */
+              inobj[28].getV()/1,  /* SWP */
+              inobj[16].getV()/1,  /* ENC,atract,secrecy */
+              inobj[ 5].getV()/1,  /* DANCER-A  */
+              inobj[ 6].getV()/1,  /* DANCER-D */
+              inobj[ 7].getV()/1,  /* ANNA-A */
+              inobj[ 8].getV()/1 );/* ANNA-D */
 
     /*選択連動をさきに更新(条件)*/
     if( uodateChar ){
@@ -3235,8 +3260,7 @@ v+="<td><!-- 付与のバフ --></td>";
  
     inobj[7].visibility=isOuji?"visible":"hidden";
     inobj[8].display=isOuji?"visible":"hidden";
-    //outobj[7].parentNode.style.display=isOuji?"table-row":"none";
-    outobj[20].innerText=["－","アンナ","ロレッタ","シャオメイ","ハルカ","セノーテ","クラリーチェ","ジルヴァ","シュシュ"][isOuji];
+    outobj[30].innerText=["－","アンナ","ロレッタ","シャオメイ","ハルカ","セノーテ","クラリーチェ","ジルヴァ","シュシュ"][isOuji];
 
     /*グループごとのバフ値表示*/
     for( i=G.length; --i >= 0 ; ){
@@ -3269,7 +3293,12 @@ v+="<td><!-- 付与のバフ --></td>";
       }
     }
     /*バフ後の計算した値を表示*/
-    for( i=outv.length ; --i >= 0 ; ) if( outv[i] >= 0 ) outobj[i].setV( outv[i] );
+console.log(i );
+    for( i=outv.length ; --i >= 0 ; ) if( outv[i] >= 0 ){
+console.log(i );
+console.log(outobj[i] );
+ outobj[i].setV( outv[i] );
+}
     /*選択状態の画面への更新*/
     for( i=M.length; --i >= 0 ; ){
         b = M[i];
@@ -3292,7 +3321,7 @@ v+="<td><!-- 付与のバフ --></td>";
       if( G[0].maskPara[0][1] >= 200 ){ v++; wk += "[<span class='nw'>対象トークン</span>]"; }
       outv += "<section><h4>●編成"+(i+1)+"<span class='nw'>["+v+"人配置]／("+Object.keys(teams[i]).length+"人編成)</h4>"+wk+"</section>";
     }
-    outobj[9].innerHTML=outv;
+    outobj[29].innerHTML=outv;
     /*復活の呪文*/
     saveword.backupstr();
   }
