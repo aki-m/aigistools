@@ -1090,7 +1090,7 @@ input.bon { background-color: #ff4; }
     GMembersCore.prototype=this; /*コアのプロトタイプをグループに向かせる*/
     GMember.prototype=new GMembersCore(); /*メンバのプロトタイプをコアに向かせる*/
     for(var i=4; i < arguments.length ; i++ ){
-      console.log("G"+in_name+"m"+i+":"+arguments[i]);
+      //console.log("G"+in_name+"m"+i+":"+arguments[i]);
       this.member[i-4] = new GMember(arguments[i][0],arguments[i][1],arguments[i][2],arguments[i][3]);
     }
   };
